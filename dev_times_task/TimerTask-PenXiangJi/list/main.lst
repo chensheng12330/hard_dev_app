@@ -1,0 +1,358 @@
+C51 COMPILER V9.01   MAIN                                                                  09/14/2018 16:54:37 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND PRINT(.\list\main.lst)
+
+line level    source
+
+   1          
+   2          /*------------------------------------------------------------------*/
+   3          /* --- STC MCU International Limited -------------------------------*/
+   4          /* --- STC 1T Series MCU RC Demo -----------------------------------*/
+   5          /* --- Mobile: (86)13922805190 -------------------------------------*/
+   6          /* --- Fax: 86-0513-55012956,55012947,55012969 ---------------------*/
+   7          /* --- Tel: 86-0513-55012928,55012929,55012966 ---------------------*/
+   8          /* --- Web: www.GXWMCU.com -----------------------------------------*/
+   9          /* --- QQ:  800003751 ----------------------------------------------*/
+  10          /* If you want to use the program or the program referenced in the  */
+  11          /* article, please specify in which data and procedures from STC    */
+  12          /*------------------------------------------------------------------*/
+  13          //#include "reg51.h"
+  14          #include        "config.h"
+  15          #include        "timer.h"
+  16          #include        "GPIO.h"
+  17          #include        "soft_uart.h"
+  18          #include        "delay.h"
+  19          
+  20          /*************  功能说明        **************
+  21          
+  22          本程序演示3个定时器的使用。
+  23          
+  24          定时器0做16位自动重装10us定时，不中断，从P3.5高速输出50KHZ时钟信号。
+  25              用户可以修改时间从而修改频率，也可以允许中断，但注意时间不要太短（一般10us以上）。
+  26          
+  27          定时器1做16位自动重装1ms定时， 中断，从P3.4高速输出500HZ时钟信号。
+  28          
+  29          定时器2做16位自动重装20ms定时，中断，从P3.0高速输出25HZ时钟信号。同时中断里从P1.0取反输出25HZ时钟信号。
+  30          
+  31          ******************************************/
+  32          
+  33          /*************  本地常量声明    **************/
+  34          
+  35          
+  36          /*************  本地变量声明    **************/
+  37          u32 g_hour=0;  //时
+  38          u32 g_minute=0;//分
+  39          u32 g_second=0;//秒
+  40          u32 g_millisecond=0;//毫秒 
+  41          u8  g_addNum = 50; //50 //定时叠加数
+  42          
+  43          u16 g_key_flag=0; //按键状态,(1:按下  0:未按下)
+  44          u8  g_key_time=0; //按键响应事件时间计时数.默认为20分钟. 单位为分钟
+  45          u8  g_light_on_time=1; //默认为20分钟. 单位为分钟
+  46          
+  47          /*************  本地函数声明    **************/
+  48          
+  49          void mintueAction(void);
+  50          
+  51          void secondAction(void);
+  52          
+  53          void printNowTime(void);
+  54          
+  55          void key_scan(void);
+C51 COMPILER V9.01   MAIN                                                                  09/14/2018 16:54:37 PAGE 2   
+
+  56          
+  57          /*************  外部函数和变量声明 *****************/
+  58          
+  59          
+  60          
+  61          /************************ IO口配置 ****************************/
+  62          void    GPIO_config(void)
+  63          {
+  64   1              GPIO_InitTypeDef        GPIO_InitStructure;                             //结构定义
+  65   1              GPIO_InitStructure.Pin  = GPIO_Pin_2 | GPIO_Pin_3;      //指定要初始化的IO, 
+  66   1              // GPIO_Pin_2 ~ GPIO_Pin_3, 或操作
+  67   1              GPIO_InitStructure.Mode = GPIO_OUT_PP;                          //指定IO的输入或输出方式,GPIO_PullUp,GPIO_HighZ,GPIO_OUT_OD,GPI
+             -O_OUT_PP
+  68   1              GPIO_Inilize(GPIO_P3,&GPIO_InitStructure);                      //初始化
+  69   1      
+  70   1      
+  71   1              GPIO_InitStructure.Pin  = GPIO_Pin_5;   //指定要初始化的IO,
+  72   1              GPIO_InitStructure.Mode = GPIO_PullUp;                          //指定IO的输入或输出方式,GPIO_PullUp,GPIO_HighZ,GPIO_OUT_OD,GPI
+             -O_OUT_PP
+  73   1              GPIO_Inilize(GPIO_P3,&GPIO_InitStructure);      
+  74   1              
+  75   1      }
+  76          
+  77          /************************ 定时器配置 ****************************/
+  78          void    Timer_config(void)
+  79          {
+  80   1              TIM_InitTypeDef         TIM_InitStructure;                                      //结构定义
+  81   1              TIM_InitStructure.TIM_Mode      = TIM_16BitAutoReload;  //指定工作模式,   TIM_16BitAutoReload,TIM_16Bit,TI
+             -M_8BitAutoReload,TIM_16BitAutoReloadNoMask
+  82   1              TIM_InitStructure.TIM_Polity    = PolityHigh;                   //指定中断优先级, PolityHigh,PolityLow
+  83   1              TIM_InitStructure.TIM_Interrupt = ENABLE;                               //中断是否允许,   ENABLE或DISABLE
+  84   1              TIM_InitStructure.TIM_ClkSource = TIM_CLOCK_12T;                        //指定时钟源,     TIM_CLOCK_1T,TIM_CLOCK_12T,TIM_CLOCK
+             -_Ext
+  85   1              TIM_InitStructure.TIM_ClkOut    = DISABLE;                              //是否输出高速脉冲, ENABLE或DISABLE
+  86   1              TIM_InitStructure.TIM_Value     = 65536UL - (50.0/1000.0 * MAIN_Fosc/12.0);             
+  87   1              // //初值,50毫秒一次中断.
+  88   1              TIM_InitStructure.TIM_Run       = ENABLE;                               //是否初始化后启动定时器, ENABLE或DISABLE
+  89   1              Timer_Inilize(Timer0,&TIM_InitStructure);                               //初始化Timer0    Timer0,Timer1,Timer2
+  90   1      
+  91   1      /*
+  92   1              TIM_InitStructure.TIM_Mode      = TIM_16BitAutoReload;  //指定工作模式,   TIM_16BitAutoReload,TIM_16Bit,TI
+             -M_8BitAutoReload,TIM_16BitAutoReloadNoMask
+  93   1              TIM_InitStructure.TIM_Polity    = PolityLow;                    //指定中断优先级, PolityHigh,PolityLow
+  94   1              TIM_InitStructure.TIM_Interrupt = ENABLE;                               //中断是否允许,   ENABLE或DISABLE
+  95   1              TIM_InitStructure.TIM_ClkSource = TIM_CLOCK_12T;                        //指定时钟源, TIM_CLOCK_1T,TIM_CLOCK_12T,TIM_CLOCK_Ext
+  96   1              TIM_InitStructure.TIM_ClkOut    = ENABLE;                               //是否输出高速脉冲, ENABLE或DISABLE
+  97   1              TIM_InitStructure.TIM_Value     = 65536UL - (MAIN_Fosc / 50*12*2);              //初值,
+  98   1              TIM_InitStructure.TIM_Run       = ENABLE;                               //是否初始化后启动定时器, ENABLE或DISABLE
+  99   1              Timer_Inilize(Timer2,&TIM_InitStructure);                               //初始化Timer1    Timer0,Timer1,Timer2
+ 100   1      */
+ 101   1      
+ 102   1      //      TIM_InitStructure.TIM_Interrupt = ENABLE;                               //中断是否允许,   ENABLE或DISABLE. (注意: Timer2固定为16位
+             -自动重装, 中断固定为低优先级)
+ 103   1      //      TIM_InitStructure.TIM_ClkSource = TIM_CLOCK_12T;                //指定时钟源,     TIM_CLOCK_1T,TIM_CLOCK_12T,TIM_CLOC
+             -K_Ext
+ 104   1      //      TIM_InitStructure.TIM_ClkOut    = DISABLE;                              //是否输出高速脉冲, ENABLE或DISABLE
+ 105   1      //      TIM_InitStructure.TIM_Value     = 65536UL - (MAIN_Fosc / (50*12));              //初值
+ 106   1      //      TIM_InitStructure.TIM_Run       = ENABLE;                               //是否初始化后启动定时器, ENABLE或DISABLE
+ 107   1      //      Timer_Inilize(Timer2,&TIM_InitStructure);                               //初始化Timer2    Timer0,Timer1,Timer2
+ 108   1      }
+ 109          
+ 110          
+C51 COMPILER V9.01   MAIN                                                                  09/14/2018 16:54:37 PAGE 3   
+
+ 111          sbit ioWorkLED   = P3^2;  //工作指示灯
+ 112          sbit ioSwitchLED = P3^3;  //控制杀菌灯
+ 113          sbit ioKEY       = P3^5;  //按键控杀菌灯
+ 114          
+ 115          /******************** 主函数**************************/
+ 116          void main(void)
+ 117          {
+ 118   1      
+ 119   1              /*
+ 120   1              p3_2 : 用于工作指示灯
+ 121   1              p3_3 : 用于控制led照明显示
+ 122   1              */
+ 123   1              
+ 124   1              //io 脚配置
+ 125   1              GPIO_config();
+ 126   1      
+ 127   1              // 工作灯开始
+ 128   1              ioWorkLED = 1;
+ 129   1      
+ 130   1              // 测试开启.
+ 131   1              ioSwitchLED = 1;
+ 132   1              ioKEY =1; //按键关闭
+ 133   1      
+ 134   1              //定时器配置 50ms 一次定时，定时器触发时，cpu进入唤醒时段.
+ 135   1              Timer_config();
+ 136   1      
+ 137   1              EA = 1;
+ 138   1                       
+ 139   1              PrintString("\r\n 开始工作了... = ");
+ 140   1      
+ 141   1              while (1)
+ 142   1              {
+ 143   2                      key_scan();
+ 144   2              /*
+ 145   2                      PCON |= 0x01;           //将IDL(PCON.0)置1,MCU将进入空闲模式
+ 146   2              _nop_();                //此时CPU无时钟,不执行指令
+ 147   2              _nop_();                //内部中断信号和外部复位信号可以终止空闲模式
+ 148   2              _nop_();
+ 149   2              _nop_();
+ 150   2              */
+ 151   2      
+ 152   2                              /*
+ 153   2                      执行任务动作1
+ 154   2      
+ 155   2                      1,4,7,10,13,16,19,22 开始照明.
+ 156   2                      */
+ 157   2      
+ 158   2                      if( g_hour ==0 ||
+ 159   2                              g_hour ==4 ||
+ 160   2                              g_hour ==7 ||
+ 161   2                              g_hour ==10||
+ 162   2                              g_hour ==13||
+ 163   2                              g_hour ==16||
+ 164   2                              g_hour ==19||
+ 165   2                              g_hour ==22||
+ 166   2                              g_key_flag==1
+ 167   2                              ){
+ 168   3      
+ 169   3                              //持续亮灯20分钟.
+ 170   3                              if(g_minute<g_light_on_time || g_key_flag==1) {
+ 171   4      
+ 172   4                                      ioSwitchLED = 1;
+C51 COMPILER V9.01   MAIN                                                                  09/14/2018 16:54:37 PAGE 4   
+
+ 173   4                              }
+ 174   3                              else {
+ 175   4                                      ioSwitchLED = 0;
+ 176   4                              }
+ 177   3                      }
+ 178   2      
+ 179   2                      /*
+ 180   2                      执行任务动作1
+ 181   2      
+ 182   2                      工作灯,每10秒闪一次
+ 183   2                      */
+ 184   2                      if(g_second%10 == 0){
+ 185   3                              ioWorkLED = 1;
+ 186   3                              delay_ms(2000);
+ 187   3                              ioWorkLED = 0;
+ 188   3                      }
+ 189   2                      else {
+ 190   3                              //ioWorkLED = 0;
+ 191   3                              delay_ms(800);
+ 192   3                      }
+ 193   2      
+ 194   2                      //结束任务.
+ 195   2      
+ 196   2                      /*      
+ 197   2                         PrintString("\r\n 循环中... ");
+ 198   2      
+ 199   2                              delay_ms(200);
+ 200   2                              delay_ms(200);
+ 201   2                              delay_ms(200);
+ 202   2                              delay_ms(200);
+ 203   2                              delay_ms(200);
+ 204   2                              delay_ms(200);
+ 205   2                      */   
+ 206   2              }
+ 207   1      }
+ 208          
+ 209          /********************* Timer0中断函数************************/
+ 210          void timer0_int (void) interrupt TIMER0_VECTOR
+ 211          {
+ 212   1              g_millisecond += g_addNum;
+ 213   1      
+ 214   1              if( g_millisecond>= 1000) { //满足一秒
+ 215   2                      g_millisecond = 0;
+ 216   2                      secondAction();
+ 217   2                      
+ 218   2                      g_second++;
+ 219   2      
+ 220   2                      if(g_second >=60){
+ 221   3      
+ 222   3                              //满足一分钟
+ 223   3                              mintueAction();
+ 224   3                              g_second =0;
+ 225   3                              g_minute ++;
+ 226   3      
+ 227   3                              if(g_minute >=60){
+ 228   4      
+ 229   4                                      //满足一小时
+ 230   4                                      g_minute =0;
+ 231   4                                      g_hour ++;
+ 232   4      
+ 233   4                                      if(g_hour >=24){
+ 234   5      
+C51 COMPILER V9.01   MAIN                                                                  09/14/2018 16:54:37 PAGE 5   
+
+ 235   5                                              //满足24小时
+ 236   5                                              g_hour =0;
+ 237   5                              
+ 238   5                                      }
+ 239   4                              
+ 240   4                              }
+ 241   3                      }
+ 242   2              }
+ 243   1      }
+ 244          
+ 245          void mintueAction(void) {
+ 246   1              //PrintString("\r\n mintueAction... ");
+ 247   1      
+ 248   1              if(g_key_time<1){
+ 249   2                      //复位.
+ 250   2                      g_key_flag =0; //用于控制亮灯
+ 251   2                      g_key_time =0; //重置按键亮灯计时时间
+ 252   2              }
+ 253   1              else{
+ 254   2                      g_key_flag =1; //用于控制亮灯
+ 255   2                      g_key_time--;
+ 256   2              }
+ 257   1      }
+ 258          
+ 259          void secondAction(void) {
+ 260   1              //PrintString("\r\n secondAction... ");
+ 261   1              printNowTime();
+ 262   1      }
+ 263          
+ 264          // TxSend(j/1000 + '0');
+ 265          void printNowTime(void) {
+ 266   1      
+ 267   1              PrintString("\r\n 现在时间:");
+ 268   1      
+ 269   1              TxSend('H');
+ 270   1              //TxSend(g_hour+ '0');
+ 271   1              TxSend(g_hour%100/10 + '0');
+ 272   1              TxSend(g_hour%10+ '0');
+ 273   1              
+ 274   1      
+ 275   1              TxSend(' ');
+ 276   1              TxSend('M');
+ 277   1              TxSend(g_minute%100/10 + '0');
+ 278   1              TxSend(g_minute%10+ '0');
+ 279   1      
+ 280   1              TxSend(' ');
+ 281   1              TxSend('S');
+ 282   1              //TxSend(g_second+ '0');
+ 283   1              TxSend(g_second%100/10 + '0');
+ 284   1              TxSend(g_second%10+ '0');
+ 285   1      
+ 286   1      /*
+ 287   1              TxSend(' ');
+ 288   1              TxSend('U');
+ 289   1              //TxSend(g_millisecond+ '0');
+ 290   1              TxSend(g_millisecond%1000/100 + '0');
+ 291   1              TxSend(g_millisecond%100/10 + '0');
+ 292   1              TxSend(g_millisecond%10+ '0');
+ 293   1      */
+ 294   1              
+ 295   1              PrintString("\r\n ");
+ 296   1      }
+C51 COMPILER V9.01   MAIN                                                                  09/14/2018 16:54:37 PAGE 6   
+
+ 297          
+ 298          void key_scan(){
+ 299   1      
+ 300   1              if(ioKEY == 0)                
+ 301   1              //如果有键按下，则条件成立（有键按下，则s4为0；而 !key_flag为1）
+ 302   1          {
+ 303   2              delay_ms(10);//延时消抖
+ 304   2              if(ioKEY == 0)                             //如果确定有键按下
+ 305   2              {                      
+ 306   3                  //进行事件处理
+ 307   3                  g_key_flag = 1;
+ 308   3                  //启动亮灯计时
+ 309   3                  g_key_time=g_light_on_time;
+ 310   3      
+ 311   3                              PrintString("\r\n 按键已按下.");
+ 312   3                  return ;
+ 313   3              }
+ 314   2              }
+ 315   1              //g_key_flag = 0;
+ 316   1              return ;
+ 317   1      }
+ 318          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    873    ----
+   CONSTANT SIZE    =     52    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     21      10
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,7 @@
+"GPIO.obj",
+"main.obj",
+"timer.obj",
+"Soft_UART.obj",
+"delay.obj" 
+TO "timer" 
+PRINT(".\list\timer.m51") RAMSIZE(256) 
