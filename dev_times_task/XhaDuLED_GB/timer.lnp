@@ -1,0 +1,3 @@
+"main.obj" 
+TO "timer" REGFILE (.\timer.ORC) 
+PRINT(".\list\timer.m51") RAMSIZE(256) 

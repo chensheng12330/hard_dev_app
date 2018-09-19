@@ -209,10 +209,10 @@
       <FileType>1</FileType>
       <tvExp>1</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>24</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>1</TopLine>
-      <CurrentLine>1</CurrentLine>
+      <CurrentLine>40</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\GPIO.c</PathWithFileName>
       <FilenameWithoutPath>GPIO.c</FilenameWithoutPath>
@@ -242,10 +242,10 @@
       <FileType>1</FileType>
       <tvExp>1</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>44</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>129</TopLine>
-      <CurrentLine>147</CurrentLine>
+      <TopLine>55</TopLine>
+      <CurrentLine>74</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -275,10 +275,10 @@
       <FileType>1</FileType>
       <tvExp>1</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>49</ColumnNumber>
+      <ColumnNumber>12</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>13</TopLine>
-      <CurrentLine>21</CurrentLine>
+      <TopLine>31</TopLine>
+      <CurrentLine>33</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\timer.c</PathWithFileName>
       <FilenameWithoutPath>timer.c</FilenameWithoutPath>
@@ -302,90 +302,10 @@
         </NormalPosition>
       </WindowPosition>
     </File>
-    <File>
-      <GroupNumber>1</GroupNumber>
-      <FileNumber>4</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>13</TopLine>
-      <CurrentLine>13</CurrentLine>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\Soft_UART.c</PathWithFileName>
-      <FilenameWithoutPath>Soft_UART.c</FilenameWithoutPath>
-    </File>
-    <File>
-      <GroupNumber>1</GroupNumber>
-      <FileNumber>5</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <ColumnNumber>6</ColumnNumber>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>18</TopLine>
-      <CurrentLine>33</CurrentLine>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\delay.c</PathWithFileName>
-      <FilenameWithoutPath>delay.c</FilenameWithoutPath>
-    </File>
   </Group>
 
   <AlienFiles>
-    <PathWithFilename>E:\hardworl\51stc15\STC15F10xxDemo\dev_app\dev_times_task\TimerTask-PenXiangJi\STC15FXXXX.H</PathWithFilename>
-    <TopLine>216</TopLine>
-    <CurrentLine>232</CurrentLine>
-    <Constant>0</Constant>
-    <WindowPosition>
-      <length>0</length>
-      <flags>0</flags>
-      <showCmd>0</showCmd>
-      <MinPosition>
-        <xPos>0</xPos>
-        <yPos>0</yPos>
-      </MinPosition>
-      <MaxPosition>
-        <xPos>0</xPos>
-        <yPos>0</yPos>
-      </MaxPosition>
-      <NormalPosition>
-        <Top>0</Top>
-        <Left>0</Left>
-        <Right>0</Right>
-        <Bottom>0</Bottom>
-      </NormalPosition>
-    </WindowPosition>
-  </AlienFiles>
-
-  <AlienFiles>
-    <PathWithFilename>E:\hardworl\51stc15\STC15F10xxDemo\dev_app\dev_times_task\TimerTask-PenXiangJi\CONFIG.H</PathWithFilename>
-    <TopLine>7</TopLine>
-    <CurrentLine>22</CurrentLine>
-    <Constant>0</Constant>
-    <WindowPosition>
-      <length>0</length>
-      <flags>0</flags>
-      <showCmd>0</showCmd>
-      <MinPosition>
-        <xPos>0</xPos>
-        <yPos>0</yPos>
-      </MinPosition>
-      <MaxPosition>
-        <xPos>0</xPos>
-        <yPos>0</yPos>
-      </MaxPosition>
-      <NormalPosition>
-        <Top>0</Top>
-        <Left>0</Left>
-        <Right>0</Right>
-        <Bottom>0</Bottom>
-      </NormalPosition>
-    </WindowPosition>
-  </AlienFiles>
-
-  <AlienFiles>
-    <PathWithFilename>E:\hardworl\51stc15\STC15F10xxDemo\dev_app\dev_times_task\TimerTask-PenXiangJi\GPIO.H</PathWithFilename>
+    <PathWithFilename>L:\dev_times_task\TimerTask-ShaDuLED\STC15FXXXX.H</PathWithFilename>
     <TopLine>1</TopLine>
     <CurrentLine>1</CurrentLine>
     <Constant>0</Constant>
@@ -411,9 +331,35 @@
   </AlienFiles>
 
   <AlienFiles>
-    <PathWithFilename>E:\hardworl\51stc15\STC15F10xxDemo\dev_app\dev_times_task\TimerTask-PenXiangJi\TIMER.H</PathWithFilename>
-    <TopLine>29</TopLine>
-    <CurrentLine>38</CurrentLine>
+    <PathWithFilename>L:\dev_times_task\TimerTask-ShaDuLED\CONFIG.H</PathWithFilename>
+    <TopLine>1</TopLine>
+    <CurrentLine>1</CurrentLine>
+    <Constant>0</Constant>
+    <WindowPosition>
+      <length>0</length>
+      <flags>0</flags>
+      <showCmd>0</showCmd>
+      <MinPosition>
+        <xPos>0</xPos>
+        <yPos>0</yPos>
+      </MinPosition>
+      <MaxPosition>
+        <xPos>0</xPos>
+        <yPos>0</yPos>
+      </MaxPosition>
+      <NormalPosition>
+        <Top>0</Top>
+        <Left>0</Left>
+        <Right>0</Right>
+        <Bottom>0</Bottom>
+      </NormalPosition>
+    </WindowPosition>
+  </AlienFiles>
+
+  <AlienFiles>
+    <PathWithFilename>L:\dev_times_task\TimerTask-ShaDuLED\TIMER.H</PathWithFilename>
+    <TopLine>8</TopLine>
+    <CurrentLine>8</CurrentLine>
     <Constant>0</Constant>
     <WindowPosition>
       <length>0</length>
@@ -1781,57 +1727,33 @@
       <Documents>
         <Doc>
           <Name>.\main.c</Name>
-          <ColumnNumber>44</ColumnNumber>
-          <TopLine>129</TopLine>
-          <CurrentLine>147</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>.\timer.c</Name>
-          <ColumnNumber>49</ColumnNumber>
-          <TopLine>13</TopLine>
-          <CurrentLine>21</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>.\GPIO.c</Name>
           <ColumnNumber>0</ColumnNumber>
-          <TopLine>1</TopLine>
-          <CurrentLine>1</CurrentLine>
+          <TopLine>55</TopLine>
+          <CurrentLine>74</CurrentLine>
         </Doc>
         <Doc>
           <Name>TIMER.H</Name>
-          <ColumnNumber>18</ColumnNumber>
-          <TopLine>29</TopLine>
-          <CurrentLine>38</CurrentLine>
+          <ColumnNumber>0</ColumnNumber>
+          <TopLine>8</TopLine>
+          <CurrentLine>8</CurrentLine>
         </Doc>
         <Doc>
-          <Name>GPIO.H</Name>
+          <Name>.\timer.c</Name>
+          <ColumnNumber>12</ColumnNumber>
+          <TopLine>31</TopLine>
+          <CurrentLine>33</CurrentLine>
+        </Doc>
+        <Doc>
+          <Name>CONFIG.H</Name>
           <ColumnNumber>0</ColumnNumber>
           <TopLine>1</TopLine>
           <CurrentLine>1</CurrentLine>
         </Doc>
         <Doc>
-          <Name>CONFIG.H</Name>
-          <ColumnNumber>53</ColumnNumber>
-          <TopLine>7</TopLine>
-          <CurrentLine>22</CurrentLine>
-        </Doc>
-        <Doc>
           <Name>STC15FXXXX.H</Name>
-          <ColumnNumber>9</ColumnNumber>
-          <TopLine>216</TopLine>
-          <CurrentLine>232</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>.\Soft_UART.c</Name>
           <ColumnNumber>0</ColumnNumber>
-          <TopLine>13</TopLine>
-          <CurrentLine>13</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>.\delay.c</Name>
-          <ColumnNumber>6</ColumnNumber>
-          <TopLine>18</TopLine>
-          <CurrentLine>33</CurrentLine>
+          <TopLine>1</TopLine>
+          <CurrentLine>1</CurrentLine>
         </Doc>
       </Documents>
     </MDIGroup>
