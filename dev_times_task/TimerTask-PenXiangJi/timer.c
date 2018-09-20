@@ -27,12 +27,12 @@
 /********************* Timer1中断函数************************/
 
 
-/********************* Timer2中断函数************************/
+/********************* Timer2中断函数***********************
 void timer2_int (void) interrupt TIMER2_VECTOR
 {
 	P35 = ~P35;
 }
-
+*/
 
 //========================================================================
 // 函数: u8	Timer_Inilize(u8 TIM, TIM_InitTypeDef *TIMx)
@@ -88,7 +88,7 @@ u8	Timer_Inilize(u8 TIM, TIM_InitTypeDef *TIMx)
 		if(TIMx->TIM_Run == ENABLE)	TR1 = 1;	//开始运行
 		return	0;		//成功
 	}
-
+	/* 
 	if(TIM == Timer2)		//Timer2,固定为16位自动重装, 中断无优先级
 	{
 		AUXR &= ~(1<<4);	//停止计数
@@ -106,6 +106,6 @@ u8	Timer_Inilize(u8 TIM, TIM_InitTypeDef *TIMx)
 		TL2 = (u8)TIMx->TIM_Value;
 		if(TIMx->TIM_Run == ENABLE)	AUXR |=  (1<<4);	//开始运行
 		return	0;		//成功
-	}
+	}	*/
 	return 2;	//错误
 }

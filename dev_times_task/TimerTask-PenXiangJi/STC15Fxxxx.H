@@ -16,15 +16,14 @@
 
 #include <intrins.h>
 
-/*  BYTE Registers  */
-sfr P0   = 0x80;
+/*  BYTE Registers  
 sfr SP   = 0x81;
 sfr DPL  = 0x82;
 sfr DPH  = 0x83;
 sfr	S4CON = 0x84;
 sfr	S4BUF = 0x85;
 sfr PCON = 0x87;
-
+*/
 sfr TCON = 0x88;
 sfr TMOD = 0x89;
 sfr TL0  = 0x8A;
@@ -32,8 +31,10 @@ sfr TL1  = 0x8B;
 sfr TH0  = 0x8C;
 sfr TH1  = 0x8D;
 sfr	AUXR = 0x8E;
-sfr WAKE_CLKO = 0x8F;
 sfr INT_CLKO = 0x8F;
+/*
+sfr WAKE_CLKO = 0x8F;
+
 sfr	AUXR2    = 0x8F;
 
 sfr RL_TL0  = 0x8A;
@@ -42,13 +43,6 @@ sfr RL_TH0  = 0x8C;
 sfr RL_TH1  = 0x8D;
 
 
-sfr P1   = 0x90;
-sfr P1M1 = 0x91;	//P1M1.n,P1M0.n 	=00--->Standard,	01--->push-pull		实际上1T的都一样
-sfr P1M0 = 0x92;	//					=10--->pure input,	11--->open drain
-sfr P0M1 = 0x93;	//P0M1.n,P0M0.n 	=00--->Standard,	01--->push-pull
-sfr P0M0 = 0x94;	//					=10--->pure input,	11--->open drain
-sfr P2M1 = 0x95;	//P2M1.n,P2M0.n 	=00--->Standard,	01--->push-pull
-sfr P2M0 = 0x96;	//					=10--->pure input,	11--->open drain
 sfr CLK_DIV = 0x97;
 sfr PCON2   = 0x97;
 
@@ -58,10 +52,10 @@ sfr S2CON = 0x9A;	//
 sfr S2BUF = 0x9B;	//
 sfr P1ASF = 0x9D;	//只写，模拟输入(AD或LVD)选择
 
-sfr P2    = 0xA0;
 sfr BUS_SPEED = 0xA1;
 sfr AUXR1 = 0xA2;
 sfr P_SW1 = 0xA2;
+*/
 
 sfr IE    = 0xA8;
 sfr SADDR = 0xA9;
@@ -74,13 +68,13 @@ sfr IE2   = 0xAF;	//STC12C5A60S2系列
 sfr P3    = 0xB0;
 sfr P3M1  = 0xB1;	//P3M1.n,P3M0.n 	=00--->Standard,	01--->push-pull
 sfr P3M0  = 0xB2;	//					=10--->pure input,	11--->open drain
-sfr P4M1  = 0xB3;	//P4M1.n,P4M0.n 	=00--->Standard,	01--->push-pull
-sfr P4M0  = 0xB4;	//					=10--->pure input,	11--->open drain
+/*
 sfr IP2   = 0xB5;	//STC12C5A60S2系列
 sfr IPH2  = 0xB6;	//STC12C5A60S2系列
 sfr IPH   = 0xB7;
-
+ */
 sfr IP        = 0xB8;
+/*
 sfr SADEN     = 0xB9;
 sfr	P_SW2     = 0xBA;
 sfr ADC_CONTR = 0xBC;	//带AD系列
@@ -164,10 +158,10 @@ sfr CH     = 0xF9;
 sfr CCAP0H = 0xFA;		//PCA模块0的捕捉/比较寄存器高8位。
 sfr CCAP1H = 0xFB;		//PCA模块1的捕捉/比较寄存器高8位。
 sfr CCAP2H = 0xFC;		//PCA模块2的捕捉/比较寄存器高8位。
-
+*/
 
 /*  BIT Registers  */
-/*  PSW   */
+/*  PSW   
 sbit CY   = PSW^7;
 sbit AC   = PSW^6;
 sbit F0   = PSW^5;
@@ -176,6 +170,7 @@ sbit RS0  = PSW^3;
 sbit OV   = PSW^2;
 sbit F1   = PSW^1;
 sbit P    = PSW^0;
+*/
 
 /*  TCON  */
 sbit TF1  = TCON^7;	//定时器1溢出中断标志位
@@ -187,46 +182,8 @@ sbit IT1  = TCON^2;	//外中断1信号方式控制位，1：下降沿中断，0：上升下降均中断。
 sbit IE0  = TCON^1;	//外中断0标志位
 sbit IT0  = TCON^0;	//外中断0信号方式控制位，1：下降沿中断，0：上升下降均中断。
 
-/*  P0  */
-sbit  P00 = P0^0;
-sbit  P01 = P0^1;
-sbit  P02 = P0^2;
-sbit  P03 = P0^3;
-sbit  P04 = P0^4;
-sbit  P05 = P0^5;
-sbit  P06 = P0^6;
-sbit  P07 = P0^7;
 
-/*  P1  */
-sbit  P10 = P1^0;
-sbit  P11 = P1^1;
-sbit  P12 = P1^2;
-sbit  P13 = P1^3;
-sbit  P14 = P1^4;
-sbit  P15 = P1^5;
-sbit  P16 = P1^6;
-sbit  P17 = P1^7;
-
-sbit  RXD2      = P1^0;
-sbit  TXD2      = P1^1;
-sbit  CCP1      = P1^0;
-sbit  CCP0      = P1^1;
-sbit  SPI_SS    = P1^2;
-sbit  SPI_MOSI  = P1^3;
-sbit  SPI_MISO  = P1^4;
-sbit  SPI_SCLK  = P1^5;
-
-/*  P2  */
-sbit  P20 = P2^0;
-sbit  P21 = P2^1;
-sbit  P22 = P2^2;
-sbit  P23 = P2^3;
-sbit  P24 = P2^4;
-sbit  P25 = P2^5;
-sbit  P26 = P2^6;
-sbit  P27 = P2^7;
-
-/*  P3  */
+/*  P3  
 sbit  P30 = P3^0;
 sbit  P31 = P3^1;
 sbit  P32 = P3^2;
@@ -235,6 +192,7 @@ sbit  P34 = P3^4;
 sbit  P35 = P3^5;
 sbit  P36 = P3^6;
 sbit  P37 = P3^7;
+ 
 
 sbit RXD  = P3^0;
 sbit TXD  = P3^1;
@@ -248,28 +206,8 @@ sbit CCP2  = P3^7;
 
 sbit CLKOUT0   = P3^5;
 sbit CLKOUT1   = P3^4;
-
-/*  P4  */
-sbit  P40 = P4^0;
-sbit  P41 = P4^1;
-sbit  P42 = P4^2;
-sbit  P43 = P4^3;
-sbit  P44 = P4^4;
-sbit  P45 = P4^5;
-sbit  P46 = P4^6;
-sbit  P47 = P4^7;
-
-/*  P5  */
-sbit  P50 = P5^0;
-sbit  P51 = P5^1;
-sbit  P52 = P5^2;
-sbit  P53 = P5^3;
-sbit  P54 = P5^4;
-sbit  P55 = P5^5;
-sbit  P56 = P5^6;
-sbit  P57 = P5^7;
-
-/*  SCON  */
+  */
+/*  SCON  
 sbit SM0  = SCON^7;	//SM0/FE		SM0 SM1 = 00 ~ 11: 方式0~3
 sbit SM1  = SCON^6;	//
 sbit SM2  = SCON^5;	//多机通讯
@@ -278,12 +216,13 @@ sbit TB8  = SCON^3;	//发送数据第8位
 sbit RB8  = SCON^2;	//接收数据第8位
 sbit TI   = SCON^1;	//发送中断标志位
 sbit RI   = SCON^0;	//接收中断标志位
+*/
 
 /*  IE   */
 sbit EA   = IE^7;	//中断允许总控制位
-sbit ELVD = IE^6;	//低压监测中断允许位
-sbit EADC = IE^5;	//ADC 中断 允许位
-sbit ES   = IE^4;	//串行中断 允许控制位
+//sbit ELVD = IE^6;	//低压监测中断允许位
+//sbit EADC = IE^5;	//ADC 中断 允许位
+//sbit ES   = IE^4;	//串行中断 允许控制位
 sbit ET1  = IE^3;	//定时中断1允许控制位
 sbit EX1  = IE^2;	//外部中断1允许控制位
 sbit ET0  = IE^1;	//定时中断0允许控制位
@@ -300,7 +239,7 @@ sbit PT1  = IP^3;	//定时中断1优先级设定位
 sbit PX1  = IP^2;	//外部中断1优先级设定位
 sbit PT0  = IP^1;	//定时中断0优先级设定位
 sbit PX0  = IP^0;	//外部中断0优先级设定位
-*/
+
 
 sbit ACC0 = ACC^0;
 sbit ACC1 = ACC^1;
@@ -319,6 +258,7 @@ sbit B4 = B^4;
 sbit B5 = B^5;
 sbit B6 = B^6;
 sbit B7 = B^7;
+*/
 
 
 //							7     6     5    4    3    2    1     0    Reset Value
@@ -331,15 +271,18 @@ sbit B7 = B^7;
 //                                          7     6     5    4    3    2    1    0    Reset Value
 //sfr IP      = 0xB8; //中断优先级低位      PPCA  PLVD  PADC  PS   PT1  PX1  PT0  PX0   0000,0000
 //--------
+/*
 sbit PPCA	= IP^7;	//PCA 模块中断优先级
 sbit PLVD	= IP^6;	//低压监测中断优先级
 sbit PADC	= IP^5;	//ADC 中断优先级
 sbit PS   	= IP^4;	//串行中断0优先级设定位
+*/
+
 sbit PT1	= IP^3;	//定时中断1优先级设定位
 sbit PX1	= IP^2;	//外部中断1优先级设定位
 sbit PT0	= IP^1;	//定时中断0优先级设定位
 sbit PX0	= IP^0;	//外部中断0优先级设定位
-
+ 
 //                                           7      6      5     4     3     2    1     0        Reset Value
 //sfr IPH   = 0xB7; //中断优先级高位       PPCAH  PLVDH  PADCH  PSH  PT1H  PX1H  PT0H  PX0H   0000,0000
 //sfr IP2   = 0xB5; //                       -      -      -     -     -     -   PSPI   PS2   xxxx,xx00
@@ -611,7 +554,7 @@ sbit PX0	= IP^0;	//外部中断0优先级设定位
 #define		PWM2_OUT_0()	PCA_PWM2 |=  3				//PWM2一直输出0
 #define		PWM2_OUT_1()	PCA_PWM2 &= ~3, CCAP2H = 0	//PWM2一直输出1
 
-
+/*
 //						7     6     5     4     3     2     1     0     Reset Value
 //sfr CCON   = 0xD8;	CF    CR    -     -     -    CCF2  CCF1  CCF0   00xx,xx00	//PCA 控制寄存器。
 sbit CCF0  = CCON^0;	//PCA 模块0中断标志，由硬件置位，必须由软件清0。
@@ -619,6 +562,7 @@ sbit CCF1  = CCON^1;	//PCA 模块1中断标志，由硬件置位，必须由软件清0。
 sbit CCF2  = CCON^2;	//PCA 模块2中断标志，由硬件置位，必须由软件清0。
 sbit CR    = CCON^6;	//1: 允许PCA计数器计数，必须由软件清0。
 sbit CF    = CCON^7;	//PCA计数器溢出（CH，CL由FFFFH变为0000H）标志。PCA计数器溢出后由硬件置位，必须由软件清0。
+*/
 
 //					 7     6     5     4     3     2     1     0    Reset Value
 //sfr CMOD  = 0xD9;	CIDL   -     -     -   CPS2   CPS1  CPS0  ECF   0xxx,0000	//PCA 工作模式寄存器。

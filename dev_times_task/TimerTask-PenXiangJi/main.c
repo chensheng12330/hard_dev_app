@@ -16,15 +16,27 @@
 #include	"GPIO.h"
 #include	"soft_uart.h"
 #include	"delay.h"
+#include	"Exti.h"
+
 
 /*************	功能说明	**************
 
 改装[自动喷香机]
 
 1、一天喷时间设置为：7点，13点，19点
-2、T按键用于每天12点较准时间，触发即设定当前时间为12点.R用于恢复喷散计数为0。每次换瓶可重置.S 关闭当程序运行.
-3、L1显示当前状态，常亮表示喷香液体不足. 
-L1闪一次，表示时间较准完成。L1闪二次，表示计数恢复完成。 L1闪三次，表示关闭定时
+2、
+T(io) 按键用于每天12点较准时间，触发即设定当前时间为12点.
+M 用于主动触发喷香机运行一次。
+S  关闭当程序运行.
+
+3、L1(绿io0)显示当前状态，
+10秒闪一次，表示机器定时运行中。
+常亮表示电池不足。
+
+L2(红io1)闪一次，表示时间较准完成。
+L2(红)闪二次，表示计数恢复完成。 
+L2(红)闪三次，表示关闭定时
+
 
 ******************************************/
 
@@ -42,6 +54,31 @@ u16 g_key_flag=0; //按键状态,(1:按下  0:未按下)
 u8  g_key_time=0; //按键响应事件时间计时数.默认为20分钟. 单位为分钟
 u8  g_light_on_time=1; //默认为20分钟. 单位为分钟
 
+
+sbit ioInKeyForTime = P3^2; //时间较准按键输入
+sbit ioInKeyForRun  = P3^3;//程序是否运行输入 
+sbit ioInKeyForMoto =P3^5;//喷香机触发运行输入 
+
+sbit ioOutForL1Green= P3^0;  //绿灯，程序运行指示灯
+sbit ioOutForL2Red  = P3^1;  //红灯，按键响应指示灯
+sbit ioOutForMoto   = P3^4;  //喷香机驱动IO口.
+
+u8 ioSwitchLED=0;
+u8 ioWorkLED=0;
+u8 ioKEY=0;
+
+typedef struct
+{
+	u8	sKeyForTime;  //0: 未按下  //1:已按下
+	u8	sKeyForRun;	 
+    u8	sKeyForMoto;
+} KeyStateDef; //当前程序按键的状态,默认为0 
+
+//全局对象
+KeyStateDef  g_allKeyState={0,0,0};
+
+
+
 /*************	本地函数声明	**************/
 
 void mintueAction(void);
@@ -53,6 +90,23 @@ void printNowTime(void);
 void key_scan(void);
 
 /*************  外部函数和变量声明 *****************/
+void	EXTI_config(void)
+{
+	EXTI_InitTypeDef	EXTI_InitStructure;					//结构定义
+
+    //初始化INT0
+	EXTI_InitStructure.EXTI_Mode      = EXT_MODE_RiseFall;	//中断模式,  EXT_MODE_RiseFall, EXT_MODE_Fall
+	EXTI_InitStructure.EXTI_Polity    = PolityHigh;			//中断优先级,   PolityLow,PolityHigh
+	EXTI_InitStructure.EXTI_Interrupt = ENABLE;				//中断允许,     ENABLE或DISABLE
+	Ext_Inilize(EXT_INT0,&EXTI_InitStructure);	
+    
+    //初始化INT1
+	EXTI_InitStructure.EXTI_Mode      = EXT_MODE_RiseFall;	//中断模式,  	EXT_MODE_RiseFall, EXT_MODE_Fall
+	EXTI_InitStructure.EXTI_Polity    = PolityLow;			//中断优先级,   PolityLow,PolityHigh
+	EXTI_InitStructure.EXTI_Interrupt = ENABLE;				//中断允许,     ENABLE或DISABLE
+	Ext_Inilize(EXT_INT1,&EXTI_InitStructure);				//	EXT_INT0,EXT_INT1,EXT_INT2,EXT_INT3,EXT_INT4
+
+}
 
 
 
@@ -60,13 +114,13 @@ void key_scan(void);
 void	GPIO_config(void)
 {
 	GPIO_InitTypeDef	GPIO_InitStructure;				//结构定义
-	GPIO_InitStructure.Pin  = GPIO_Pin_2 | GPIO_Pin_3;	//指定要初始化的IO, 
+	GPIO_InitStructure.Pin  = GPIO_Pin_0 | GPIO_Pin_1| GPIO_Pin_5;	//指定要初始化的IO, 
 	// GPIO_Pin_2 ~ GPIO_Pin_3, 或操作
 	GPIO_InitStructure.Mode = GPIO_OUT_PP;				//指定IO的输入或输出方式,GPIO_PullUp,GPIO_HighZ,GPIO_OUT_OD,GPIO_OUT_PP
 	GPIO_Inilize(GPIO_P3,&GPIO_InitStructure);			//初始化
 
 
-	GPIO_InitStructure.Pin  = GPIO_Pin_5;	//指定要初始化的IO,
+	GPIO_InitStructure.Pin   = GPIO_Pin_2 |GPIO_Pin_3 | GPIO_Pin_4 ;	//指定要初始化的IO,
 	GPIO_InitStructure.Mode = GPIO_PullUp;				//指定IO的输入或输出方式,GPIO_PullUp,GPIO_HighZ,GPIO_OUT_OD,GPIO_OUT_PP
 	GPIO_Inilize(GPIO_P3,&GPIO_InitStructure);	
 	
@@ -86,66 +140,39 @@ void	Timer_config(void)
 	TIM_InitStructure.TIM_Run       = ENABLE;				//是否初始化后启动定时器, ENABLE或DISABLE
 	Timer_Inilize(Timer0,&TIM_InitStructure);				//初始化Timer0	  Timer0,Timer1,Timer2
 
-/*
-	TIM_InitStructure.TIM_Mode      = TIM_16BitAutoReload;	//指定工作模式,   TIM_16BitAutoReload,TIM_16Bit,TIM_8BitAutoReload,TIM_16BitAutoReloadNoMask
-	TIM_InitStructure.TIM_Polity    = PolityLow;			//指定中断优先级, PolityHigh,PolityLow
-	TIM_InitStructure.TIM_Interrupt = ENABLE;				//中断是否允许,   ENABLE或DISABLE
-	TIM_InitStructure.TIM_ClkSource = TIM_CLOCK_12T;			//指定时钟源, TIM_CLOCK_1T,TIM_CLOCK_12T,TIM_CLOCK_Ext
-	TIM_InitStructure.TIM_ClkOut    = ENABLE;				//是否输出高速脉冲, ENABLE或DISABLE
-	TIM_InitStructure.TIM_Value     = 65536UL - (MAIN_Fosc / 50*12*2);		//初值,
-	TIM_InitStructure.TIM_Run       = ENABLE;				//是否初始化后启动定时器, ENABLE或DISABLE
-	Timer_Inilize(Timer2,&TIM_InitStructure);				//初始化Timer1	  Timer0,Timer1,Timer2
-*/
-
-//	TIM_InitStructure.TIM_Interrupt = ENABLE;				//中断是否允许,   ENABLE或DISABLE. (注意: Timer2固定为16位自动重装, 中断固定为低优先级)
-//	TIM_InitStructure.TIM_ClkSource = TIM_CLOCK_12T;		//指定时钟源,     TIM_CLOCK_1T,TIM_CLOCK_12T,TIM_CLOCK_Ext
-//	TIM_InitStructure.TIM_ClkOut    = DISABLE;				//是否输出高速脉冲, ENABLE或DISABLE
-//	TIM_InitStructure.TIM_Value     = 65536UL - (MAIN_Fosc / (50*12));		//初值
-//	TIM_InitStructure.TIM_Run       = ENABLE;				//是否初始化后启动定时器, ENABLE或DISABLE
-//	Timer_Inilize(Timer2,&TIM_InitStructure);				//初始化Timer2	  Timer0,Timer1,Timer2
 }
 
-
-sbit ioWorkLED   = P3^2;  //工作指示灯
-sbit ioSwitchLED = P3^3;  //控制杀菌灯
-sbit ioKEY       = P3^5;  //按键控杀菌灯
 
 /******************** 主函数**************************/
 void main(void)
 {
-
-	/*
-	p3_2 : 用于工作指示灯
-	p3_3 : 用于控制led照明显示
-	*/
 	
 	//io 脚配置
 	GPIO_config();
 
+    //全局变量初使化
 	// 工作灯开始
-	ioWorkLED = 1;
+      ioOutForL1Green=ioInKeyForMoto=ioInKeyForRun=ioInKeyForTime=1; //key键拉高
 
-	// 测试开启.
-	ioSwitchLED = 1;
-	ioKEY =1; //按键关闭
+      //输出io脚先关闭
+      ioOutForL2Red =ioOutForMoto = 0;
 
+        //g_allKeyState = {0,0,0};
+
+
+        //开启引脚p32 p33的外部中断,下降沿中断.
+        EXTI_config();
+    
 	//定时器配置 50ms 一次定时，定时器触发时，cpu进入唤醒时段.
 	Timer_config();
 
 	EA = 1;
 		 
-	PrintString("\r\n 开始工作了... = ");
+	//PrintString("\r\n 开始工作了... = ");
 
 	while (1)
 	{
 		key_scan();
-        /*
-		PCON |= 0x01;           //将IDL(PCON.0)置1,MCU将进入空闲模式
-        _nop_();                //此时CPU无时钟,不执行指令
-        _nop_();                //内部中断信号和外部复位信号可以终止空闲模式
-        _nop_();
-        _nop_();
-        */
 
 			/*
 		执行任务动作1
@@ -190,55 +217,10 @@ void main(void)
 		}
 
 		//结束任务.
-
-		/*	
-		   PrintString("\r\n 循环中... ");
-
-			delay_ms(200);
-			delay_ms(200);
-			delay_ms(200);
-			delay_ms(200);
-			delay_ms(200);
-			delay_ms(200);
-		*/   
+   
 	}
 }
 
-/********************* Timer0中断函数************************/
-void timer0_int (void) interrupt TIMER0_VECTOR
-{
-	g_millisecond += g_addNum;
-
-	if( g_millisecond>= 1000) { //满足一秒
-		g_millisecond = 0;
-		secondAction();
-		
-		g_second++;
-
-		if(g_second >=60){
-
-			//满足一分钟
-			mintueAction();
-			g_second =0;
-			g_minute ++;
-
-			if(g_minute >=60){
-
-				//满足一小时
-				g_minute =0;
-				g_hour ++;
-
-				if(g_hour >=24){
-
-					//满足24小时
-					g_hour =0;
-			
-				}
-			
-			}
-		}
-	}
-}
 
 void mintueAction(void) {
 	//PrintString("\r\n mintueAction... ");
@@ -313,4 +295,65 @@ void key_scan(){
 	//g_key_flag = 0;
 	return ;
 }
+
+
+/********************* Timer0中断函数************************/
+void timer0_int (void) interrupt TIMER0_VECTOR
+{
+	g_millisecond += g_addNum;
+
+	if( g_millisecond>= 1000) { //满足一秒
+		g_millisecond = 0;
+		secondAction();
+		
+		g_second++;
+
+		if(g_second >=60){
+
+			//满足一分钟
+			mintueAction();
+			g_second =0;
+			g_minute ++;
+
+			if(g_minute >=60){
+
+				//满足一小时
+				g_minute =0;
+				g_hour ++;
+
+				if(g_hour >=24){
+
+					//满足24小时
+					g_hour =0;
+			
+				}
+			
+			}
+		}
+	}
+}
+
+
+
+/********************* INT0中断函数 *************************/
+void INT0_int (void) interrupt INT0_VECTOR		//进中断时已经清除标志
+{
+	//WakeUpSource = 1;	//标记INT0唤醒
+	EX0 = 0;			//INT0 Disable
+	IE0  = 0;			//外中断0标志位
+
+    PrintString("\r\n 外部中断0.");
+}
+
+/********************* INT1中断函数 *************************/
+void INT1_int (void) interrupt INT1_VECTOR		//进中断时已经清除标志
+{
+	//tfWakeUpSource = 2;	//标记INT1唤醒
+	EX1 = 0;			//INT1 Disable
+	IE1  = 0;			//外中断1标志位
+
+
+    PrintString("\r\n 外部中断1.");
+}
+
 

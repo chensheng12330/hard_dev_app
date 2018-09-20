@@ -2,6 +2,7 @@
 "main.obj",
 "timer.obj",
 "Soft_UART.obj",
-"delay.obj" 
+"delay.obj",
+"Exti.obj" 
 TO "timer" 
 PRINT(".\list\timer.m51") RAMSIZE(256) 
