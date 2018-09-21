@@ -69,9 +69,9 @@ u8 ioKEY=0;
 
 typedef struct
 {
-	u8	sKeyForTime;  //0: 未按下  //1:已按下
-	u8	sKeyForRun;	 
-    u8	sKeyForMoto;
+	u8	sKeyForTime;  //时间键状态值.  0: 未按下  //1:已按下
+	u8	sKeyForRun;	  //程序键状态值.  0: 未按下  //1:已按下
+       u8   sKeyForMoto;  //喷香机键状态值.  0: 未按下  //1:已按下
 } KeyStateDef; //当前程序按键的状态,默认为0 
 
 //全局对象
@@ -101,11 +101,16 @@ void	EXTI_config(void)
 	Ext_Inilize(EXT_INT0,&EXTI_InitStructure);	
     
     //初始化INT1
-	EXTI_InitStructure.EXTI_Mode      = EXT_MODE_RiseFall;	//中断模式,  	EXT_MODE_RiseFall, EXT_MODE_Fall
+	EXTI_InitStructure.EXTI_Mode      = EXT_MODE_Fall;	//中断模式,  	EXT_MODE_RiseFall, EXT_MODE_Fall
 	EXTI_InitStructure.EXTI_Polity    = PolityLow;			//中断优先级,   PolityLow,PolityHigh
 	EXTI_InitStructure.EXTI_Interrupt = ENABLE;				//中断允许,     ENABLE或DISABLE
 	Ext_Inilize(EXT_INT1,&EXTI_InitStructure);				//	EXT_INT0,EXT_INT1,EXT_INT2,EXT_INT3,EXT_INT4
 
+    //初始化INT3
+	EXTI_InitStructure.EXTI_Mode      = EXT_MODE_Fall;	//中断模式,  	EXT_MODE_RiseFall, EXT_MODE_Fall
+	EXTI_InitStructure.EXTI_Polity    = PolityLow;			//中断优先级,   PolityLow,PolityHigh
+	EXTI_InitStructure.EXTI_Interrupt = ENABLE;				//中断允许,     ENABLE或DISABLE
+	Ext_Inilize(EXT_INT3,&EXTI_InitStructure);
 }
 
 
@@ -172,7 +177,7 @@ void main(void)
 
 	while (1)
 	{
-		key_scan();
+		//key_scan();
 
 			/*
 		执行任务动作1
@@ -180,7 +185,7 @@ void main(void)
 		1,4,7,10,13,16,19,22 开始照明.
 		*/
 
-		if( g_hour ==0 ||
+		if(   g_hour ==0 ||
 			g_hour ==4 ||
 			g_hour ==7 ||
 			g_hour ==10||
@@ -244,7 +249,7 @@ void secondAction(void) {
 // TxSend(j/1000 + '0');
 void printNowTime(void) {
 
-	PrintString("\r\n 现在时间:");
+	//PrintString("\r\n 现在时间:");
 
 	TxSend('H');
 	//TxSend(g_hour+ '0');
@@ -274,28 +279,6 @@ void printNowTime(void) {
 	
 	PrintString("\r\n ");
 }
-
-void key_scan(){
-
-	if(ioKEY == 0)                
-	//如果有键按下，则条件成立（有键按下，则s4为0；而 !key_flag为1）
-    {
-    	delay_ms(10);//延时消抖
-        if(ioKEY == 0)                             //如果确定有键按下
-        {                      
-            //进行事件处理
-            g_key_flag = 1;
-            //启动亮灯计时
-            g_key_time=g_light_on_time;
-
-			PrintString("\r\n 按键已按下.");
-            return ;
-        }
-	}
-	//g_key_flag = 0;
-	return ;
-}
-
 
 /********************* Timer0中断函数************************/
 void timer0_int (void) interrupt TIMER0_VECTOR
@@ -339,21 +322,38 @@ void timer0_int (void) interrupt TIMER0_VECTOR
 void INT0_int (void) interrupt INT0_VECTOR		//进中断时已经清除标志
 {
 	//WakeUpSource = 1;	//标记INT0唤醒
-	EX0 = 0;			//INT0 Disable
+	//EX0 = 0;			//INT0 Disable
 	IE0  = 0;			//外中断0标志位
-
     PrintString("\r\n 外部中断0.");
 }
 
 /********************* INT1中断函数 *************************/
 void INT1_int (void) interrupt INT1_VECTOR		//进中断时已经清除标志
 {
+	//进入中断时，可以把int1中断关闭。
+	EX1 = 0;	
 	//tfWakeUpSource = 2;	//标记INT1唤醒
-	EX1 = 0;			//INT1 Disable
+	//EX1 = 0;			//INT1 Disable
 	IE1  = 0;			//外中断1标志位
 
+	//处理完中断事件后，可以把 int1中断开启，防止多次进入。
 
-    PrintString("\r\n 外部中断1.");
+    PrintString("\r\n 外部中断1.延时1秒");
+    delay_ms(2000);
+	EX1 = 1;
+}
+
+/********************* INT3中断函数 ************************/
+void INT3_int  (void) interrupt INT3_VECTOR
+{
+    PrintString("\r\n 外部中断3.延时1秒");
+
+/*
+    INT_CLKO |=  (1 << 5);  //允许中断  
+    INT_CLKO &= ~(1 << 5);  //禁止中断
+*/
+	//EX3 = 0;	
+    //IE1  = 0;	
 }
 
 

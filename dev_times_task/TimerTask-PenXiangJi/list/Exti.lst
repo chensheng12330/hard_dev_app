@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   EXTI                                                                  09/20/2018 18:08:20 PAGE 1   
+C51 COMPILER V9.01   EXTI                                                                  09/21/2018 17:22:16 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE EXTI
@@ -62,7 +62,7 @@ line level    source
   53   1              
   54   1              if(EXT == EXT_INT0)     //外中断0
   55   1              {
-C51 COMPILER V9.01   EXTI                                                                  09/20/2018 18:08:20 PAGE 2   
+C51 COMPILER V9.01   EXTI                                                                  09/21/2018 17:22:16 PAGE 2   
 
   56   2                      if(INTx->EXTI_Interrupt == ENABLE)              EX0 = 1;        //允许中断
   57   2                      else                                                                    EX0 = 0;        //禁止中断
@@ -89,15 +89,15 @@ line level    source
   78   1                      if(INTx->EXTI_Interrupt == ENABLE)      INT_CLKO |=  (1 << 4);  //允许中断      
   79   1                      else                                                            INT_CLKO &= ~(1 << 4);  //禁止中断
   80   1                      return  0;              //成功
-  81   1              }
+  81   1              }*/
   82   1      
   83   1              if(EXT == EXT_INT3)             //外中断3, 固定为下降沿低优先级中断
   84   1              {
-  85   1                      if(INTx->EXTI_Interrupt == ENABLE)      INT_CLKO |=  (1 << 5);  //允许中断      
-  86   1                      else                                                            INT_CLKO &= ~(1 << 5);  //禁止中断
-  87   1                      return  0;              //成功
-  88   1              }
-  89   1      
+  85   2                      if(INTx->EXTI_Interrupt == ENABLE)      INT_CLKO |=  (1 << 5);  //允许中断      
+  86   2                      else                                                            INT_CLKO &= ~(1 << 5);  //禁止中断
+  87   2                      return  0;              //成功
+  88   2              }
+  89   1              /*
   90   1              if(EXT == EXT_INT4)             //外中断4, 固定为下降沿低优先级中断
   91   1              {
   92   1                      if(INTx->EXTI_Interrupt == ENABLE)      INT_CLKO |=  (1 << 6);  //允许中断      
@@ -109,7 +109,7 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    110    ----
+   CODE SIZE        =    133    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----

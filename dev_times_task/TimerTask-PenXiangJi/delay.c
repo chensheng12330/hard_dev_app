@@ -30,7 +30,7 @@
 // ÈÕÆÚ: 2013-4-1
 // ±¸×¢: 
 //========================================================================
-void  delay_ms(unsigned char ms)
+void  delay_ms(unsigned int ms)
 {
      unsigned int i;
 	 do{

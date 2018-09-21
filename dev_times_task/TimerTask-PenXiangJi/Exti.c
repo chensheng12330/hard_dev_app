@@ -78,7 +78,7 @@ u8	Ext_Inilize(u8 EXT, EXTI_InitTypeDef *INTx)
 		if(INTx->EXTI_Interrupt == ENABLE)	INT_CLKO |=  (1 << 4);	//允许中断	
 		else								INT_CLKO &= ~(1 << 4);	//禁止中断
 		return	0;		//成功
-	}
+	}*/
 
 	if(EXT == EXT_INT3)		//外中断3, 固定为下降沿低优先级中断
 	{
@@ -86,7 +86,7 @@ u8	Ext_Inilize(u8 EXT, EXTI_InitTypeDef *INTx)
 		else								INT_CLKO &= ~(1 << 5);	//禁止中断
 		return	0;		//成功
 	}
-
+        /*
 	if(EXT == EXT_INT4)		//外中断4, 固定为下降沿低优先级中断
 	{
 		if(INTx->EXTI_Interrupt == ENABLE)	INT_CLKO |=  (1 << 6);	//允许中断	

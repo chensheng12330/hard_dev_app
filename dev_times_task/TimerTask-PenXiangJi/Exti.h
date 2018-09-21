@@ -1,4 +1,20 @@
 
+/***************************************************************************************
+****************************************************************************************
+* FILE		: Exti.h
+* Description	:  中断处理
+*			  
+* Copyright (c) 2018 by XXX. All Rights Reserved.
+* 
+* History:
+* Version		Name       		Date			Description
+   0.1		XXX	2018/09/21	Initial Version
+   
+****************************************************************************************
+****************************************************************************************/
+
+
+
 #ifndef	__EXTI_H
 #define	__EXTI_H
 
@@ -19,6 +35,7 @@ typedef struct
 	u8	EXTI_Polity;		//优先级设置	PolityHigh,PolityLow
 	u8	EXTI_Interrupt;		//中断允许		ENABLE,DISABLE
 } EXTI_InitTypeDef;
+
 
 u8	Ext_Inilize(u8 EXT, EXTI_InitTypeDef *INTx);
 
