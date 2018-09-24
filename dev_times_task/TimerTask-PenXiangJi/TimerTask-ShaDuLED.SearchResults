@@ -1,6 +1,5 @@
----- g_key_time 匹配 (5 在 0 文件 ) ----
-Main.c:u8  g_key_time=0; //按键响应事件时间计时数.默认为20分钟. 单位为分钟
-Main.c:	if(g_key_time<1){
-Main.c:		g_key_time =0; //重置按键亮灯计时时间
-Main.c:		g_key_time--;
-Main.c:            g_key_time=g_light_on_time;
+---- .sKeyForRun Matches (4 in 0 files) ----
+Main.c:	if(g_allKeyState.sKeyForRun== 1) {
+Main.c:		while(g_allKeyState.sKeyForRun){;};
+Main.c:		//g_allKeyState.sKeyForRun = 0;
+Main.c:	g_allKeyState.sKeyForRun = 1;

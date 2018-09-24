@@ -25,7 +25,7 @@
 
 1¡¢Ò»ÌìÅçÊ±¼äÉèÖÃÎª£º7µã£¬13µã£¬19µã
 2¡¢
-T(io) °´¼üÓÃÓÚÃ¿Ìì12µã½Ï×¼Ê±¼ä£¬´¥·¢¼´Éè¶¨µ±Ç°Ê±¼äÎª12µã.
+T(io) °´¼üÓÃÓÚÃ¿Ìì12µã½Ï×¼Ê±¼ä£¬´¥·¢¼´Éè¶¨µ±Ç°Ê	±¼äÎª12µã.
 M ÓÃÓÚÖ÷¶¯´¥·¢ÅçÏã»úÔËĞĞÒ»´Î¡£
 S  ¹Ø±Õµ±³ÌĞòÔËĞĞ.
 
@@ -48,30 +48,30 @@ u32 g_hour=0;  //Ê±
 u32 g_minute=0;//·Ö
 u32 g_second=0;//Ãë
 u32 g_millisecond=0;//ºÁÃë 
-u8  g_addNum = 50; //50 //¶¨Ê±µş¼ÓÊı
+#define  k_addNum 50; //50 //¶¨Ê±µş¼ÓÊı
 
 u16 g_key_flag=0; //°´¼ü×´Ì¬,(1:°´ÏÂ  0:Î´°´ÏÂ)
 u8  g_key_time=0; //°´¼üÏìÓ¦ÊÂ¼şÊ±¼ä¼ÆÊ±Êı.Ä¬ÈÏÎª20·ÖÖÓ. µ¥Î»Îª·ÖÖÓ
 u8  g_light_on_time=1; //Ä¬ÈÏÎª20·ÖÖÓ. µ¥Î»Îª·ÖÖÓ
 
 
-sbit ioInKeyForTime = P3^2; //Ê±¼ä½Ï×¼°´¼üÊäÈë
-sbit ioInKeyForRun  = P3^3;//³ÌĞòÊÇ·ñÔËĞĞÊäÈë 
-sbit ioInKeyForMoto =P3^5;//ÅçÏã»ú´¥·¢ÔËĞĞÊäÈë 
+sbit ioInKeyForTime = P3^2; //Ê±¼ä½Ï×¼°´¼üÊäÈë  int0
+sbit ioInKeyForRun  = P3^3;//³ÌĞòÊÇ·ñÔËĞĞÊäÈë   int1
+sbit ioInKeyForMoto =P3^5;//ÅçÏã»ú´¥·¢ÔËĞĞÊäÈë  int3
 
 sbit ioOutForL1Green= P3^0;  //ÂÌµÆ£¬³ÌĞòÔËĞĞÖ¸Ê¾µÆ
 sbit ioOutForL2Red  = P3^1;  //ºìµÆ£¬°´¼üÏìÓ¦Ö¸Ê¾µÆ
-sbit ioOutForMoto   = P3^4;  //ÅçÏã»úÇı¶¯IO¿Ú.
+sbit ioOutForMoto   = P3^4;  //ÅçÏã»úÇı¶¯IO¿Ú. 
 
 u8 ioSwitchLED=0;
 u8 ioWorkLED=0;
 u8 ioKEY=0;
-
+ 
 typedef struct
 {
 	u8	sKeyForTime;  //Ê±¼ä¼ü×´Ì¬Öµ.  0: Î´°´ÏÂ  //1:ÒÑ°´ÏÂ
 	u8	sKeyForRun;	  //³ÌĞò¼ü×´Ì¬Öµ.  0: Î´°´ÏÂ  //1:ÒÑ°´ÏÂ
-       u8   sKeyForMoto;  //ÅçÏã»ú¼ü×´Ì¬Öµ.  0: Î´°´ÏÂ  //1:ÒÑ°´ÏÂ
+    u8  sKeyForMoto;  //ÅçÏã»ú¼ü×´Ì¬Öµ.  0: Î´°´ÏÂ  //1:ÒÑ°´ÏÂ
 } KeyStateDef; //µ±Ç°³ÌĞò°´¼üµÄ×´Ì¬,Ä¬ÈÏÎª0 
 
 //È«¾Ö¶ÔÏó
@@ -177,7 +177,7 @@ void main(void)
 
 	while (1)
 	{
-		//key_scan();
+		key_scan();
 
 			/*
 		Ö´ĞĞÈÎÎñ¶¯×÷1
@@ -226,6 +226,60 @@ void main(void)
 	}
 }
 
+/***ÄÚ²¿¹¦ÄÜº¯Êı***/
+
+// °´¼ü´¦Àí¹¦ÄÜ
+void key_scan(void) {
+
+	if(g_allKeyState.sKeyForMoto == 1) {
+
+		//´¥·¢ÅçÏã»ú¹¤×÷
+
+		//Çå¿ÕÔ­×´Ì¬
+		g_allKeyState.sKeyForMoto = 0;
+	}
+
+	if(g_allKeyState.sKeyForRun== 1) {
+
+		//Í£Ö¹APPÔËĞĞ
+		while(g_allKeyState.sKeyForRun){;};
+		
+		//Çå¿ÕÔ­×´Ì¬
+		//g_allKeyState.sKeyForRun = 0;
+	}
+
+	if(g_allKeyState.sKeyForTime== 1) {
+
+		//ÖØÖÃÊ±¼äÎª12µã.
+		g_hour = 12;
+		g_minute=g_second=g_millisecond =0;
+
+		//Çå¿ÕÔ­×´Ì¬
+		g_allKeyState.sKeyForTime = 0;
+	}	
+}
+
+//ÁÁµÆÏìÓ¦
+/*
+3¡¢L1(ÂÌio0)ÏÔÊ¾µ±Ç°×´Ì¬£¬
+10ÃëÉÁÒ»´Î£¬±íÊ¾»úÆ÷¶¨Ê±ÔËĞĞÖĞ¡£
+³£ÁÁ±íÊ¾µç³Ø²»×ã¡£
+
+L2(ºìio1)ÉÁÒ»´Î£¬±íÊ¾Ê±¼ä½Ï×¼Íê³É¡£
+L2(ºì)ÉÁ¶ş´Î£¬±íÊ¾¼ÆÊı»Ö¸´Íê³É¡£ 
+L2(ºì)ÉÁÈı´Î£¬±íÊ¾¹Ø±Õ¶¨Ê±
+*/
+void L2ShowWithNum(u8 num){
+
+	for(u8 i=0; i<num; i++)
+	{
+		ioOutForL2Red = 0;
+		delay_ms(200);
+		ioOutForL2Red = 1;
+	}
+}
+
+/**/
 
 void mintueAction(void) {
 	//PrintString("\r\n mintueAction... ");
@@ -243,6 +297,13 @@ void mintueAction(void) {
 
 void secondAction(void) {
 	//PrintString("\r\n secondAction... ");
+
+	if(g_second%10 == 0){
+		ioOutForL1Green = 0;
+		delay_ms(200);
+		ioOutForL1Green = 1;
+	}
+	
 	printNowTime();
 }
 
@@ -283,7 +344,7 @@ void printNowTime(void) {
 /********************* Timer0ÖĞ¶Ïº¯Êı************************/
 void timer0_int (void) interrupt TIMER0_VECTOR
 {
-	g_millisecond += g_addNum;
+	g_millisecond += k_addNum;
 
 	if( g_millisecond>= 1000) { //Âú×ãÒ»Ãë
 		g_millisecond = 0;
@@ -295,6 +356,8 @@ void timer0_int (void) interrupt TIMER0_VECTOR
 
 			//Âú×ãÒ»·ÖÖÓ
 			mintueAction();
+
+			
 			g_second =0;
 			g_minute ++;
 
@@ -316,7 +379,11 @@ void timer0_int (void) interrupt TIMER0_VECTOR
 	}
 }
 
-
+/*
+sbit ioInKeyForTime = P3^2; //Ê±¼ä½Ï×¼°´¼üÊäÈë  int0
+sbit ioInKeyForRun  = P3^3;//³ÌĞòÊÇ·ñÔËĞĞÊäÈë   int1
+sbit ioInKeyForMoto =P3^5;//ÅçÏã»ú´¥·¢ÔËĞĞÊäÈë  int3
+*/
 
 /********************* INT0ÖĞ¶Ïº¯Êı *************************/
 void INT0_int (void) interrupt INT0_VECTOR		//½øÖĞ¶ÏÊ±ÒÑ¾­Çå³ı±êÖ¾
@@ -325,6 +392,8 @@ void INT0_int (void) interrupt INT0_VECTOR		//½øÖĞ¶ÏÊ±ÒÑ¾­Çå³ı±êÖ¾
 	//EX0 = 0;			//INT0 Disable
 	IE0  = 0;			//ÍâÖĞ¶Ï0±êÖ¾Î»
     PrintString("\r\n Íâ²¿ÖĞ¶Ï0.");
+
+	g_allKeyState.sKeyForTime= 1;
 }
 
 /********************* INT1ÖĞ¶Ïº¯Êı *************************/
@@ -341,6 +410,8 @@ void INT1_int (void) interrupt INT1_VECTOR		//½øÖĞ¶ÏÊ±ÒÑ¾­Çå³ı±êÖ¾
     PrintString("\r\n Íâ²¿ÖĞ¶Ï1.ÑÓÊ±1Ãë");
     delay_ms(2000);
 	EX1 = 1;
+
+	g_allKeyState.ioInKeyForRun= 1;
 }
 
 /********************* INT3ÖĞ¶Ïº¯Êı ************************/
@@ -354,6 +425,8 @@ void INT3_int  (void) interrupt INT3_VECTOR
 */
 	//EX3 = 0;	
     //IE1  = 0;	
+
+	g_allKeyState.ioInKeyForMoto= 1;
 }
 
 
