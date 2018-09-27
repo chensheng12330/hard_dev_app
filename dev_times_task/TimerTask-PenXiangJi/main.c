@@ -57,11 +57,12 @@ u8  g_light_on_time=1; //默认为20分钟. 单位为分钟
 
 sbit ioInKeyForTime = P3^2; //时间较准按键输入  int0
 sbit ioInKeyForRun  = P3^3;//程序是否运行输入   int1
-sbit ioInKeyForMoto =P3^5;//喷香机触发运行输入  int3
+sbit ioInKeyForMoto = P3^5;//喷香机触发运行输入  int3
 
-sbit ioOutForL1Green= P3^0;  //绿灯，程序运行指示灯
+sbit ioOutForL1Green= P3^1;  //绿灯，程序运行指示灯
 sbit ioOutForL2Red  = P3^1;  //红灯，按键响应指示灯
-sbit ioOutForMoto   = P3^4;  //喷香机驱动IO口. 
+sbit ioOutForMotoPower=P3^4;  //喷香机电源开关IO口. 
+sbit ioOutForMotoKey= P3^0;  //喷香机驱动开关IO口. 
 
 u8 ioSwitchLED=0;
 u8 ioWorkLED=0;
@@ -82,8 +83,6 @@ KeyStateDef  g_allKeyState={0,0,0};
 
 
 
-
-
 /*************	本地函数声明	**************/
 
 void mintueAction(void);
@@ -94,6 +93,9 @@ void printNowTime(void);
 
 void key_scan(void);
 
+void l2ShowWithNum(u8 num);
+
+void motoStart(void);
 /*************  外部函数和变量声明 *****************/
 void	EXTI_config(void)
 {
@@ -165,7 +167,11 @@ void main(void)
       ioOutForL1Green=ioInKeyForMoto=ioInKeyForRun=ioInKeyForTime=1; //key键拉高
 
       //输出io脚先关闭
-      ioOutForL2Red =ioOutForMoto = 0;
+      ioOutForL2Red =ioOutForMotoPower = 0;
+
+       ioOutForMotoKey=1; //触发喷香机的按键开关. 低位开，高位关.
+
+            
 
         //g_allKeyState = {0,0,0};
 
@@ -187,47 +193,14 @@ void main(void)
 			/*
 		执行任务动作1
 
-		1,4,7,10,13,16,19,22 开始照明.
+		一天喷时间设置为：7点，13点，19点
 		*/
 
-		if(   g_hour ==0 ||
-			g_hour ==4 ||
-			g_hour ==7 ||
-			g_hour ==10||
-			g_hour ==13||
-			g_hour ==16||
-			g_hour ==19||
-			g_hour ==22||
-			g_key_flag==1
-			){
+		if( g_hour ==7 || g_hour ==13 || g_hour ==19 ) {
 
-			//持续亮灯20分钟.
-			if(g_minute<g_light_on_time || g_key_flag==1) {
-
-				ioSwitchLED = 1;
-			}
-			else {
-				ioSwitchLED = 0;
-			}
+ 		       //MotoStart();
+				
 		}
-
-		/*
-		执行任务动作1
-
-		工作灯,每10秒闪一次
-		*/
-		if(g_second%10 == 0){
-			ioWorkLED = 1;
-			delay_ms(2000);
-			ioWorkLED = 0;
-		}
-		else {
-			//ioWorkLED = 0;
-			delay_ms(900);
-		}
-
-		//结束任务.
-   
 	}
 }
 
@@ -273,16 +246,18 @@ void key_scan(void) {
 L2(红io1)闪一次，表示时间较准完成。
 L2(红)闪二次，表示计数恢复完成。 
 L2(红)闪三次，表示关闭定时
-*/
-void L2ShowWithNum(u8 num){
+*/ 
+void l2ShowWithNum(u8 num)
+{
 
-	for(u8 i=0; i<num; i++)
+	int i=0;	
+	for(i=0; i<num; i++)
 	{
 		ioOutForL2Red = 0;
 		delay_ms(200);
-		ioOutForL2Red = 1
-	}
-}
+		ioOutForL2Red = 1;
+	}	/**/
+}	
 
 /*电机控制
 
@@ -290,36 +265,43 @@ void L2ShowWithNum(u8 num){
 2.等待喷香机启动,约(1秒)钟,即8(k_moto_run_time-2)秒时启动操作.
 3.打开p35, 20us 秒关闭(模似按键)
 */
-void MotoStart(void) {
+void motoStart(void) {
     //设置电机启动标志时间值.
     g_moto_run_time = k_moto_run_time; 
 }
 
 void secondAction(void) {
 	//PrintString("\r\n secondAction... ");
-
+	printNowTime();
+    
 	if(g_second%10 == 0){
-		ioOutForL1Green = 0;
+		ioOutForMotoPower = 0;
 		delay_ms(200);
-		ioOutForL1Green = 1;
+		ioOutForMotoPower = 1;
 	}
 
-        if(g_moto_run_time==8){
+        if(g_moto_run_time==0){
+                return;
+        }
+        else if(g_moto_run_time==8){
                 g_moto_run_time--;
                 //启动电机按键
-               
+                ioOutForMotoKey=0;  //打开
+               delay_ms(20);
+               ioOutForMotoKey=1; //关闭
+                
          }
         else if(g_moto_run_time==1){
                 g_moto_run_time=0;
 
                 //关闭电机电源
-                 ioOutForMoto = 0;
+                 ioOutForMotoPower= 0;
             }
         else if(g_moto_run_time>0){
                 g_moto_run_time--;
             }
         
-	printNowTime();
+	
 }
 
 void mintueAction(void) {
@@ -431,8 +413,9 @@ void INT1_int (void) interrupt INT1_VECTOR		//进中断时已经清除标志
     PrintString("\r\n 外部中断1.延时1秒");
     delay_ms(2000);
 	EX1 = 1;
-
-	g_allKeyState.ioInKeyForRun= 1;
+		;	  //程序键状态值.  0: 未按下  //1:已按下
+    
+	g_allKeyState.sKeyForRun= 1;
 }
 
 /********************* INT3中断函数 ************************/
@@ -447,7 +430,7 @@ void INT3_int  (void) interrupt INT3_VECTOR
 	//EX3 = 0;	
     //IE1  = 0;	
 
-	g_allKeyState.ioInKeyForMoto= 1;
+	g_allKeyState.sKeyForMoto= 1;
 }
 
 
