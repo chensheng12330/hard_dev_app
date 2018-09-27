@@ -1,5 +1,0 @@
----- .sKeyForRun Matches (4 in 0 files) ----
-Main.c:	if(g_allKeyState.sKeyForRun== 1) {
-Main.c:		while(g_allKeyState.sKeyForRun){;};
-Main.c:		//g_allKeyState.sKeyForRun = 0;
-Main.c:	g_allKeyState.sKeyForRun = 1;

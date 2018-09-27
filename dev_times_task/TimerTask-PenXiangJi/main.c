@@ -66,6 +66,9 @@ sbit ioOutForMoto   = P3^4;  //喷香机驱动IO口.
 u8 ioSwitchLED=0;
 u8 ioWorkLED=0;
 u8 ioKEY=0;
+
+#define  k_moto_run_time 10; //50 //定时叠加数
+u8 g_moto_run_time=0; //电机启动运行后的时间值
  
 typedef struct
 {
@@ -76,6 +79,8 @@ typedef struct
 
 //全局对象
 KeyStateDef  g_allKeyState={0,0,0};
+
+
 
 
 
@@ -275,24 +280,19 @@ void L2ShowWithNum(u8 num){
 	{
 		ioOutForL2Red = 0;
 		delay_ms(200);
-		ioOutForL2Red = 1;
+		ioOutForL2Red = 1
 	}
 }
 
-/**/
+/*电机控制
 
-void mintueAction(void) {
-	//PrintString("\r\n mintueAction... ");
-
-	if(g_key_time<1){
-		//复位.
-		g_key_flag =0; //用于控制亮灯
-		g_key_time =0; //重置按键亮灯计时时间
-	}
-	else{
-		g_key_flag =1; //用于控制亮灯
-		g_key_time--;
-	}
+1.打开p34,      (10秒) 后关闭(相当于开关电源)
+2.等待喷香机启动,约(1秒)钟,即8(k_moto_run_time-2)秒时启动操作.
+3.打开p35, 20us 秒关闭(模似按键)
+*/
+void MotoStart(void) {
+    //设置电机启动标志时间值.
+    g_moto_run_time = k_moto_run_time; 
 }
 
 void secondAction(void) {
@@ -303,9 +303,30 @@ void secondAction(void) {
 		delay_ms(200);
 		ioOutForL1Green = 1;
 	}
-	
+
+        if(g_moto_run_time==8){
+                g_moto_run_time--;
+                //启动电机按键
+               
+         }
+        else if(g_moto_run_time==1){
+                g_moto_run_time=0;
+
+                //关闭电机电源
+                 ioOutForMoto = 0;
+            }
+        else if(g_moto_run_time>0){
+                g_moto_run_time--;
+            }
+        
 	printNowTime();
 }
+
+void mintueAction(void) {
+	//PrintString("\r\n mintueAction... ");
+
+}
+
 
 // TxSend(j/1000 + '0');
 void printNowTime(void) {
