@@ -1,7 +1,7 @@
-C51 COMPILER V9.01   SOFT_UART                                                             09/28/2018 18:12:46 PAGE 1   
+C51 COMPILER V9.00   SOFT_UART                                                             09/28/2018 23:20:13 PAGE 1   
 
 
-C51 COMPILER V9.01, COMPILATION OF MODULE SOFT_UART
+C51 COMPILER V9.00, COMPILATION OF MODULE SOFT_UART
 OBJECT MODULE PLACED IN Soft_UART.OBJ
 COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE Soft_UART.c BROWSE DEBUG OBJECTEXTEND PRINT(.\list\Soft_UART.lst)
 
@@ -61,48 +61,50 @@ line level    source
   52          // 备注: 
   53          //========================================================================
   54          void    TxSend(u8 dat)
-  55          {
-C51 COMPILER V9.01   SOFT_UART                                                             09/28/2018 18:12:46 PAGE 2   
+  55          {       
+C51 COMPILER V9.00   SOFT_UART                                                             09/28/2018 23:20:13 PAGE 2   
 
-  56   1              u8      i;
-  57   1      //      EA = 0;
-  58   1              P_TXD = 0;
-  59   1              BitTime();
-  60   1              for(i=0; i<8; i++)
-  61   1              {
-  62   2                      if(dat & 1)             P_TXD = 1;
-  63   2                      else                    P_TXD = 0;
-  64   2                      dat >>= 1;
-  65   2                      BitTime();
-  66   2              }
-  67   1              P_TXD = 1;
-  68   1      //      EA = 1;
-  69   1              BitTime();
-  70   1              BitTime();
-  71   1      }
-  72          
-  73          //========================================================================
-  74          // 函数: void PrintString(unsigned char code *puts)
-  75          // 描述: 模拟串口发送一串字符串。9600，N，8，1
-  76          // 参数: *puts: 要发送的字符指针.
-  77          // 返回: none.
-  78          // 版本: VER1.0
-  79          // 日期: 2013-4-1
-  80          // 备注: 
-  81          //========================================================================
-  82          void PrintString(unsigned char code *puts)
-  83          {
-  84   1          for (; *puts != 0;  puts++)  TxSend(*puts);
-  85   1      }
-  86          
+  56   1              
+  57   1              u8      i;
+  58   1              return;
+  59   1      //      EA = 0;
+  60   1              P_TXD = 0;
+  61   1              BitTime();
+  62   1              for(i=0; i<8; i++)
+  63   1              {
+  64   2                      if(dat & 1)             P_TXD = 1;
+  65   2                      else                    P_TXD = 0;
+  66   2                      dat >>= 1;
+  67   2                      BitTime();
+  68   2              }
+  69   1              P_TXD = 1;
+  70   1      //      EA = 1;
+  71   1              BitTime();
+  72   1              BitTime();
+  73   1      }
+  74          
+  75          //========================================================================
+  76          // 函数: void PrintString(unsigned char code *puts)
+  77          // 描述: 模拟串口发送一串字符串。9600，N，8，1
+  78          // 参数: *puts: 要发送的字符指针.
+  79          // 返回: none.
+  80          // 版本: VER1.0
+  81          // 日期: 2013-4-1
+  82          // 备注: 
+  83          //========================================================================
+  84          void PrintString(unsigned char code *puts)
+  85          {
+  86   1          for (; *puts != 0;  puts++)  TxSend(*puts);
+  87   1      }
+  88          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =     68    ----
+   CODE SIZE        =     31    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =   ----    ----
+   DATA SIZE        =   ----       1
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

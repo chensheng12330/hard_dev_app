@@ -222,7 +222,7 @@ void key_scan(void) {
 
 		//触发喷香机工作
 		motoStart();
-                  l2ShowWithNum(l2Num_MotoRun_2);
+		l2ShowWithNum(l2Num_MotoRun_2);
 		
 	}
 /*
@@ -262,13 +262,15 @@ L2(红)闪三次，表示关闭APP运行
 void l2ShowWithNum(u8 num)
 {
 	int i=0;
-    PrintString("\r\n l2ShowWithNum. ");
+    PrintString("\r\n l2ShowWithNum.");
 		
 	for(i=0; i<num; i++)
 	{
-		ioOutForL2Red = 0;
-		delay_ms(200);
+		delay_ms(100);
 		ioOutForL2Red = 1;
+		delay_ms(100);
+		ioOutForL2Red = 0;
+
 	}	/**/
 }	
 
@@ -280,7 +282,10 @@ void l2ShowWithNum(u8 num)
 */
 void motoStart(void) {
     //设置电机启动标志时间值.
+
+	ioOutForMotoPower= 1; //开启电源
     g_moto_run_time = k_moto_run_time; 
+	
     PrintString("\r\n motoStart. ");
 }
 
@@ -305,7 +310,7 @@ void secondAction(void) {
                 g_moto_run_time--;
                 //启动电机按键
                 ioOutForMotoKey=0;  //打开
-               delay_ms(20);
+               delay_ms(30);
                ioOutForMotoKey=1; //关闭
                 
          }
@@ -331,7 +336,7 @@ void mintueAction(void) {
 // TxSend(j/1000 + '0');
 void printNowTime(void) {
 
-	//PrintString("\r\n 现在时间:");
+	PrintString("\r\n ....");
 
 	TxSend('H');
 	//TxSend(g_hour+ '0');
@@ -369,6 +374,7 @@ void timer0_int (void) interrupt TIMER0_VECTOR
 
 	if( g_millisecond>= 1000) { //满足一秒
 		g_millisecond = 0;
+        
 		secondAction();
 		
 		g_second++;
@@ -411,10 +417,14 @@ void INT0_int (void) interrupt INT0_VECTOR		//进中断时已经清除标志
 {
 	//WakeUpSource = 1;	//标记INT0唤醒
 	//EX0 = 0;			//INT0 Disable
-	IE0  = 0;			//外中断0标志位
-    PrintString("\r\n 外部中断0.");
 
+	IE0  = 0;			//外中断0标志位
 	g_allKeyState.sKeyForTime= 1;
+        PrintString("\r\n 外部中断0.");
+        delay_ms(2000);
+        EX0 = 1;
+
+	
 }
 
 /********************* INT1中断函数 *************************/
@@ -425,14 +435,14 @@ void INT1_int (void) interrupt INT1_VECTOR		//进中断时已经清除标志
 	//tfWakeUpSource = 2;	//标记INT1唤醒
 	//EX1 = 0;			//INT1 Disable
 	IE1  = 0;			//外中断1标志位
-
+	g_allKeyState.sKeyForMoto= 1;
 	//处理完中断事件后，可以把 int1中断开启，防止多次进入。
 
     PrintString("\r\n 外部中断1.延时1秒");
     delay_ms(2000);
-	EX1 = 1;	 ;	  //程序键状态值.  0: 未按下  //1:已按下
+	EX1 = 1;	  //程序键状态值.  0: 未按下  //1:已按下
     
-	g_allKeyState.sKeyForMoto= 1;
+	
 }
 
 /********************* INT3中断函数 ***********************
