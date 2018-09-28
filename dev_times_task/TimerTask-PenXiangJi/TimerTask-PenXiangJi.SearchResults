@@ -1,5 +1,5 @@
----- ioOutForMoto Matches (4 in 0 files) ----
-Main.c:sbit ioOutForMoto   = P3^4;  //喷香机电源开关IO口. 
-Main.c:sbit ioOutForMotoKey= P3^0;  //喷香机驱动IO口. 
-Main.c:      ioOutForL2Red =ioOutForMoto = 0;
-Main.c:                 ioOutForMoto = 0;
+---- ioOutForL1Green Matches (4 in 0 files) ----
+Main.c:sbit ioOutForL1Green= P3^0;  //绿灯，程序运行指示灯
+Main.c:      ioOutForL1Green=ioInKeyForMoto=ioInKeyForTime=1; //key键拉高
+Main.c:		ioOutForL1Green = 0;
+Main.c:		ioOutForL1Green = 1;
