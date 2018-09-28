@@ -1,5 +1,10 @@
----- ioOutForL1Green Matches (4 in 0 files) ----
-Main.c:sbit ioOutForL1Green= P3^0;  //绿灯，程序运行指示灯
-Main.c:      ioOutForL1Green=ioInKeyForMoto=ioInKeyForTime=1; //key键拉高
-Main.c:		ioOutForL1Green = 0;
-Main.c:		ioOutForL1Green = 1;
+---- g_moto_run_time Matches (9 in 0 files) ----
+Main.c:u8 g_moto_run_time=0; //电机启动运行后的时间值
+Main.c:    g_moto_run_time = k_moto_run_time; 
+Main.c:        if(g_moto_run_time==0){
+Main.c:        else if(g_moto_run_time==8){
+Main.c:                g_moto_run_time--;
+Main.c:        else if(g_moto_run_time==1){
+Main.c:                g_moto_run_time=0;
+Main.c:        else if(g_moto_run_time>0){
+Main.c:                g_moto_run_time--;

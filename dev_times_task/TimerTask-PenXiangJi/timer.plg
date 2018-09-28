@@ -19,3 +19,253 @@ linking...
 Program Size: data=40.0 xdata=0 code=2280
 creating hex file from "timer"...
 "timer" - 0 Error(s), 0 Warning(s).
+compiling Soft_UART.c...
+SOFT_UART.C(57): error C141: syntax error near 'u8'
+SOFT_UART.C(57): error C202: 'i': undefined identifier
+SOFT_UART.C(61): error C202: 'i': undefined identifier
+Soft_UART.c - 3 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+compiling Soft_UART.c...
+SOFT_UART.C(57): error C141: syntax error near 'u8'
+SOFT_UART.C(57): error C202: 'i': undefined identifier
+SOFT_UART.C(61): error C202: 'i': undefined identifier
+Target not created
+compiling Soft_UART.c...
+Soft_UART.c - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?BITTIME?SOFT_UART
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_TXSEND?SOFT_UART
+    CALLER1: ?PR?TIMER0_INT?MAIN
+    CALLER2: ?PR?INT0_INT?MAIN
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_TXSEND?SOFT_UART
+    CALLER1: ?PR?INT0_INT?MAIN
+    CALLER2: ?PR?INT1_INT?MAIN
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_TXSEND?SOFT_UART
+    CALLER1: ?PR?INT1_INT?MAIN
+    CALLER2: ?C_C51STARTUP
+Program Size: data=43.0 xdata=0 code=2257
+creating hex file from "timer"...
+"timer" - 0 Error(s), 4 Warning(s).
+Build target 'Target 1'
+compiling GPIO.c...
+compiling main.c...
+compiling timer.c...
+compiling Soft_UART.c...
+compiling delay.c...
+compiling Exti.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?BITTIME?SOFT_UART
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_TXSEND?SOFT_UART
+    CALLER1: ?PR?TIMER0_INT?MAIN
+    CALLER2: ?PR?INT0_INT?MAIN
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_TXSEND?SOFT_UART
+    CALLER1: ?PR?INT0_INT?MAIN
+    CALLER2: ?PR?INT1_INT?MAIN
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_TXSEND?SOFT_UART
+    CALLER1: ?PR?INT1_INT?MAIN
+    CALLER2: ?C_C51STARTUP
+Program Size: data=43.0 xdata=0 code=2257
+creating hex file from "timer"...
+"timer" - 0 Error(s), 4 Warning(s).
+Build target 'Target 1'
+compiling GPIO.c...
+compiling main.c...
+compiling timer.c...
+compiling Soft_UART.c...
+compiling delay.c...
+compiling Exti.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?BITTIME?SOFT_UART
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_TXSEND?SOFT_UART
+    CALLER1: ?PR?TIMER0_INT?MAIN
+    CALLER2: ?PR?INT0_INT?MAIN
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_TXSEND?SOFT_UART
+    CALLER1: ?PR?INT0_INT?MAIN
+    CALLER2: ?PR?INT1_INT?MAIN
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_TXSEND?SOFT_UART
+    CALLER1: ?PR?INT1_INT?MAIN
+    CALLER2: ?C_C51STARTUP
+Program Size: data=43.0 xdata=0 code=2257
+creating hex file from "timer"...
+"timer" - 0 Error(s), 4 Warning(s).
+compiling main.c...
+main.c - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?BITTIME?SOFT_UART
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_TXSEND?SOFT_UART
+    CALLER1: ?PR?TIMER0_INT?MAIN
+    CALLER2: ?PR?INT0_INT?MAIN
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_TXSEND?SOFT_UART
+    CALLER1: ?PR?INT0_INT?MAIN
+    CALLER2: ?PR?INT1_INT?MAIN
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_TXSEND?SOFT_UART
+    CALLER1: ?PR?INT1_INT?MAIN
+    CALLER2: ?C_C51STARTUP
+Program Size: data=43.0 xdata=0 code=2259
+creating hex file from "timer"...
+"timer" - 0 Error(s), 4 Warning(s).
+Build target 'Target 1'
+compiling GPIO.c...
+compiling main.c...
+compiling timer.c...
+compiling Soft_UART.c...
+compiling delay.c...
+compiling Exti.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?BITTIME?SOFT_UART
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_TXSEND?SOFT_UART
+    CALLER1: ?PR?TIMER0_INT?MAIN
+    CALLER2: ?PR?INT0_INT?MAIN
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_TXSEND?SOFT_UART
+    CALLER1: ?PR?INT0_INT?MAIN
+    CALLER2: ?PR?INT1_INT?MAIN
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_TXSEND?SOFT_UART
+    CALLER1: ?PR?INT1_INT?MAIN
+    CALLER2: ?C_C51STARTUP
+Program Size: data=43.0 xdata=0 code=2259
+creating hex file from "timer"...
+"timer" - 0 Error(s), 4 Warning(s).
+compiling main.c...
+main.c - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?BITTIME?SOFT_UART
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_TXSEND?SOFT_UART
+    CALLER1: ?PR?TIMER0_INT?MAIN
+    CALLER2: ?PR?INT0_INT?MAIN
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_TXSEND?SOFT_UART
+    CALLER1: ?PR?INT0_INT?MAIN
+    CALLER2: ?PR?INT1_INT?MAIN
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_TXSEND?SOFT_UART
+    CALLER1: ?PR?INT1_INT?MAIN
+    CALLER2: ?C_C51STARTUP
+Program Size: data=43.0 xdata=0 code=2266
+creating hex file from "timer"...
+"timer" - 0 Error(s), 4 Warning(s).
+Build target 'Target 1'
+compiling GPIO.c...
+compiling main.c...
+compiling timer.c...
+compiling Soft_UART.c...
+compiling delay.c...
+compiling Exti.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?BITTIME?SOFT_UART
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_TXSEND?SOFT_UART
+    CALLER1: ?PR?TIMER0_INT?MAIN
+    CALLER2: ?PR?INT0_INT?MAIN
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_TXSEND?SOFT_UART
+    CALLER1: ?PR?INT0_INT?MAIN
+    CALLER2: ?PR?INT1_INT?MAIN
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_TXSEND?SOFT_UART
+    CALLER1: ?PR?INT1_INT?MAIN
+    CALLER2: ?C_C51STARTUP
+Program Size: data=43.0 xdata=0 code=2266
+creating hex file from "timer"...
+"timer" - 0 Error(s), 4 Warning(s).
+Build target 'Target 1'
+compiling GPIO.c...
+compiling main.c...
+compiling timer.c...
+compiling Soft_UART.c...
+compiling delay.c...
+compiling Exti.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?BITTIME?SOFT_UART
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_TXSEND?SOFT_UART
+    CALLER1: ?PR?TIMER0_INT?MAIN
+    CALLER2: ?PR?INT0_INT?MAIN
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_TXSEND?SOFT_UART
+    CALLER1: ?PR?INT0_INT?MAIN
+    CALLER2: ?PR?INT1_INT?MAIN
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_TXSEND?SOFT_UART
+    CALLER1: ?PR?INT1_INT?MAIN
+    CALLER2: ?C_C51STARTUP
+Program Size: data=43.0 xdata=0 code=2266
+creating hex file from "timer"...
+"timer" - 0 Error(s), 4 Warning(s).
+Build target 'Target 1'
+compiling GPIO.c...
+compiling main.c...
+compiling timer.c...
+compiling Soft_UART.c...
+compiling delay.c...
+compiling Exti.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?BITTIME?SOFT_UART
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_TXSEND?SOFT_UART
+    CALLER1: ?PR?TIMER0_INT?MAIN
+    CALLER2: ?PR?INT0_INT?MAIN
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_TXSEND?SOFT_UART
+    CALLER1: ?PR?INT0_INT?MAIN
+    CALLER2: ?PR?INT1_INT?MAIN
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_TXSEND?SOFT_UART
+    CALLER1: ?PR?INT1_INT?MAIN
+    CALLER2: ?C_C51STARTUP
+Program Size: data=43.0 xdata=0 code=2266
+creating hex file from "timer"...
+"timer" - 0 Error(s), 4 Warning(s).
+Build target 'Target 1'
+compiling GPIO.c...
+compiling main.c...
+compiling timer.c...
+compiling Soft_UART.c...
+compiling delay.c...
+compiling Exti.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?BITTIME?SOFT_UART
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_TXSEND?SOFT_UART
+    CALLER1: ?PR?TIMER0_INT?MAIN
+    CALLER2: ?PR?INT0_INT?MAIN
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_TXSEND?SOFT_UART
+    CALLER1: ?PR?INT0_INT?MAIN
+    CALLER2: ?PR?INT1_INT?MAIN
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_TXSEND?SOFT_UART
+    CALLER1: ?PR?INT1_INT?MAIN
+    CALLER2: ?C_C51STARTUP
+Program Size: data=43.0 xdata=0 code=2266
+creating hex file from "timer"...
+"timer" - 0 Error(s), 4 Warning(s).
