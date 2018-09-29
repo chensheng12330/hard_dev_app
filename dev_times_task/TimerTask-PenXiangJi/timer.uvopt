@@ -272,10 +272,10 @@
       <FileType>1</FileType>
       <tvExp>1</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>31</ColumnNumber>
+      <ColumnNumber>30</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>402</TopLine>
-      <CurrentLine>425</CurrentLine>
+      <TopLine>6</TopLine>
+      <CurrentLine>14</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -334,20 +334,6 @@
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>4</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>1</tvExp>
-      <Focus>0</Focus>
-      <ColumnNumber>49</ColumnNumber>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>4</TopLine>
-      <CurrentLine>4</CurrentLine>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\Soft_UART.c</PathWithFileName>
-      <FilenameWithoutPath>Soft_UART.c</FilenameWithoutPath>
-    </File>
-    <File>
-      <GroupNumber>1</GroupNumber>
       <FileNumber>5</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -377,7 +363,7 @@
   </Group>
 
   <AlienFiles>
-    <PathWithFilename>F:\BaiduYunDownload\单片机通信技术\STC15X\dev_times_task\hard_dev_app\dev_times_task\TimerTask-PenXiangJi\SOFT_UART.H</PathWithFilename>
+    <PathWithFilename>E:\hardworl\51stc15\STC15F10xxDemo\dev_app\hard_dev_app\dev_times_task\TimerTask-PenXiangJi\SOFT_UART.H</PathWithFilename>
     <TopLine>1</TopLine>
     <CurrentLine>15</CurrentLine>
     <Constant>0</Constant>
@@ -403,7 +389,7 @@
   </AlienFiles>
 
   <AlienFiles>
-    <PathWithFilename>F:\BaiduYunDownload\单片机通信技术\STC15X\dev_times_task\hard_dev_app\dev_times_task\TimerTask-PenXiangJi\EXTI.H</PathWithFilename>
+    <PathWithFilename>E:\hardworl\51stc15\STC15F10xxDemo\dev_app\hard_dev_app\dev_times_task\TimerTask-PenXiangJi\EXTI.H</PathWithFilename>
     <TopLine>1</TopLine>
     <CurrentLine>14</CurrentLine>
     <Constant>0</Constant>
@@ -429,7 +415,33 @@
   </AlienFiles>
 
   <AlienFiles>
-    <PathWithFilename>F:\BaiduYunDownload\单片机通信技术\STC15X\dev_times_task\hard_dev_app\dev_times_task\TimerTask-PenXiangJi\STC15FXXXX.H</PathWithFilename>
+    <PathWithFilename>E:\hardworl\51stc15\STC15F10xxDemo\dev_app\hard_dev_app\dev_times_task\TimerTask-PenXiangJi\Soft_UART.c</PathWithFilename>
+    <TopLine>4</TopLine>
+    <CurrentLine>4</CurrentLine>
+    <Constant>0</Constant>
+    <WindowPosition>
+      <length>0</length>
+      <flags>0</flags>
+      <showCmd>0</showCmd>
+      <MinPosition>
+        <xPos>0</xPos>
+        <yPos>0</yPos>
+      </MinPosition>
+      <MaxPosition>
+        <xPos>0</xPos>
+        <yPos>0</yPos>
+      </MaxPosition>
+      <NormalPosition>
+        <Top>0</Top>
+        <Left>0</Left>
+        <Right>0</Right>
+        <Bottom>0</Bottom>
+      </NormalPosition>
+    </WindowPosition>
+  </AlienFiles>
+
+  <AlienFiles>
+    <PathWithFilename>E:\hardworl\51stc15\STC15F10xxDemo\dev_app\hard_dev_app\dev_times_task\TimerTask-PenXiangJi\STC15FXXXX.H</PathWithFilename>
     <TopLine>298</TopLine>
     <CurrentLine>310</CurrentLine>
     <Constant>0</Constant>
@@ -455,7 +467,7 @@
   </AlienFiles>
 
   <AlienFiles>
-    <PathWithFilename>F:\BaiduYunDownload\单片机通信技术\STC15X\dev_times_task\hard_dev_app\dev_times_task\TimerTask-PenXiangJi\CONFIG.H</PathWithFilename>
+    <PathWithFilename>E:\hardworl\51stc15\STC15F10xxDemo\dev_app\hard_dev_app\dev_times_task\TimerTask-PenXiangJi\CONFIG.H</PathWithFilename>
     <TopLine>1</TopLine>
     <CurrentLine>25</CurrentLine>
     <Constant>0</Constant>
@@ -481,7 +493,7 @@
   </AlienFiles>
 
   <AlienFiles>
-    <PathWithFilename>F:\BaiduYunDownload\单片机通信技术\STC15X\dev_times_task\hard_dev_app\dev_times_task\TimerTask-PenXiangJi\GPIO.H</PathWithFilename>
+    <PathWithFilename>E:\hardworl\51stc15\STC15F10xxDemo\dev_app\hard_dev_app\dev_times_task\TimerTask-PenXiangJi\GPIO.H</PathWithFilename>
     <TopLine>26</TopLine>
     <CurrentLine>35</CurrentLine>
     <Constant>0</Constant>
@@ -507,7 +519,7 @@
   </AlienFiles>
 
   <AlienFiles>
-    <PathWithFilename>F:\BaiduYunDownload\单片机通信技术\STC15X\dev_times_task\hard_dev_app\dev_times_task\TimerTask-PenXiangJi\TIMER.H</PathWithFilename>
+    <PathWithFilename>E:\hardworl\51stc15\STC15F10xxDemo\dev_app\hard_dev_app\dev_times_task\TimerTask-PenXiangJi\TIMER.H</PathWithFilename>
     <TopLine>29</TopLine>
     <CurrentLine>38</CurrentLine>
     <Constant>0</Constant>
@@ -1877,9 +1889,9 @@
       <Documents>
         <Doc>
           <Name>.\main.c</Name>
-          <ColumnNumber>31</ColumnNumber>
-          <TopLine>402</TopLine>
-          <CurrentLine>425</CurrentLine>
+          <ColumnNumber>30</ColumnNumber>
+          <TopLine>6</TopLine>
+          <CurrentLine>14</CurrentLine>
         </Doc>
         <Doc>
           <Name>.\timer.c</Name>
@@ -1918,7 +1930,7 @@
           <CurrentLine>310</CurrentLine>
         </Doc>
         <Doc>
-          <Name>.\Soft_UART.c</Name>
+          <Name>E:\hardworl\51stc15\STC15F10xxDemo\dev_app\hard_dev_app\dev_times_task\TimerTask-PenXiangJi\Soft_UART.c</Name>
           <ColumnNumber>49</ColumnNumber>
           <TopLine>4</TopLine>
           <CurrentLine>4</CurrentLine>
@@ -1942,7 +1954,7 @@
           <CurrentLine>14</CurrentLine>
         </Doc>
         <Doc>
-          <Name>SOFT_UART.H</Name>
+          <Name>E:\hardworl\51stc15\STC15F10xxDemo\dev_app\hard_dev_app\dev_times_task\TimerTask-PenXiangJi\SOFT_UART.H</Name>
           <ColumnNumber>12</ColumnNumber>
           <TopLine>1</TopLine>
           <CurrentLine>15</CurrentLine>

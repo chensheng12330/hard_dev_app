@@ -14,7 +14,7 @@
 #include	"config.h"
 #include	"timer.h"
 #include	"GPIO.h"
-#include	"soft_uart.h"
+//#include	"soft_uart.h"
 #include	"delay.h"
 #include	"Exti.h"
 
@@ -54,15 +54,11 @@ L2(红)闪三次，表示关闭定时
 #define l2Num_MotoRun_2  2
 
 /*************	本地变量声明	**************/
-u32 g_hour=0;  //时
-u32 g_minute=0;//分
-u32 g_second=0;//秒
-u32 g_millisecond=0;//毫秒 
+u8 g_hour=0;  //时
+u8  g_minute=0;//分
+u8  g_second=0;//秒
+u16 g_millisecond=0;//毫秒 
 #define  k_addNum 50; //50 //定时叠加数
-
-u16 g_key_flag=0; //按键状态,(1:按下  0:未按下)
-u8  g_key_time=0; //按键响应事件时间计时数.默认为20分钟. 单位为分钟
-u8  g_light_on_time=1; //默认为20分钟. 单位为分钟
 
 
 sbit ioInKeyForTime = P3^2; //时间较准按键输入  int0
@@ -91,11 +87,11 @@ KeyStateDef  g_allKeyState={0,0};
 
 /*************	本地函数声明	**************/
 
-void mintueAction(void);
+//void mintueAction(void);
 
 void secondAction(void);
 
-void printNowTime(void);
+//void printNowTime(void);
 
 void key_scan(void);
 
@@ -116,7 +112,7 @@ void	EXTI_config(void)
     //初始化INT1
 	EXTI_InitStructure.EXTI_Mode      = EXT_MODE_Fall;	//中断模式,  	EXT_MODE_RiseFall, EXT_MODE_Fall
 	EXTI_InitStructure.EXTI_Polity    = PolityLow;			//中断优先级,   PolityLow,PolityHigh
-	EXTI_InitStructure.EXTI_Interrupt = ENABLE;				//中断允许,     ENABLE或DISABLE
+	//EXTI_InitStructure.EXTI_Interrupt = ENABLE;				//中断允许,     ENABLE或DISABLE
 	Ext_Inilize(EXT_INT1,&EXTI_InitStructure);				//	EXT_INT0,EXT_INT1,EXT_INT2,EXT_INT3,EXT_INT4
 
 /*
@@ -155,7 +151,7 @@ void	Timer_config(void)
 	TIM_InitStructure.TIM_Interrupt = ENABLE;				//中断是否允许,   ENABLE或DISABLE
 	TIM_InitStructure.TIM_ClkSource = TIM_CLOCK_12T;			//指定时钟源,     TIM_CLOCK_1T,TIM_CLOCK_12T,TIM_CLOCK_Ext
 	TIM_InitStructure.TIM_ClkOut    = DISABLE;				//是否输出高速脉冲, ENABLE或DISABLE
-	TIM_InitStructure.TIM_Value     = 65536UL - (50.0/1000.0 * MAIN_Fosc/12.0);		
+	TIM_InitStructure.TIM_Value     =  0x3cb0;//65536UL - (50.0/1000.0 * MAIN_Fosc/12.0);		
 	// //初值,50毫秒一次中断.
 	TIM_InitStructure.TIM_Run       = ENABLE;				//是否初始化后启动定时器, ENABLE或DISABLE
 	Timer_Inilize(Timer0,&TIM_InitStructure);				//初始化Timer0	  Timer0,Timer1,Timer2
@@ -243,7 +239,7 @@ void key_scan(void) {
 		g_hour = 12;
 		g_minute=g_second=g_millisecond =0;
 
-        l2ShowWithNum(l2Num_TimeRest_1);
+                l2ShowWithNum(l2Num_TimeRest_1);
 		
 	}	
 }
@@ -261,8 +257,8 @@ L2(红)闪三次，表示关闭APP运行
 
 void l2ShowWithNum(u8 num)
 {
-	int i=0;
-    PrintString("\r\n l2ShowWithNum.");
+	int i;
+    //PrintString("\r\n l2ShowWithNum.");
 		
 	for(i=0; i<num; i++)
 	{
@@ -283,15 +279,15 @@ void l2ShowWithNum(u8 num)
 void motoStart(void) {
     //设置电机启动标志时间值.
 
-	ioOutForMotoPower= 1; //开启电源
-    g_moto_run_time = k_moto_run_time; 
+        ioOutForMotoPower= 1; //开启电源
+        g_moto_run_time = k_moto_run_time; 
 	
-    PrintString("\r\n motoStart. ");
+   // PrintString("\r\n motoStart. ");
 }
 
 void secondAction(void) {
 	//PrintString("\r\n secondAction... ");
-	printNowTime();
+	//printNowTime();
     
 	if(g_second%10 == 0){   //工作指示灯(绿)
 		ioOutForL1Green = 1;
@@ -326,7 +322,7 @@ void secondAction(void) {
         
 	
 }
-
+/*
 void mintueAction(void) {
 	//PrintString("\r\n mintueAction... ");
 
@@ -355,17 +351,18 @@ void printNowTime(void) {
 	TxSend(g_second%100/10 + '0');
 	TxSend(g_second%10+ '0');
 
-/*
+//
 	TxSend(' ');
 	TxSend('U');
 	//TxSend(g_millisecond+ '0');
 	TxSend(g_millisecond%1000/100 + '0');
 	TxSend(g_millisecond%100/10 + '0');
 	TxSend(g_millisecond%10+ '0');
-*/
+//
 	
 	PrintString("\r\n ");
 }
+*/
 
 /********************* Timer0中断函数************************/
 void timer0_int (void) interrupt TIMER0_VECTOR
@@ -382,7 +379,7 @@ void timer0_int (void) interrupt TIMER0_VECTOR
 		if(g_second >=60){
 
 			//满足一分钟
-			mintueAction();
+			//mintueAction();
 
 			
 			g_second =0;
@@ -420,7 +417,7 @@ void INT0_int (void) interrupt INT0_VECTOR		//进中断时已经清除标志
 
 	IE0  = 0;			//外中断0标志位
 	g_allKeyState.sKeyForTime= 1;
-        PrintString("\r\n 外部中断0.");
+        //PrintString("\r\n 外部中断0.");
         delay_ms(2000);
         EX0 = 1;
 
@@ -438,7 +435,7 @@ void INT1_int (void) interrupt INT1_VECTOR		//进中断时已经清除标志
 	g_allKeyState.sKeyForMoto= 1;
 	//处理完中断事件后，可以把 int1中断开启，防止多次进入。
 
-    PrintString("\r\n 外部中断1.延时1秒");
+   // PrintString("\r\n 外部中断1.延时1秒");
     delay_ms(2000);
 	EX1 = 1;	  //程序键状态值.  0: 未按下  //1:已按下
     

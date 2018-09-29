@@ -1,7 +1,6 @@
 "GPIO.obj",
 "main.obj",
 "timer.obj",
-"Soft_UART.obj",
 "delay.obj",
 "Exti.obj" 
 TO "timer" 

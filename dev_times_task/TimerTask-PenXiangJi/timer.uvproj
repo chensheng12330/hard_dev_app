@@ -362,11 +362,6 @@
               <FilePath>.\timer.c</FilePath>
             </File>
             <File>
-              <FileName>Soft_UART.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Soft_UART.c</FilePath>
-            </File>
-            <File>
               <FileName>delay.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\delay.c</FilePath>

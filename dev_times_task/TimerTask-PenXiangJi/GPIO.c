@@ -30,16 +30,16 @@
 //========================================================================
 u8	GPIO_Inilize(u8 GPIO, GPIO_InitTypeDef *GPIOx)
 {
-	if(GPIO > GPIO_P5)				return 1;	//空操作
-	if(GPIOx->Mode > GPIO_OUT_PP)	return 2;	//错误
+	//if(GPIO > GPIO_P5)				return 1;	//空操作
+	//if(GPIOx->Mode > GPIO_OUT_PP)	return 2;	//错误
 
 
 	if(GPIO == GPIO_P3)
 	{
 		if(GPIOx->Mode == GPIO_PullUp)		P3M1 &= ~GPIOx->Pin,	P3M0 &= ~GPIOx->Pin;	 //上拉准双向口
-		if(GPIOx->Mode == GPIO_HighZ)		P3M1 |=  GPIOx->Pin,	P3M0 &= ~GPIOx->Pin;	 //浮空输入
-		if(GPIOx->Mode == GPIO_OUT_OD)		P3M1 |=  GPIOx->Pin,	P3M0 |=  GPIOx->Pin;	 //开漏输出
-		if(GPIOx->Mode == GPIO_OUT_PP)		P3M1 &= ~GPIOx->Pin,	P3M0 |=  GPIOx->Pin;	 //推挽输出
+		else if(GPIOx->Mode == GPIO_HighZ)		P3M1 |=  GPIOx->Pin,	P3M0 &= ~GPIOx->Pin;	 //浮空输入
+		else if(GPIOx->Mode == GPIO_OUT_OD)		P3M1 |=  GPIOx->Pin,	P3M0 |=  GPIOx->Pin;	 //开漏输出
+		else if(GPIOx->Mode == GPIO_OUT_PP)		P3M1 &= ~GPIOx->Pin,	P3M0 |=  GPIOx->Pin;	 //推挽输出
 	}
 
 	return 0;	//成功
