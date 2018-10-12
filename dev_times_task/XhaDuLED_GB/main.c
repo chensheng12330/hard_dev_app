@@ -16,16 +16,16 @@ typedef 	unsigned int	u16;
 
 
 /*************	本地变量声明	**************/
-u8 g_hour=0;  //时
-u8 g_minute=0;//分
+u8 g_hour=23;  //时
+u8 g_minute=22;//分
 u8 g_second=0;//秒
 u16 g_millisecond=0;//毫秒 
 //u8  g_addNum = 50; //50 //定时叠加数
 
-u8 g_key_flag=0; //按键状态,(1:按下  0:未按下)
+//u8 g_key_flag=0; //按键状态,(1:按下  0:未按下)
 u8 g_key_time=0; //按键响应事件时间计时数.默认为20分钟. 单位为分钟
 
-u8 bIsOpen;
+//u8 bIsOpen;
 /*************	本地函数声明	**************/
 
 void delay_ms(unsigned char ms);
@@ -93,15 +93,15 @@ void main(void)
 	while (1)
 	{
 
-		//按键扫描
+		//按键扫描 1、按键触发杀毒
 		if(ioKEY == 0)                
 		//如果有键按下，则条件成立（有键按下，则s4为0；而 !key_flag为1）
 	    {
-	    	delay_ms(10);//延时消抖
+	    	delay_ms(20);//延时消抖
 	        if(ioKEY == 0)                             //如果确定有键按下
 	        {                      
 	            //进行事件处理
-	            g_key_flag = 1;
+	            //g_key_flag = 1;
 	            //启动亮灯计时
 	            g_key_time=g_light_on_time;
 	
@@ -110,38 +110,18 @@ void main(void)
 	        }
 		}
 
-	    //任务判断
-		
-			 
-		if(g_key_flag != 1)
-		{
-			switch(g_hour) {
-			 case 0:
-			 case 4:
+	    //任务判断  2.自动任务触发杀毒
+		switch(g_hour) {  //喝水时间点，在这个时候进行杀毒操作. (一天4次，每次20分钟，一天共1个小时.)
 			 case 7:
-			 case 10:
 			 case 13:
-			 case 16:
 			 case 19:
-			 case 22:
-			 	bIsOpen = 1;
+			 case 23:
+		
+			 	g_key_time=g_light_on_time;
 			 	break;
 			default:
-				bIsOpen = 0;
+				//bIsOpen = 0;
 			 	break;
-			}
-		}
-		else{
-			bIsOpen = 1;	
-		}
-	   /**/
-		//持续亮灯20分钟.
-		if(bIsOpen && (g_minute<g_light_on_time)) {
-
-			ioSwitchLED = 1;
-		}
-		else {
-			ioSwitchLED = 0;
 		}
 
 		/*
@@ -180,11 +160,13 @@ void timer0_int (void) interrupt 1
 			///////////////////////////
 			if(g_key_time<1){
 				//复位.
-				g_key_flag =0; //用于控制亮灯
+				//g_key_flag =0; //用于控制黑灯
+				ioSwitchLED = 0;
 				g_key_time =0; //重置按键亮灯计时时间
 			}
 			else{
-				g_key_flag =1; //用于控制亮灯
+				//g_key_flag =1; //用于控制亮灯
+				ioSwitchLED = 1;
 				g_key_time--;
 			}			
 			///////////////////////////
