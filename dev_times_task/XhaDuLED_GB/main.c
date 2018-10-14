@@ -10,14 +10,14 @@
 
 /*************	本地常量声明	**************/
 #define MAIN_Fosc		12000000L
-#define	g_light_on_time 20 ////默认为20分钟. 单位为分钟
+#define	g_light_on_time 15 ////默认为20分钟. 单位为分钟
 typedef 	unsigned char	u8;
 typedef 	unsigned int	u16;
 
 
 /*************	本地变量声明	**************/
-u8 g_hour=23;  //时
-u8 g_minute=22;//分
+u8 g_hour=8;  //时
+u8 g_minute=0;//分
 u8 g_second=0;//秒
 u16 g_millisecond=0;//毫秒 
 //u8  g_addNum = 50; //50 //定时叠加数
@@ -39,6 +39,7 @@ void printNowTime(void);
 sfr P3M1  = 0xB1;	//P3M1.n,P3M0.n 	=00--->Standard,	01--->push-pull
 sfr P3M0  = 0xB2;	//					=10--->pure input,	11--->open drain
 
+sfr PCON = 0x87;
 sfr IE    = 0xA8;
 sbit EA   = IE^7;	//中断允许总控制位
 sbit ET0  = IE^1;	//定时中断0允许控制位
@@ -49,6 +50,11 @@ sfr	AUXR = 0x8E;
 sbit TF0  = TCON^5;
 sfr TH0  = 0x8C;
 sfr TL0  = 0x8A;
+sfr INT_CLKO = 0x8F;
+
+sbit ELVD = IE^6;                   //低压检测中断使能位
+#define LVDF    0x20                //PCON.5,低压检测中断标志位
+
 
 sfr P3    = 0xB0;
 sbit ioWorkLED   = P3^3;  //工作指示灯
@@ -65,6 +71,13 @@ void main(void)
 	p3_2 : 用于工作指示灯
 	p3_3 : 用于控制led照明显示
 	*/
+	// 0000 0000
+	P3 = 0x00;
+	
+	PCON &= ~LVDF;                  //上电后需要清LVD中断标志位
+    ELVD = 1;                       //使能LVD中断
+
+	//INT_CLKO |= 0x20;           //(EX3 = 1)使能INT3下降沿中断 唤醒
 	
 	//io 脚配置	 0000|0000   0000|1100
 	P3M1 =  0x00;
@@ -74,8 +87,8 @@ void main(void)
 	//ioWorkLED = 1;
 
 	// 测试开启.
-	//ioSwitchLED = 1;
-	//ioKEY =1; //按键关闭
+	ioSwitchLED = 0;
+	ioKEY =1; //按键关闭
 
 	//定时器配置 50ms 一次定时，定时器触发时，cpu进入唤醒时段.
 	//Timer_config();
@@ -104,9 +117,9 @@ void main(void)
 	            //g_key_flag = 1;
 	            //启动亮灯计时
 	            g_key_time=g_light_on_time;
-	
+				ioWorkLED = 1;
 				//PrintString("\r\n 按键已按下.");
-	            return ;
+				continue;
 	        }
 		}
 
@@ -153,6 +166,13 @@ void timer0_int (void) interrupt 1
 		g_second++;
 		//printNowTime();
 
+		/////
+		//实时判断
+		if(g_key_time>0){
+			ioSwitchLED = 1;
+		}
+		//////
+
 		if(g_second >=60){
 
 			//满足一分钟
@@ -192,6 +212,19 @@ void timer0_int (void) interrupt 1
 			}
 		}
 	}
+}
+
+///低电压中断函数
+//如果低电压，将	     LVD_VECTOR		6
+void LVD_ISR() interrupt 6 using 1
+{	
+	//
+	ioWorkLED = 1; //常亮，表示电压不足
+	ioSwitchLED = 0; //熄灯
+
+	PCON &= ~LVDF;                  //向PCON.5写0清LVD中断
+
+	//PCON |= 0x02;               //进入掉电模式
 }
 
 void  delay_ms(unsigned char ms)
