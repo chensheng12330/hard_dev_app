@@ -129,9 +129,13 @@ void main(void)
 			 case 13:
 			 case 19:
 			 case 23:
-		
-			 	g_key_time=g_light_on_time;
+			 {
+			 	if(g_key_time==0){ //只有在g_key_time处理非触发状态下，才进行触发操作.
+					g_key_time=g_light_on_time;
+				}
+			 	
 			 	break;
+			  }
 			default:
 				//bIsOpen = 0;
 			 	break;
