@@ -16,7 +16,7 @@ typedef 	unsigned int	u16;
 
 
 /*************	本地变量声明	**************/
-u8 g_hour=8;  //时
+u8 g_hour=23;  //时
 u8 g_minute=0;//分
 u8 g_second=0;//秒
 u16 g_millisecond=0;//毫秒 
@@ -29,7 +29,7 @@ u8 g_key_time=0; //按键响应事件时间计时数.默认为20分钟. 单位为分钟
 /*************	本地函数声明	**************/
 
 void delay_ms(unsigned char ms);
-void printNowTime(void);
+//void printNowTime(void);
 /*************  外部函数和变量声明 *****************/
 
 
@@ -129,8 +129,8 @@ void main(void)
 			 case 13:
 			 case 19:
 			 case 23:
-			 {
-			 	if(g_key_time==0){ //只有在g_key_time处理非触发状态下，才进行触发操作.
+			 {	   
+			 	if(g_key_time==0 && g_minute==0 && g_second<3){ //只有在g_key_time处理非触发状态下，才进行触发操作.
 					g_key_time=g_light_on_time;
 				}
 			 	
