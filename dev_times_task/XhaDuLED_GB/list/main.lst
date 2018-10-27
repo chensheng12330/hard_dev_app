@@ -1,4 +1,4 @@
-C51 COMPILER V9.00   MAIN                                                                  10/17/2018 22:44:28 PAGE 1   
+C51 COMPILER V9.00   MAIN                                                                  10/27/2018 16:32:26 PAGE 1   
 
 
 C51 COMPILER V9.00, COMPILATION OF MODULE MAIN
@@ -26,7 +26,7 @@ line level    source
   16          
   17          
   18          /*************  本地变量声明    **************/
-  19          u8 g_hour=23;  //时
+  19          u8 g_hour=0;  //时
   20          u8 g_minute=0;//分
   21          u8 g_second=0;//秒
   22          u16 g_millisecond=0;//毫秒 
@@ -62,7 +62,7 @@ line level    source
   52          sfr TL0  = 0x8A;
   53          sfr INT_CLKO = 0x8F;
   54          
-C51 COMPILER V9.00   MAIN                                                                  10/17/2018 22:44:28 PAGE 2   
+C51 COMPILER V9.00   MAIN                                                                  10/27/2018 16:32:26 PAGE 2   
 
   55          sbit ELVD = IE^6;                   //低压检测中断使能位
   56          #define LVDF    0x20                //PCON.5,低压检测中断标志位
@@ -71,231 +71,267 @@ line level    source
   59          sfr P3    = 0xB0;
   60          sbit ioWorkLED   = P3^3;  //工作指示灯
   61          sbit ioSwitchLED = P3^2;  //控制杀菌灯
-  62          sbit ioKEY       = P3^5;  //按键控杀菌灯
-  63          
-  64          //#include      "soft_uart.h"
-  65          
-  66          /******************** 主函数**************************/
-  67          void main(void)
-  68          {
-  69   1      
-  70   1              /*
-  71   1              p3_2 : 用于工作指示灯
-  72   1              p3_3 : 用于控制led照明显示
-  73   1              */
-  74   1              // 0000 0000
-  75   1              P3 = 0x00;
-  76   1              
-  77   1              PCON &= ~LVDF;                  //上电后需要清LVD中断标志位
-  78   1          ELVD = 1;                       //使能LVD中断
-  79   1      
-  80   1              //INT_CLKO |= 0x20;           //(EX3 = 1)使能INT3下降沿中断 唤醒
-  81   1              
-  82   1              //io 脚配置      0000|0000   0000|1100
-  83   1              P3M1 =  0x00;
-  84   1              P3M0 =  0x0c;
-  85   1      
-  86   1              // 工作灯开始
-  87   1              //ioWorkLED = 1;
-  88   1      
-  89   1              // 测试开启.
-  90   1              ioSwitchLED = 0;
-  91   1              ioKEY =1; //按键关闭
-  92   1      
-  93   1              //定时器配置 50ms 一次定时，定时器触发时，cpu进入唤醒时段.
-  94   1              //Timer_config();
-  95   1              AUXR &= 0x7F;           //定时器时钟12T模式
-  96   1              TMOD &= 0xF0;           //设置定时器模式
-  97   1              TMOD |= 0x01;           //设置定时器模式
-  98   1              TL0 = 0xB0;             //设置定时初值
-  99   1              TH0 = 0x3C;             //设置定时初值
- 100   1              ET0 = 1;
- 101   1              //TF0 = 0;              //清除TF0标志
- 102   1              TR0 = 1;                //定时器0开始计时
- 103   1      
- 104   1              EA=1;
- 105   1              
- 106   1              while (1)
- 107   1              {
- 108   2      
- 109   2                      //按键扫描 1、按键触发杀毒
- 110   2                      if(ioKEY == 0)                
- 111   2                      //如果有键按下，则条件成立（有键按下，则s4为0；而 !key_flag为1）
- 112   2                  {
- 113   3                      delay_ms(20);//延时消抖
- 114   3                      if(ioKEY == 0)                             //如果确定有键按下
- 115   3                      {                      
- 116   4                          //进行事件处理
-C51 COMPILER V9.00   MAIN                                                                  10/17/2018 22:44:28 PAGE 3   
+  62          sbit ioKEY       = P3^4;  //按键控杀菌灯
+  63          sbit ioKEYRestTime       = P3^5;  //重置时间为早上8点
+  64          
+  65          //#include      "soft_uart.h"
+  66          
+  67          /******************** 主函数**************************/
+  68          void main(void)
+  69          {
+  70   1      
+  71   1              /*
+  72   1              p3_2 : 用于工作指示灯
+  73   1              p3_3 : 用于控制led照明显示
+  74   1              */
+  75   1              // 0000 0000
+  76   1              P3 = 0x00;
+  77   1              
+  78   1              PCON &= ~LVDF;                  //上电后需要清LVD中断标志位
+  79   1          ELVD = 1;                       //使能LVD中断
+  80   1      
+  81   1              //INT_CLKO |= 0x20;           //(EX3 = 1)使能INT3下降沿中断 唤醒
+  82   1              
+  83   1              //io 脚配置      0000|0000   0000|1100
+  84   1              P3M1 =  0x00;
+  85   1              P3M0 =  0x0c;
+  86   1      
+  87   1              // 工作灯开始
+  88   1              //ioWorkLED = 1;
+  89   1      
+  90   1              // 测试开启.
+  91   1              ioSwitchLED = 0;
+  92   1              ioKEY =1; //按键关闭
+  93   1              ioKEYRestTime=1; //
+  94   1      
+  95   1              //定时器配置 50ms 一次定时，定时器触发时，cpu进入唤醒时段.
+  96   1              //Timer_config();
+  97   1              AUXR &= 0x7F;           //定时器时钟12T模式
+  98   1              TMOD &= 0xF0;           //设置定时器模式
+  99   1              TMOD |= 0x01;           //设置定时器模式
+ 100   1              TL0 = 0xB0;             //设置定时初值
+ 101   1              TH0 = 0x3C;             //设置定时初值
+ 102   1              ET0 = 1;
+ 103   1              //TF0 = 0;              //清除TF0标志
+ 104   1              TR0 = 1;                //定时器0开始计时
+ 105   1      
+ 106   1              EA=1;
+ 107   1              
+ 108   1              while (1)
+ 109   1              {
+ 110   2      
+ 111   2                      //按键扫描 1、按键触发杀毒
+ 112   2                      if(ioKEY == 0)                
+ 113   2                      //如果有键按下，则条件成立（有键按下，则s4为0；而 !key_flag为1）
+ 114   2                  {
+ 115   3                      delay_ms(20);//延时消抖
+ 116   3                      if(ioKEY == 0)                             //如果确定有键按下
+C51 COMPILER V9.00   MAIN                                                                  10/27/2018 16:32:26 PAGE 3   
 
- 117   4                          //g_key_flag = 1;
- 118   4                          //启动亮灯计时
- 119   4                          g_key_time=g_light_on_time;
- 120   4                                      ioWorkLED = 1;
- 121   4                                      //PrintString("\r\n 按键已按下.");
- 122   4                                      continue;
- 123   4                      }
- 124   3                      }
- 125   2      
- 126   2                  //任务判断  2.自动任务触发杀毒
- 127   2                      switch(g_hour) {  //喝水时间点，在这个时候进行杀毒操作. (一天4次，每次20分钟，一天共1个小时.)
- 128   3                               case 7:
- 129   3                               case 13:
- 130   3                               case 19:
- 131   3                               case 23:
- 132   3                               {         
- 133   4                                      if(g_key_time==0 && g_minute==0 && g_second<3){ //只有在g_key_time处理非触发状态下，才进行触发操作.
- 134   5                                              g_key_time=g_light_on_time;
- 135   5                                      }
- 136   4                                      
- 137   4                                      break;
- 138   4                                }
- 139   3                              default:
- 140   3                                      //bIsOpen = 0;
- 141   3                                      break;
- 142   3                      }
- 143   2      
- 144   2                      /*
- 145   2                      执行任务动作1
- 146   2      
- 147   2                      工作灯,每10秒闪一次
- 148   2                      */
- 149   2                      if(g_second%10 == 0){
- 150   3                              ioWorkLED = 1;
- 151   3                              delay_ms(2000);
- 152   3                              ioWorkLED = 0;
- 153   3                      }
- 154   2                      else {
- 155   3                              delay_ms(900);
- 156   3                      }
- 157   2      
- 158   2                      //结束任务. 
- 159   2              }
- 160   1      }
- 161          
- 162          /********************* Timer0中断函数************************/
- 163          void timer0_int (void) interrupt 1
- 164          {
- 165   1              //PrintString("\r\n T:");
- 166   1              g_millisecond = g_millisecond + 50;
- 167   1      
- 168   1              if( g_millisecond >= 1000) { //满足一秒
- 169   2                      g_millisecond = 0;
- 170   2                      g_second++;
- 171   2                      //printNowTime();
- 172   2      
- 173   2                      /////
- 174   2                      //实时判断
- 175   2                      if(g_key_time>0){
- 176   3                              ioSwitchLED = 1;
- 177   3                      }
- 178   2                      //////
-C51 COMPILER V9.00   MAIN                                                                  10/17/2018 22:44:28 PAGE 4   
+ 117   3                      {                      
+ 118   4                          //进行事件处理
+ 119   4                          //g_key_flag = 1;
+ 120   4                          //启动亮灯计时
+ 121   4      
+ 122   4                                      //如果已是开灯，则关灯
+ 123   4                                      if(g_key_time>0) {
+ 124   5                                               g_key_time     = ioSwitchLED = 0;
+ 125   5                                               ioWorkLED = 1;
+ 126   5                                      }
+ 127   4                                      else {
+ 128   5                                          g_key_time=g_light_on_time;
+ 129   5                                              ioWorkLED = 0;
+ 130   5                                      }
+ 131   4                          
+ 132   4                                      while(ioKEY==0);
+ 133   4                                      //PrintString("\r\n 按键已按下.");
+ 134   4                                      continue;
+ 135   4                      }
+ 136   3                      }
+ 137   2      
+ 138   2                      if(ioKEYRestTime == 0)                
+ 139   2                      //如果有键按下，则条件成立（有键按下，则s4为0；而 !key_flag为1）
+ 140   2                  {
+ 141   3                      delay_ms(20);//延时消抖
+ 142   3                      if(ioKEYRestTime == 0)                             //如果确定有键按下
+ 143   3                      {                      
+ 144   4                          //进行事件处理,设置时间为早上8点
+ 145   4                                      g_hour = 8;
+ 146   4                                      g_minute=g_second=g_key_time=0; 
+ 147   4                              
+ 148   4      
+ 149   4                                      //闪灯
+ 150   4                                      ioWorkLED = 0;
+ 151   4                                      delay_ms(1000);
+ 152   4                                      ioWorkLED = 1;
+ 153   4                                      delay_ms(1000);
+ 154   4                                      ioWorkLED = 0;
+ 155   4                          continue;
+ 156   4                      }
+ 157   3                      }
+ 158   2      
+ 159   2      
+ 160   2                  //任务判断  2.自动任务触发杀毒
+ 161   2                      switch(g_hour) {  //喝水时间点，在这个时候进行杀毒操作. (一天4次，每次20分钟，一天共1个小时.)
+ 162   3                               case 7:
+ 163   3                               case 13:
+ 164   3                               case 19:
+ 165   3                               case 23:
+ 166   3                               {         
+ 167   4                                      if(g_key_time==0 && g_minute==0 && g_second<3){ //只有在g_key_time处理非触发状态下，才进行触发操作.
+ 168   5                                              g_key_time=g_light_on_time;
+ 169   5                                      }
+ 170   4                                      
+ 171   4                                      break;
+ 172   4                                }
+ 173   3                              default:
+ 174   3                                      //bIsOpen = 0;
+ 175   3                                      break;
+ 176   3                      }
+ 177   2      
+ 178   2                      /*
+C51 COMPILER V9.00   MAIN                                                                  10/27/2018 16:32:26 PAGE 4   
 
- 179   2      
- 180   2                      if(g_second >=60){
- 181   3      
- 182   3                              //满足一分钟
- 183   3                              //执行任务
- 184   3                              ///////////////////////////
- 185   3                              if(g_key_time<1){
- 186   4                                      //复位.
- 187   4                                      //g_key_flag =0; //用于控制黑灯
- 188   4                                      ioSwitchLED = 0;
- 189   4                                      g_key_time =0; //重置按键亮灯计时时间
- 190   4                              }
- 191   3                              else{
- 192   4                                      //g_key_flag =1; //用于控制亮灯
- 193   4                                      ioSwitchLED = 1;
- 194   4                                      g_key_time--;
- 195   4                              }                       
- 196   3                              ///////////////////////////
- 197   3      
- 198   3      
- 199   3                              ///时间累加
- 200   3                              g_second =0;
- 201   3                              g_minute ++;
- 202   3      
- 203   3                              if(g_minute >=60){
- 204   4      
- 205   4                                      //满足一小时
- 206   4                                      g_minute =0;
- 207   4                                      g_hour ++;
- 208   4      
- 209   4                                      if(g_hour ==24){
- 210   5      
- 211   5                                              //满足24小时
- 212   5                                              g_hour =0;
- 213   5                              
- 214   5                                      }
- 215   4                              
- 216   4                              }
- 217   3                      }
- 218   2              }
- 219   1      }
- 220          
- 221          ///低电压中断函数
- 222          //如果低电压，将             LVD_VECTOR         6
- 223          void LVD_ISR() interrupt 6 using 1
- 224          {       
- 225   1              //
- 226   1              ioWorkLED = 1; //常亮，表示电压不足
- 227   1              ioSwitchLED = 0; //熄灯
- 228   1      
- 229   1              PCON &= ~LVDF;                  //向PCON.5写0清LVD中断
- 230   1      
- 231   1              //PCON |= 0x02;               //进入掉电模式
- 232   1      }
- 233          
- 234          void  delay_ms(unsigned char ms)
- 235          {
- 236   1           unsigned int i;
- 237   1               do{
- 238   2                    i = MAIN_Fosc / 13000;
- 239   2                        while(--i)    ;   //14T per loop
- 240   2           }while(--ms);
-C51 COMPILER V9.00   MAIN                                                                  10/17/2018 22:44:28 PAGE 5   
+ 179   2                      执行任务动作1
+ 180   2      
+ 181   2                      工作灯,每10秒闪一次
+ 182   2                      */
+ 183   2                      if(g_second%10 == 0){
+ 184   3                              ioWorkLED = 0;
+ 185   3                              delay_ms(2000);
+ 186   3                              ioWorkLED = 1;
+ 187   3                      }
+ 188   2                      else {
+ 189   3                              delay_ms(900);
+ 190   3                      }
+ 191   2      
+ 192   2                      //结束任务. 
+ 193   2              }
+ 194   1      }
+ 195          
+ 196          /********************* Timer0中断函数************************/
+ 197          void timer0_int (void) interrupt 1
+ 198          {
+ 199   1              //PrintString("\r\n T:");
+ 200   1              g_millisecond = g_millisecond + 50;
+ 201   1      
+ 202   1              if( g_millisecond >= 1000) { //满足一秒
+ 203   2                      g_millisecond = 0;
+ 204   2                      g_second++;
+ 205   2                      //printNowTime();
+ 206   2      
+ 207   2                      /////
+ 208   2                      //实时判断
+ 209   2                      if(g_key_time>0){
+ 210   3                              ioSwitchLED = 1;
+ 211   3                      }
+ 212   2                      //////
+ 213   2      
+ 214   2                      if(g_second >=60){
+ 215   3      
+ 216   3                              //满足一分钟
+ 217   3                              //执行任务
+ 218   3                              ///////////////////////////
+ 219   3                              if(g_key_time<1){
+ 220   4                                      //复位.
+ 221   4                                      //g_key_flag =0; //用于控制黑灯
+ 222   4                                      ioSwitchLED = 0;
+ 223   4                                      g_key_time =0; //重置按键亮灯计时时间
+ 224   4                              }
+ 225   3                              else{
+ 226   4                                      //g_key_flag =1; //用于控制亮灯
+ 227   4                                      ioSwitchLED = 1;
+ 228   4                                      g_key_time--;
+ 229   4                              }                       
+ 230   3                              ///////////////////////////
+ 231   3      
+ 232   3      
+ 233   3                              ///时间累加
+ 234   3                              g_second =0;
+ 235   3                              g_minute ++;
+ 236   3      
+ 237   3                              if(g_minute >=60){
+ 238   4      
+ 239   4                                      //满足一小时
+ 240   4                                      g_minute =0;
+C51 COMPILER V9.00   MAIN                                                                  10/27/2018 16:32:26 PAGE 5   
 
- 241   1      }
- 242          
- 243           /*
- 244          // TxSend(j/1000 + '0');
- 245          void printNowTime(void) {
- 246          
- 247                  PrintString("\r\n 现在时间:");
- 248          
- 249                  TxSend('H');
- 250                  //TxSend(g_hour+ '0');
- 251                  TxSend(g_hour%100/10 + '0');
- 252                  TxSend(g_hour%10+ '0');
- 253          
+ 241   4                                      g_hour ++;
+ 242   4      
+ 243   4                                      if(g_hour ==24){
+ 244   5      
+ 245   5                                              //满足24小时
+ 246   5                                              g_hour =0;
+ 247   5                              
+ 248   5                                      }
+ 249   4                              
+ 250   4                              }
+ 251   3                      }
+ 252   2              }
+ 253   1      }
  254          
- 255                  TxSend(' ');
- 256                  TxSend('M');
- 257                  TxSend(g_minute%100/10 + '0');
- 258                  TxSend(g_minute%10+ '0');
- 259          
- 260                  TxSend(' ');
- 261                  TxSend('S');
- 262                  TxSend(g_second%100/10 + '0');
- 263                  TxSend(g_second%10+ '0');
- 264          
- 265          ///*
- 266                  TxSend(' ');
- 267                  TxSend('U');
- 268                  //TxSend(g_millisecond+ '0');
- 269                  TxSend(g_millisecond%1000/100 + '0');
- 270                  TxSend(g_millisecond%100/10 + '0');
- 271                  TxSend(g_millisecond%10+ '0');
- 272          
- 273          
- 274          //      PrintString("\r\n ");
- 275          //}
- 276          */
+ 255          ///低电压中断函数
+ 256          //如果低电压，将             LVD_VECTOR         6
+ 257          void LVD_ISR() interrupt 6 using 1
+ 258          {       
+ 259   1              //
+ 260   1              ioWorkLED = 1; //常亮，表示电压不足
+ 261   1              ioSwitchLED = 0; //熄灯
+ 262   1      
+ 263   1              PCON &= ~LVDF;                  //向PCON.5写0清LVD中断
+ 264   1      
+ 265   1              //PCON |= 0x02;               //进入掉电模式
+ 266   1      }
+ 267          
+ 268          void  delay_ms(unsigned char ms)
+ 269          {
+ 270   1           unsigned int i;
+ 271   1               do{
+ 272   2                    i = MAIN_Fosc / 13000;
+ 273   2                        while(--i)    ;   //14T per loop
+ 274   2           }while(--ms);
+ 275   1      }
+ 276          
+ 277           /*
+ 278          // TxSend(j/1000 + '0');
+ 279          void printNowTime(void) {
+ 280          
+ 281                  PrintString("\r\n 现在时间:");
+ 282          
+ 283                  TxSend('H');
+ 284                  //TxSend(g_hour+ '0');
+ 285                  TxSend(g_hour%100/10 + '0');
+ 286                  TxSend(g_hour%10+ '0');
+ 287          
+ 288          
+ 289                  TxSend(' ');
+ 290                  TxSend('M');
+ 291                  TxSend(g_minute%100/10 + '0');
+ 292                  TxSend(g_minute%10+ '0');
+ 293          
+ 294                  TxSend(' ');
+ 295                  TxSend('S');
+ 296                  TxSend(g_second%100/10 + '0');
+ 297                  TxSend(g_second%10+ '0');
+ 298          
+ 299          ///*
+ 300                  TxSend(' ');
+ 301                  TxSend('U');
+ 302                  //TxSend(g_millisecond+ '0');
+C51 COMPILER V9.00   MAIN                                                                  10/27/2018 16:32:26 PAGE 6   
+
+ 303                  TxSend(g_millisecond%1000/100 + '0');
+ 304                  TxSend(g_millisecond%100/10 + '0');
+ 305                  TxSend(g_millisecond%10+ '0');
+ 306          
+ 307          
+ 308          //      PrintString("\r\n ");
+ 309          //}
+ 310          */
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    238    ----
+   CODE SIZE        =    295    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----

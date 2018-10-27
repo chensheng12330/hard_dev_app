@@ -5,6 +5,13 @@
 2.杀菌灯光每天 1,4,7,10,13,16,19,22 整点时间段 启动照明.持续20分钟.
 3.按键按下,强制开启启动照明,.持续20分钟.
 
+   针对单片机：stc15L104W
+
+   p3.0, p3.1  保留为烧写接口
+   p3.2 杀毒灯IO ，高位启动
+   p3.3 指示灯IO ，低位启动
+   p3.4 重置内部时间为8点
+   p3.5 强制开启杀毒，持续15分钟
 ******************************************/
 
 
@@ -16,7 +23,7 @@ typedef 	unsigned int	u16;
 
 
 /*************	本地变量声明	**************/
-u8 g_hour=23;  //时
+u8 g_hour=0;  //时
 u8 g_minute=0;//分
 u8 g_second=0;//秒
 u16 g_millisecond=0;//毫秒 
@@ -59,7 +66,8 @@ sbit ELVD = IE^6;                   //低压检测中断使能位
 sfr P3    = 0xB0;
 sbit ioWorkLED   = P3^3;  //工作指示灯
 sbit ioSwitchLED = P3^2;  //控制杀菌灯
-sbit ioKEY       = P3^5;  //按键控杀菌灯
+sbit ioKEY       = P3^4;  //按键控杀菌灯
+sbit ioKEYRestTime       = P3^5;  //重置时间为早上8点
 
 //#include	"soft_uart.h"
 
@@ -89,6 +97,7 @@ void main(void)
 	// 测试开启.
 	ioSwitchLED = 0;
 	ioKEY =1; //按键关闭
+	ioKEYRestTime=1; //
 
 	//定时器配置 50ms 一次定时，定时器触发时，cpu进入唤醒时段.
 	//Timer_config();
@@ -116,12 +125,44 @@ void main(void)
 	            //进行事件处理
 	            //g_key_flag = 1;
 	            //启动亮灯计时
-	            g_key_time=g_light_on_time;
-				ioWorkLED = 1;
+
+				//如果已是开灯，则关灯
+				if(g_key_time>0) {
+					 g_key_time	= ioSwitchLED = 0;
+					 ioWorkLED = 1;
+				}
+				else {
+				    g_key_time=g_light_on_time;
+					ioWorkLED = 0;
+				}
+	            
+				while(ioKEY==0);
 				//PrintString("\r\n 按键已按下.");
 				continue;
 	        }
 		}
+
+		if(ioKEYRestTime == 0)                
+		//如果有键按下，则条件成立（有键按下，则s4为0；而 !key_flag为1）
+	    {
+	    	delay_ms(20);//延时消抖
+	        if(ioKEYRestTime == 0)                             //如果确定有键按下
+	        {                      
+	            //进行事件处理,设置时间为早上8点
+				g_hour = 8;
+				g_minute=g_second=g_key_time=0; 
+			
+
+				//闪灯
+				ioWorkLED = 0;
+				delay_ms(1000);
+				ioWorkLED = 1;
+				delay_ms(1000);
+				ioWorkLED = 0;
+	            continue;
+	        }
+		}
+
 
 	    //任务判断  2.自动任务触发杀毒
 		switch(g_hour) {  //喝水时间点，在这个时候进行杀毒操作. (一天4次，每次20分钟，一天共1个小时.)
@@ -147,9 +188,9 @@ void main(void)
 		工作灯,每10秒闪一次
 		*/
 		if(g_second%10 == 0){
-			ioWorkLED = 1;
-			delay_ms(2000);
 			ioWorkLED = 0;
+			delay_ms(2000);
+			ioWorkLED = 1;
 		}
 		else {
 			delay_ms(900);
