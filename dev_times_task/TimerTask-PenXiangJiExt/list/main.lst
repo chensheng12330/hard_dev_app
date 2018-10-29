@@ -1,0 +1,506 @@
+C51 COMPILER V9.01   MAIN                                                                  10/29/2018 17:42:09 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND PRINT(.\list\main.lst)
+
+line level    source
+
+   1          
+   2          /*------------------------------------------------------------------*/
+   3          /* --- STC MCU International Limited -------------------------------*/
+   4          /* --- STC 1T Series MCU RC Demo -----------------------------------*/
+   5          /* --- Mobile: (86)13922805190 -------------------------------------*/
+   6          /* --- Fax: 86-0513-55012956,55012947,55012969 ---------------------*/
+   7          /* --- Tel: 86-0513-55012928,55012929,55012966 ---------------------*/
+   8          /* --- Web: www.GXWMCU.com -----------------------------------------*/
+   9          /* --- QQ:  800003751 ----------------------------------------------*/
+  10          /* If you want to use the program or the program referenced in the  */
+  11          /* article, please specify in which data and procedures from STC    */
+  12          /*------------------------------------------------------------------*/
+  13          //#include "reg51.h"
+  14          #include        "config.h"
+  15          #include        "timer.h"
+  16          #include        "GPIO.h"
+  17          //#include      "soft_uart.h"
+  18          #include        "delay.h"
+  19          #include        "Exti.h"
+  20          
+  21          
+  22          /*************  ¹¦ÄÜËµÃ÷        **************
+  23          
+  24          ¸Ä×°[×Ô¶¯ÅçÏã»ú]
+  25          
+  26          1¡¢Ò»ÌìÅçÊ±¼äÉèÖÃÎª£º7µã£¬13µã£¬19µã
+  27          2¡¢
+  28          T(io) °´¼üÓÃÓÚÃ¿Ìì12µã½Ï×¼Ê±¼ä£¬´¥·¢¼´Éè¶¨µ±Ç°Ê ±¼äÎª12µã.
+  29          M ÓÃÓÚÖ÷¶¯´¥·¢ÅçÏã»úÔËÐÐÒ»´Î¡£
+  30          S  ¹Ø±Õµ±³ÌÐòÔËÐÐ.
+  31          
+  32          3¡¢L1(ÂÌio0)ÏÔÊ¾µ±Ç°×´Ì¬£¬
+  33          10ÃëÉÁÒ»´Î£¬±íÊ¾»úÆ÷¶¨Ê±ÔËÐÐÖÐ¡£
+  34          ³£ÁÁ±íÊ¾µç³Ø²»×ã¡£
+  35          
+  36          L2(ºìio1)ÉÁÒ»´Î£¬±íÊ¾Ê±¼ä½Ï×¼Íê³É¡£
+  37          L2(ºì)ÉÁ¶þ´Î£¬±íÊ¾¼ÆÊý»Ö¸´Íê³É¡£ 
+  38          L2(ºì)ÉÁÈý´Î£¬±íÊ¾¹Ø±Õ¶¨Ê±
+  39          
+  40          /*stc15f104w Òý½Å°²ÅÅ
+  41          *********************************************************
+  42          µç»úµçÔ´  p3.4  -- ||--p3.3  ÅçÏã»ú°´¼ü¿ØÖÆÊäÈë
+  43          ÕýµçÔ´       vcc    -- ||--p3.2  Ê±¼äÖØÖÃ°´¼ü¿ØÖÆÊäÈë
+  44          µç»ú¿ª¹Ø  p3.5  -- ||--p3.1  ºìµÆ
+  45          ¸ºµçÔ´        gnd  -- ||--p3.0  ÂÌµÆ
+  46          *********************************************************
+  47          
+  48          */
+  49          
+  50          /******************************************/
+  51          
+  52          /*************  ±¾µØ³£Á¿ÉùÃ÷    **************/
+  53          #define l2Num_TimeRest_1 1
+  54          #define l2Num_MotoRun_2  2
+  55          
+C51 COMPILER V9.01   MAIN                                                                  10/29/2018 17:42:09 PAGE 2   
+
+  56          /*************  ±¾µØ±äÁ¿ÉùÃ÷    **************/
+  57          u8 g_hour=8;  //Ê±
+  58          u8  g_minute=0;//·Ö
+  59          u8  g_second=0;//Ãë
+  60          u16 g_millisecond=0;//ºÁÃë 
+  61          #define  k_addNum 50; //50 //¶¨Ê±µþ¼ÓÊý
+  62          
+  63          sbit ioOutForL1Green= P3^0;  //ÂÌµÆ£¬³ÌÐòÔËÐÐÖ¸Ê¾µÆ
+  64          sbit ioOutForL2Red  = P3^1;  //ºìµÆ£¬°´¼üÏìÓ¦Ö¸Ê¾µÆ
+  65          
+  66          sbit ioInKeyForMoto = P3^2;//ÅçÏã»ú´¥·¢ÔËÐÐÊäÈë  int0
+  67          sbit ioInKeyForTime = P3^3; //Ê±¼ä½Ï×¼°´¼üÊäÈë  int1
+  68          
+  69          
+  70          sbit ioOutForMotoPower=P3^5;  //ÅçÏã»úµç»úÆô¶¯¿ª¹ØIO¿Ú.
+  71          //sbit ioOutForMotoKey= P3^4;  //ÔÝÊ±²»×ö´¦Àí£¬±£ÁôIO¿Ú
+  72          
+  73          
+  74          #define  k_moto_run_time 10; //50 //¶¨Ê±µþ¼ÓÊý
+  75          u8 g_moto_run_time=0; //µç»úÆô¶¯ÔËÐÐºóµÄÊ±¼äÖµ
+  76           
+  77          typedef struct
+  78          {
+  79                  u8      sKeyForTime;  //ÖØÖÃÊ±¼ä¼ü×´Ì¬Öµ.  0: Î´°´ÏÂ  //1:ÒÑ°´ÏÂ
+  80                  //u8    sKeyForRun;       //³ÌÐò¼ü×´Ì¬Öµ.  0: Î´°´ÏÂ  //1:ÒÑ°´ÏÂ
+  81                  u8     sKeyForMoto;  //ÅçÏã»ú¼ü×´Ì¬Öµ.  0: Î´°´ÏÂ  //1:ÒÑ°´ÏÂ
+  82          } KeyStateDef; //µ±Ç°³ÌÐò°´¼üµÄ×´Ì¬,Ä¬ÈÏÎª0 
+  83          
+  84          //È«¾Ö¶ÔÏó
+  85          KeyStateDef  g_allKeyState={0,0};
+  86          
+  87          
+  88          /*************  ±¾µØº¯ÊýÉùÃ÷    **************/
+  89          
+  90          //void mintueAction(void);
+  91          
+  92          void secondAction(void);
+  93          
+  94          //void printNowTime(void);
+  95          
+  96          void key_scan(void);
+  97          
+  98          void l2ShowWithNum(u8 num);
+  99          
+ 100          void motoStart(void);
+ 101          /*************  Íâ²¿º¯ÊýºÍ±äÁ¿ÉùÃ÷ *****************/
+ 102          void    EXTI_config(void)
+ 103          {
+ 104   1              EXTI_InitTypeDef        EXTI_InitStructure;                                     //½á¹¹¶¨Òå
+ 105   1      
+ 106   1          //³õÊ¼»¯INT0
+ 107   1              EXTI_InitStructure.EXTI_Mode      = EXT_MODE_RiseFall;  //ÖÐ¶ÏÄ£Ê½,  EXT_MODE_RiseFall, EXT_MODE_Fall
+ 108   1              EXTI_InitStructure.EXTI_Polity    = PolityHigh;                 //ÖÐ¶ÏÓÅÏÈ¼¶,   PolityLow,PolityHigh
+ 109   1              EXTI_InitStructure.EXTI_Interrupt = ENABLE;                             //ÖÐ¶ÏÔÊÐí,     ENABLE»òDISABLE
+ 110   1              Ext_Inilize(EXT_INT0,&EXTI_InitStructure);      
+ 111   1          
+ 112   1          //³õÊ¼»¯INT1
+ 113   1              EXTI_InitStructure.EXTI_Mode      = EXT_MODE_Fall;      //ÖÐ¶ÏÄ£Ê½,     EXT_MODE_RiseFall, EXT_MODE_Fall
+ 114   1              EXTI_InitStructure.EXTI_Polity    = PolityLow;                  //ÖÐ¶ÏÓÅÏÈ¼¶,   PolityLow,PolityHigh
+ 115   1              //EXTI_InitStructure.EXTI_Interrupt = ENABLE;                           //ÖÐ¶ÏÔÊÐí,     ENABLE»òDISABLE
+ 116   1              Ext_Inilize(EXT_INT1,&EXTI_InitStructure);                              //      EXT_INT0,EXT_INT1,EXT_INT2,EXT_INT3,EXT_INT4
+ 117   1      
+C51 COMPILER V9.01   MAIN                                                                  10/29/2018 17:42:09 PAGE 3   
+
+ 118   1      /*
+ 119   1          //³õÊ¼»¯INT3
+ 120   1              EXTI_InitStructure.EXTI_Mode      = EXT_MODE_Fall;      //ÖÐ¶ÏÄ£Ê½,     EXT_MODE_RiseFall, EXT_MODE_Fall
+ 121   1              EXTI_InitStructure.EXTI_Polity    = PolityLow;                  //ÖÐ¶ÏÓÅÏÈ¼¶,   PolityLow,PolityHigh
+ 122   1              EXTI_InitStructure.EXTI_Interrupt = ENABLE;                             //ÖÐ¶ÏÔÊÐí,     ENABLE»òDISABLE
+ 123   1              Ext_Inilize(EXT_INT3,&EXTI_InitStructure);
+ 124   1              */
+ 125   1      }
+ 126          
+ 127          
+ 128          
+ 129          /************************ IO¿ÚÅäÖÃ ****************************/
+ 130          void    GPIO_config(void)
+ 131          {
+ 132   1              GPIO_InitTypeDef        GPIO_InitStructure;                             //½á¹¹¶¨Òå
+ 133   1              GPIO_InitStructure.Pin  = GPIO_Pin_0 | GPIO_Pin_1| GPIO_Pin_4|GPIO_Pin_5;       //Ö¸¶¨Òª³õÊ¼»¯µÄIO, 
+ 134   1              // GPIO_Pin_2 ~ GPIO_Pin_3, »ò²Ù×÷
+ 135   1              GPIO_InitStructure.Mode = GPIO_OUT_PP;                          //Ö¸¶¨IOµÄÊäÈë»òÊä³ö·½Ê½,GPIO_PullUp,GPIO_HighZ,GPIO_OUT_OD,GPI
+             -O_OUT_PP
+ 136   1              GPIO_Inilize(GPIO_P3,&GPIO_InitStructure);                      //³õÊ¼»¯
+ 137   1      
+ 138   1      
+ 139   1              GPIO_InitStructure.Pin   = GPIO_Pin_2 |GPIO_Pin_3  ;    //Ö¸¶¨Òª³õÊ¼»¯µÄIO,
+ 140   1              GPIO_InitStructure.Mode = GPIO_PullUp;                          //Ö¸¶¨IOµÄÊäÈë»òÊä³ö·½Ê½,GPIO_PullUp,GPIO_HighZ,GPIO_OUT_OD,GPI
+             -O_OUT_PP
+ 141   1              GPIO_Inilize(GPIO_P3,&GPIO_InitStructure);      
+ 142   1              
+ 143   1      }
+ 144          
+ 145          /************************ ¶¨Ê±Æ÷ÅäÖÃ ****************************/
+ 146          void    Timer_config(void)
+ 147          {
+ 148   1              TIM_InitTypeDef         TIM_InitStructure;                                      //½á¹¹¶¨Òå
+ 149   1              TIM_InitStructure.TIM_Mode      = TIM_16BitAutoReload;  //Ö¸¶¨¹¤×÷Ä£Ê½,   TIM_16BitAutoReload,TIM_16Bit,TI
+             -M_8BitAutoReload,TIM_16BitAutoReloadNoMask
+ 150   1              TIM_InitStructure.TIM_Polity    = PolityHigh;                   //Ö¸¶¨ÖÐ¶ÏÓÅÏÈ¼¶, PolityHigh,PolityLow
+ 151   1              TIM_InitStructure.TIM_Interrupt = ENABLE;                               //ÖÐ¶ÏÊÇ·ñÔÊÐí,   ENABLE»òDISABLE
+ 152   1              TIM_InitStructure.TIM_ClkSource = TIM_CLOCK_12T;                        //Ö¸¶¨Ê±ÖÓÔ´,     TIM_CLOCK_1T,TIM_CLOCK_12T,TIM_CLOCK
+             -_Ext
+ 153   1              TIM_InitStructure.TIM_ClkOut    = DISABLE;                              //ÊÇ·ñÊä³ö¸ßËÙÂö³å, ENABLE»òDISABLE
+ 154   1              TIM_InitStructure.TIM_Value     =  0x3cb0;//65536UL - (50.0/1000.0 * MAIN_Fosc/12.0);           
+ 155   1              // //³õÖµ,50ºÁÃëÒ»´ÎÖÐ¶Ï.
+ 156   1              TIM_InitStructure.TIM_Run       = ENABLE;                               //ÊÇ·ñ³õÊ¼»¯ºóÆô¶¯¶¨Ê±Æ÷, ENABLE»òDISABLE
+ 157   1              Timer_Inilize(Timer0,&TIM_InitStructure);                               //³õÊ¼»¯Timer0    Timer0,Timer1,Timer2
+ 158   1      
+ 159   1      }
+ 160          
+ 161          
+ 162          /******************** Ö÷º¯Êý**************************/
+ 163          void main(void)
+ 164          {
+ 165   1              
+ 166   1              //io ½ÅÅäÖÃ
+ 167   1              GPIO_config();
+ 168   1      
+ 169   1          //È«¾Ö±äÁ¿³õÊ¹»¯
+ 170   1              // ¹¤×÷µÆ¿ªÊ¼
+ 171   1            ioOutForL1Green=ioInKeyForMoto=ioInKeyForTime=1; //key¼üÀ­¸ß
+ 172   1      
+ 173   1            //Êä³öio½ÅÏÈ¹Ø±Õ
+ 174   1            ioOutForL2Red =ioOutForMotoPower = 0;
+ 175   1      
+C51 COMPILER V9.01   MAIN                                                                  10/29/2018 17:42:09 PAGE 4   
+
+ 176   1           // ioOutForMotoKey=1; //´¥·¢ÅçÏã»úµÄ°´¼ü¿ª¹Ø. µÍÎ»¿ª£¬¸ßÎ»¹Ø.
+ 177   1      
+ 178   1                 
+ 179   1              //g_allKeyState = {0,0,0};
+ 180   1      
+ 181   1      
+ 182   1              //¿ªÆôÒý½Åp32 p33µÄÍâ²¿ÖÐ¶Ï,ÏÂ½µÑØÖÐ¶Ï.
+ 183   1              EXTI_config();
+ 184   1          
+ 185   1              //¶¨Ê±Æ÷ÅäÖÃ 50ms Ò»´Î¶¨Ê±£¬¶¨Ê±Æ÷´¥·¢Ê±£¬cpu½øÈë»½ÐÑÊ±¶Î.
+ 186   1              Timer_config();
+ 187   1      
+ 188   1              EA = 1;
+ 189   1                       
+ 190   1              //PrintString("\r\n ¿ªÊ¼¹¤×÷ÁË... = ");
+ 191   1      
+ 192   1              while (1)
+ 193   1              {
+ 194   2                      key_scan();
+ 195   2      
+ 196   2                              /*
+ 197   2                      Ö´ÐÐÈÎÎñ¶¯×÷1
+ 198   2      
+ 199   2                      Ò»ÌìÅçÊ±¼äÉèÖÃÎª£º7µã£¬13µã£¬19µã(Õû)
+ 200   2                      */
+ 201   2                      switch(g_hour){
+ 202   3                              case 7:
+ 203   3                              case 13:
+ 204   3                              case 19:
+ 205   3                                  {
+ 206   4                                          if( g_minute==0 && g_second ==0 && 
+ 207   4                                          g_millisecond<=100 )
+ 208   4                                           {
+ 209   5                                                    motoStart();
+ 210   5                                              }
+ 211   4                                  }
+ 212   3                                  break;
+ 213   3                                  
+ 214   3                               default:
+ 215   3                                  break;
+ 216   3                          }
+ 217   2      
+ 218   2              }
+ 219   1      }
+ 220          
+ 221          /***ÄÚ²¿¹¦ÄÜº¯Êý***/
+ 222          
+ 223          // °´¼ü´¦Àí¹¦ÄÜ
+ 224          void key_scan(void) {
+ 225   1      
+ 226   1              if(g_allKeyState.sKeyForMoto == 1) {
+ 227   2                      //Çå¿ÕÔ­×´Ì¬
+ 228   2                      g_allKeyState.sKeyForMoto = 0;
+ 229   2      
+ 230   2                      //´¥·¢ÅçÏã»ú¹¤×÷
+ 231   2                      motoStart();
+ 232   2                      l2ShowWithNum(l2Num_MotoRun_2);
+ 233   2                      
+ 234   2              }
+ 235   1      /*
+ 236   1              if(g_allKeyState.sKeyForRun== 1) {
+ 237   1      
+C51 COMPILER V9.01   MAIN                                                                  10/29/2018 17:42:09 PAGE 5   
+
+ 238   1                      //Í£Ö¹APPÔËÐÐ
+ 239   1                      while(g_allKeyState.sKeyForRun){;};
+ 240   1                      
+ 241   1                      //Çå¿ÕÔ­×´Ì¬
+ 242   1                      //g_allKeyState.sKeyForRun = 0;
+ 243   1              }
+ 244   1      */
+ 245   1              if(g_allKeyState.sKeyForTime== 1) {
+ 246   2                      //Çå¿ÕÔ­×´Ì¬
+ 247   2                      g_allKeyState.sKeyForTime = 0;
+ 248   2      
+ 249   2                      //ÖØÖÃÊ±¼äÎª12µã.
+ 250   2                      g_hour = 12;
+ 251   2                      g_minute=g_second=g_millisecond =0;
+ 252   2      
+ 253   2                      l2ShowWithNum(l2Num_TimeRest_1);
+ 254   2                      
+ 255   2              }       
+ 256   1      }
+ 257          
+ 258          //ÁÁµÆÏìÓ¦
+ 259          /*
+ 260          3¡¢L1(ÂÌio0)ÏÔÊ¾µ±Ç°×´Ì¬£¬
+ 261          10ÃëÉÁÒ»´Î£¬±íÊ¾»úÆ÷¶¨Ê±ÔËÐÐÖÐ¡£
+ 262          ³£ÁÁ±íÊ¾µç³Ø²»×ã¡£
+ 263          
+ 264          L2(ºìio1)ÉÁÒ»´Î£¬±íÊ¾Ê±¼ä½Ï×¼Íê³É¡£
+ 265          L2(ºì)ÉÁ¶þ´Î£¬±íÊ¾´¥·¢ÅçÏã»ú¹¤×÷¡£ 
+ 266          L2(ºì)ÉÁÈý´Î£¬±íÊ¾¹Ø±ÕAPPÔËÐÐ
+ 267          */ 
+ 268          
+ 269          void l2ShowWithNum(u8 num)
+ 270          {
+ 271   1              int i;
+ 272   1          //PrintString("\r\n l2ShowWithNum.");
+ 273   1                      
+ 274   1              for(i=0; i<num; i++)
+ 275   1              {
+ 276   2                      delay_ms(100);
+ 277   2                      ioOutForL2Red = 1;
+ 278   2                      delay_ms(100);
+ 279   2                      ioOutForL2Red = 0;
+ 280   2      
+ 281   2              }       /**/
+ 282   1      }       
+ 283          
+ 284          /*µç»ú¿ØÖÆ
+ 285          
+ 286          1.´ò¿ªp34,      (10Ãë) ºó¹Ø±Õ(Ïàµ±ÓÚ¿ª¹ØµçÔ´)
+ 287          2.µÈ´ýÅçÏã»úÆô¶¯,Ô¼(1Ãë)ÖÓ,¼´8(k_moto_run_time-2)ÃëÊ±Æô¶¯²Ù×÷.
+ 288          3.´ò¿ªp35, 20us Ãë¹Ø±Õ(Ä£ËÆ°´¼ü)
+ 289          */
+ 290          void motoStart(void) {
+ 291   1          //ÉèÖÃµç»úÆô¶¯±êÖ¾Ê±¼äÖµ.
+ 292   1      
+ 293   1              ioOutForMotoPower= 1; //¿ªÆôµçÔ´
+ 294   1              g_moto_run_time = k_moto_run_time; 
+ 295   1              
+ 296   1         // PrintString("\r\n motoStart. ");
+ 297   1      }
+ 298          
+ 299          void secondAction(void) {
+C51 COMPILER V9.01   MAIN                                                                  10/29/2018 17:42:09 PAGE 6   
+
+ 300   1              //PrintString("\r\n secondAction... ");
+ 301   1              //printNowTime();
+ 302   1          
+ 303   1              if(g_second%10 == 0){   //¹¤×÷Ö¸Ê¾µÆ(ÂÌ)
+ 304   2                      ioOutForL1Green = 1;
+ 305   2                      //delay_ms(200);
+ 306   2                      
+ 307   2              }
+ 308   1          else {
+ 309   2                  ioOutForL1Green = 0;
+ 310   2              }
+ 311   1      
+ 312   1      
+ 313   1              if(g_moto_run_time==0){
+ 314   2                      return;
+ 315   2              }
+ 316   1              else if(g_moto_run_time==1){
+ 317   2                      g_moto_run_time=0;
+ 318   2                      ioOutForL2Red = 0; //¹Øµç»úÔËÐÐÖ¸Ê¾µÆ
+ 319   2                      //¹Ø±Õµç»úµçÔ´
+ 320   2                       ioOutForMotoPower= 0;
+ 321   2                  }
+ 322   1              else if(g_moto_run_time>0){
+ 323   2                      ioOutForL2Red = 1;
+ 324   2                      g_moto_run_time--;
+ 325   2                  }
+ 326   1              
+ 327   1              
+ 328   1      }
+ 329          /*
+ 330          void mintueAction(void) {
+ 331                  //PrintString("\r\n mintueAction... ");
+ 332          
+ 333          }
+ 334          
+ 335          
+ 336          // TxSend(j/1000 + '0');
+ 337          void printNowTime(void) {
+ 338          
+ 339                  PrintString("\r\n ....");
+ 340          
+ 341                  TxSend('H');
+ 342                  //TxSend(g_hour+ '0');
+ 343                  TxSend(g_hour%100/10 + '0');
+ 344                  TxSend(g_hour%10+ '0');
+ 345                  
+ 346          
+ 347                  TxSend(' ');
+ 348                  TxSend('M');
+ 349                  TxSend(g_minute%100/10 + '0');
+ 350                  TxSend(g_minute%10+ '0');
+ 351          
+ 352                  TxSend(' ');
+ 353                  TxSend('S');
+ 354                  //TxSend(g_second+ '0');
+ 355                  TxSend(g_second%100/10 + '0');
+ 356                  TxSend(g_second%10+ '0');
+ 357          
+ 358          //
+ 359                  TxSend(' ');
+ 360                  TxSend('U');
+ 361                  //TxSend(g_millisecond+ '0');
+C51 COMPILER V9.01   MAIN                                                                  10/29/2018 17:42:09 PAGE 7   
+
+ 362                  TxSend(g_millisecond%1000/100 + '0');
+ 363                  TxSend(g_millisecond%100/10 + '0');
+ 364                  TxSend(g_millisecond%10+ '0');
+ 365          //
+ 366                  
+ 367                  PrintString("\r\n ");
+ 368          }
+ 369          */
+ 370          
+ 371          /********************* Timer0ÖÐ¶Ïº¯Êý************************/
+ 372          void timer0_int (void) interrupt TIMER0_VECTOR
+ 373          {
+ 374   1              g_millisecond += k_addNum;
+ 375   1      
+ 376   1              if( g_millisecond>= 1000) { //Âú×ãÒ»Ãë
+ 377   2                      g_millisecond = 0;
+ 378   2              
+ 379   2                      secondAction();
+ 380   2                      
+ 381   2                      g_second++;
+ 382   2      
+ 383   2                      if(g_second >=60){
+ 384   3      
+ 385   3                              //Âú×ãÒ»·ÖÖÓ
+ 386   3                              //mintueAction();
+ 387   3      
+ 388   3                              
+ 389   3                              g_second =0;
+ 390   3                              g_minute ++;
+ 391   3      
+ 392   3                              if(g_minute >=60){
+ 393   4      
+ 394   4                                      //Âú×ãÒ»Ð¡Ê±
+ 395   4                                      g_minute =0;
+ 396   4                                      g_hour ++;
+ 397   4      
+ 398   4                                      if(g_hour >=24){
+ 399   5      
+ 400   5                                              //Âú×ã24Ð¡Ê±
+ 401   5                                              g_hour =0;
+ 402   5                              
+ 403   5                                      }
+ 404   4                              
+ 405   4                              }
+ 406   3                      }
+ 407   2              }
+ 408   1      }
+ 409          
+ 410          /*
+ 411          sbit ioInKeyForTime = P3^2; //Ê±¼ä½Ï×¼°´¼üÊäÈë  int0
+ 412          sbit ioInKeyForRun  = P3^3;//³ÌÐòÊÇ·ñÔËÐÐÊäÈë   int1
+ 413          sbit ioInKeyForMoto =P3^5;//ÅçÏã»ú´¥·¢ÔËÐÐÊäÈë  int3
+ 414          */
+ 415          
+ 416          /********************* INT0ÖÐ¶Ïº¯Êý *************************/
+ 417          void INT0_int (void) interrupt INT0_VECTOR              //½øÖÐ¶ÏÊ±ÒÑ¾­Çå³ý±êÖ¾
+ 418          {
+ 419   1              //WakeUpSource = 1;     //±ê¼ÇINT0»½ÐÑ
+ 420   1              //EX0 = 0;                      //INT0 Disable
+ 421   1      
+ 422   1              IE0  = 0;                       //ÍâÖÐ¶Ï0±êÖ¾Î»
+ 423   1              g_allKeyState.sKeyForMoto= 1;
+C51 COMPILER V9.01   MAIN                                                                  10/29/2018 17:42:09 PAGE 8   
+
+ 424   1              //PrintString("\r\n Íâ²¿ÖÐ¶Ï0.");
+ 425   1              while(ioInKeyForMoto==0);
+ 426   1              EX0 = 1;
+ 427   1      
+ 428   1              
+ 429   1      }
+ 430          
+ 431          /********************* INT1ÖÐ¶Ïº¯Êý *************************/
+ 432          void INT1_int (void) interrupt INT1_VECTOR              //½øÖÐ¶ÏÊ±ÒÑ¾­Çå³ý±êÖ¾
+ 433          {
+ 434   1              //½øÈëÖÐ¶ÏÊ±£¬¿ÉÒÔ°Ñint1ÖÐ¶Ï¹Ø±Õ¡£
+ 435   1              EX1 = 0;        
+ 436   1              //tfWakeUpSource = 2;   //±ê¼ÇINT1»½ÐÑ
+ 437   1              //EX1 = 0;                      //INT1 Disable
+ 438   1              IE1  = 0;                       //ÍâÖÐ¶Ï1±êÖ¾Î»
+ 439   1              g_allKeyState.sKeyForTime= 1;
+ 440   1              //´¦ÀíÍêÖÐ¶ÏÊÂ¼þºó£¬¿ÉÒÔ°Ñ int1ÖÐ¶Ï¿ªÆô£¬·ÀÖ¹¶à´Î½øÈë¡£
+ 441   1      
+ 442   1         // PrintString("\r\n Íâ²¿ÖÐ¶Ï1.ÑÓÊ±1Ãë");
+ 443   1          delay_ms(2000);
+ 444   1               while(ioInKeyForTime==0);
+ 445   1              EX1 = 1;          //³ÌÐò¼ü×´Ì¬Öµ.  0: Î´°´ÏÂ  //1:ÒÑ°´ÏÂ
+ 446   1        
+ 447   1      }
+ 448          
+ 449          /********************* INT3ÖÐ¶Ïº¯Êý ***********************
+ 450          void INT3_int  (void) interrupt INT3_VECTOR
+ 451          {
+ 452              PrintString("\r\n Íâ²¿ÖÐ¶Ï3.ÑÓÊ±1Ãë");
+ 453          
+ 454          //
+ 455              INT_CLKO |=  (1 << 5);  //ÔÊÐíÖÐ¶Ï  
+ 456              INT_CLKO &= ~(1 << 5);  //½ûÖ¹ÖÐ¶Ï
+ 457          ///
+ 458                  //EX3 = 0;      
+ 459              //IE1  = 0; 
+ 460          
+ 461                  g_allKeyState.sKeyForMoto= 1;
+ 462          }
+ 463          */
+ 464          
+ 465          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    467    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      8      16
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

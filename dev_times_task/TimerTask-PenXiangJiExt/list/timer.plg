@@ -1,0 +1,429 @@
+<html>
+<body>
+<pre>
+<h1>礦ision Build Log</h1>
+<h2>Project:</h2>
+E:\hardworl\51stc15\STC15F10xxDemo\STC15系列库函数与例程测试版V2.0\例程\02-Timer0-Timer1-Timer2\timer.uvproj
+Project File Date:  <unknown>
+
+<h2>Output:</h2>
+compiling main.c...
+MAIN.C(95): warning C206: 'printf': missing function-prototype
+MAIN.C(95): error C267: 'printf': requires ANSI-style prototype
+main.c - 1 Error(s), 1 Warning(s).
+compiling main.c...
+MAIN.C(95): warning C206: 'print': missing function-prototype
+MAIN.C(95): error C267: 'print': requires ANSI-style prototype
+main.c - 1 Error(s), 1 Warning(s).
+compiling main.c...
+STC15FXXXX.H(20): error C231: 'P0': redefinition
+STC15FXXXX.H(21): error C231: 'SP': redefinition
+STC15FXXXX.H(22): error C231: 'DPL': redefinition
+STC15FXXXX.H(23): error C231: 'DPH': redefinition
+STC15FXXXX.H(26): error C231: 'PCON': redefinition
+STC15FXXXX.H(28): error C231: 'TCON': redefinition
+STC15FXXXX.H(29): error C231: 'TMOD': redefinition
+STC15FXXXX.H(30): error C231: 'TL0': redefinition
+STC15FXXXX.H(31): error C231: 'TL1': redefinition
+STC15FXXXX.H(32): error C231: 'TH0': redefinition
+STC15FXXXX.H(33): error C231: 'TH1': redefinition
+STC15FXXXX.H(45): error C231: 'P1': redefinition
+STC15FXXXX.H(55): error C231: 'SCON': redefinition
+STC15FXXXX.H(56): error C231: 'SBUF': redefinition
+STC15FXXXX.H(61): error C231: 'P2': redefinition
+STC15FXXXX.H(66): error C231: 'IE': redefinition
+STC15FXXXX.H(74): error C231: 'P3': redefinition
+STC15FXXXX.H(83): error C231: 'IP': redefinition
+STC15FXXXX.H(115): error C231: 'PSW': redefinition
+STC15FXXXX.H(144): error C231: 'ACC': redefinition
+STC15FXXXX.H(157): error C231: 'B': redefinition
+STC15FXXXX.H(171): error C231: 'CY': redefinition
+STC15FXXXX.H(172): error C231: 'AC': redefinition
+STC15FXXXX.H(173): error C231: 'F0': redefinition
+STC15FXXXX.H(174): error C231: 'RS1': redefinition
+STC15FXXXX.H(175): error C231: 'RS0': redefinition
+STC15FXXXX.H(176): error C231: 'OV': redefinition
+STC15FXXXX.H(178): error C231: 'P': redefinition
+STC15FXXXX.H(181): error C231: 'TF1': redefinition
+STC15FXXXX.H(182): error C231: 'TR1': redefinition
+STC15FXXXX.H(183): error C231: 'TF0': redefinition
+STC15FXXXX.H(184): error C231: 'TR0': redefinition
+STC15FXXXX.H(185): error C231: 'IE1': redefinition
+STC15FXXXX.H(186): error C231: 'IT1': redefinition
+STC15FXXXX.H(187): error C231: 'IE0': redefinition
+STC15FXXXX.H(188): error C231: 'IT0': redefinition
+STC15FXXXX.H(239): error C231: 'RXD': redefinition
+STC15FXXXX.H(240): error C231: 'TXD': redefinition
+STC15FXXXX.H(241): error C231: 'INT0': redefinition
+STC15FXXXX.H(242): error C231: 'INT1': redefinition
+STC15FXXXX.H(243): error C231: 'T0': redefinition
+STC15FXXXX.H(244): error C231: 'T1': redefinition
+STC15FXXXX.H(245): error C231: 'WR': redefinition
+STC15FXXXX.H(246): error C231: 'RD': redefinition
+STC15FXXXX.H(273): error C231: 'SM0': redefinition
+STC15FXXXX.H(274): error C231: 'SM1': redefinition
+STC15FXXXX.H(275): error C231: 'SM2': redefinition
+STC15FXXXX.H(276): error C231: 'REN': redefinition
+STC15FXXXX.H(277): error C231: 'TB8': redefinition
+STC15FXXXX.H(278): error C231: 'RB8': redefinition
+STC15FXXXX.H(279): error C231: 'TI': redefinition
+STC15FXXXX.H(280): error C231: 'RI': redefinition
+STC15FXXXX.H(283): error C231: 'EA': redefinition
+STC15FXXXX.H(286): error C231: 'ES': redefinition
+STC15FXXXX.H(287): error C231: 'ET1': redefinition
+STC15FXXXX.H(288): error C231: 'EX1': redefinition
+STC15FXXXX.H(289): error C231: 'ET0': redefinition
+STC15FXXXX.H(290): error C231: 'EX0': redefinition
+STC15FXXXX.H(337): error C231: 'PS': redefinition
+STC15FXXXX.H(338): error C231: 'PT1': redefinition
+STC15FXXXX.H(339): error C231: 'PX1': redefinition
+STC15FXXXX.H(340): error C231: 'PT0': redefinition
+STC15FXXXX.H(341): error C231: 'PX0': redefinition
+main.c - 63 Error(s), 0 Warning(s).
+compiling main.c...
+STC15FXXXX.H(20): error C231: 'P0': redefinition
+STC15FXXXX.H(21): error C231: 'SP': redefinition
+STC15FXXXX.H(22): error C231: 'DPL': redefinition
+STC15FXXXX.H(23): error C231: 'DPH': redefinition
+STC15FXXXX.H(26): error C231: 'PCON': redefinition
+STC15FXXXX.H(28): error C231: 'TCON': redefinition
+STC15FXXXX.H(29): error C231: 'TMOD': redefinition
+STC15FXXXX.H(30): error C231: 'TL0': redefinition
+STC15FXXXX.H(31): error C231: 'TL1': redefinition
+STC15FXXXX.H(32): error C231: 'TH0': redefinition
+STC15FXXXX.H(33): error C231: 'TH1': redefinition
+STC15FXXXX.H(45): error C231: 'P1': redefinition
+STC15FXXXX.H(55): error C231: 'SCON': redefinition
+STC15FXXXX.H(56): error C231: 'SBUF': redefinition
+STC15FXXXX.H(61): error C231: 'P2': redefinition
+STC15FXXXX.H(66): error C231: 'IE': redefinition
+STC15FXXXX.H(74): error C231: 'P3': redefinition
+STC15FXXXX.H(83): error C231: 'IP': redefinition
+STC15FXXXX.H(115): error C231: 'PSW': redefinition
+STC15FXXXX.H(144): error C231: 'ACC': redefinition
+STC15FXXXX.H(157): error C231: 'B': redefinition
+STC15FXXXX.H(171): error C231: 'CY': redefinition
+STC15FXXXX.H(172): error C231: 'AC': redefinition
+STC15FXXXX.H(173): error C231: 'F0': redefinition
+STC15FXXXX.H(174): error C231: 'RS1': redefinition
+STC15FXXXX.H(175): error C231: 'RS0': redefinition
+STC15FXXXX.H(176): error C231: 'OV': redefinition
+STC15FXXXX.H(178): error C231: 'P': redefinition
+STC15FXXXX.H(181): error C231: 'TF1': redefinition
+STC15FXXXX.H(182): error C231: 'TR1': redefinition
+STC15FXXXX.H(183): error C231: 'TF0': redefinition
+STC15FXXXX.H(184): error C231: 'TR0': redefinition
+STC15FXXXX.H(185): error C231: 'IE1': redefinition
+STC15FXXXX.H(186): error C231: 'IT1': redefinition
+STC15FXXXX.H(187): error C231: 'IE0': redefinition
+STC15FXXXX.H(188): error C231: 'IT0': redefinition
+STC15FXXXX.H(239): error C231: 'RXD': redefinition
+STC15FXXXX.H(240): error C231: 'TXD': redefinition
+STC15FXXXX.H(241): error C231: 'INT0': redefinition
+STC15FXXXX.H(242): error C231: 'INT1': redefinition
+STC15FXXXX.H(243): error C231: 'T0': redefinition
+STC15FXXXX.H(244): error C231: 'T1': redefinition
+STC15FXXXX.H(245): error C231: 'WR': redefinition
+STC15FXXXX.H(246): error C231: 'RD': redefinition
+STC15FXXXX.H(273): error C231: 'SM0': redefinition
+STC15FXXXX.H(274): error C231: 'SM1': redefinition
+STC15FXXXX.H(275): error C231: 'SM2': redefinition
+STC15FXXXX.H(276): error C231: 'REN': redefinition
+STC15FXXXX.H(277): error C231: 'TB8': redefinition
+STC15FXXXX.H(278): error C231: 'RB8': redefinition
+STC15FXXXX.H(279): error C231: 'TI': redefinition
+STC15FXXXX.H(280): error C231: 'RI': redefinition
+STC15FXXXX.H(283): error C231: 'EA': redefinition
+STC15FXXXX.H(286): error C231: 'ES': redefinition
+STC15FXXXX.H(287): error C231: 'ET1': redefinition
+STC15FXXXX.H(288): error C231: 'EX1': redefinition
+STC15FXXXX.H(289): error C231: 'ET0': redefinition
+STC15FXXXX.H(290): error C231: 'EX0': redefinition
+STC15FXXXX.H(337): error C231: 'PS': redefinition
+STC15FXXXX.H(338): error C231: 'PT1': redefinition
+STC15FXXXX.H(339): error C231: 'PX1': redefinition
+STC15FXXXX.H(340): error C231: 'PT0': redefinition
+STC15FXXXX.H(341): error C231: 'PX0': redefinition
+main.c - 63 Error(s), 0 Warning(s).
+compiling main.c...
+main.c - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling GPIO.c...
+compiling timer.c...
+linking...
+Program Size: data=19.0 xdata=0 code=1285
+creating hex file from "timer"...
+"timer" - 0 Error(s), 0 Warning(s).
+compiling main.c...
+main.c - 0 Error(s), 0 Warning(s).
+compiling main.c...
+main.c - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+linking...
+*** ERROR L104: MULTIPLE PUBLIC DEFINITIONS
+    SYMBOL:  TIMER0_INT
+    MODULE:  timer.obj (TIMER)
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?GPIO_CONFIG?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER_CONFIG?MAIN
+*** WARNING L5: CODE SPACE MEMORY OVERLAP
+    FROM:    000BH
+    TO:      000DH
+Program Size: data=23.0 xdata=0 code=1316
+Target not created
+Build target 'Target 1'
+linking...
+*** ERROR L104: MULTIPLE PUBLIC DEFINITIONS
+    SYMBOL:  TIMER0_INT
+    MODULE:  timer.obj (TIMER)
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?GPIO_CONFIG?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER_CONFIG?MAIN
+*** WARNING L5: CODE SPACE MEMORY OVERLAP
+    FROM:    000BH
+    TO:      000DH
+Program Size: data=23.0 xdata=0 code=1316
+Target not created
+Build target 'Target 1'
+compiling GPIO.c...
+compiling main.c...
+compiling timer.c...
+linking...
+*** ERROR L104: MULTIPLE PUBLIC DEFINITIONS
+    SYMBOL:  TIMER0_INT
+    MODULE:  timer.obj (TIMER)
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?GPIO_CONFIG?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER_CONFIG?MAIN
+*** WARNING L5: CODE SPACE MEMORY OVERLAP
+    FROM:    000BH
+    TO:      000DH
+Program Size: data=23.0 xdata=0 code=1316
+Target not created
+Build target 'Target 1'
+compiling GPIO.c...
+compiling main.c...
+compiling timer.c...
+linking...
+*** ERROR L104: MULTIPLE PUBLIC DEFINITIONS
+    SYMBOL:  TIMER0_INT
+    MODULE:  timer.obj (TIMER)
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?GPIO_CONFIG?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER_CONFIG?MAIN
+*** WARNING L5: CODE SPACE MEMORY OVERLAP
+    FROM:    000BH
+    TO:      000DH
+Program Size: data=23.0 xdata=0 code=1316
+Target not created
+Build target 'Target 1'
+compiling GPIO.c...
+compiling main.c...
+compiling timer.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?GPIO_CONFIG?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER_CONFIG?MAIN
+Program Size: data=23.0 xdata=0 code=1298
+creating hex file from "timer"...
+"timer" - 0 Error(s), 2 Warning(s).
+Build target 'Target 1'
+compiling GPIO.c...
+compiling main.c...
+compiling timer.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?GPIO_CONFIG?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER_CONFIG?MAIN
+Program Size: data=23.0 xdata=0 code=1298
+creating hex file from "timer"...
+"timer" - 0 Error(s), 2 Warning(s).
+Build target 'Target 1'
+compiling GPIO.c...
+compiling main.c...
+compiling timer.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER0INIT?MAIN
+Program Size: data=19.0 xdata=0 code=1282
+creating hex file from "timer"...
+"timer" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling GPIO.c...
+compiling main.c...
+compiling timer.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER0INIT?MAIN
+Program Size: data=19.0 xdata=0 code=1250
+creating hex file from "timer"...
+"timer" - 0 Error(s), 1 Warning(s).
+compiling timer.c...
+timer.c - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER0INIT?MAIN
+Program Size: data=19.0 xdata=0 code=1250
+creating hex file from "timer"...
+"timer" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling GPIO.c...
+compiling main.c...
+compiling timer.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER0INIT?MAIN
+Program Size: data=19.0 xdata=0 code=1250
+creating hex file from "timer"...
+"timer" - 0 Error(s), 1 Warning(s).
+compiling timer.c...
+timer.c - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER0INIT?MAIN
+Program Size: data=19.0 xdata=0 code=1250
+creating hex file from "timer"...
+"timer" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling GPIO.c...
+compiling main.c...
+compiling timer.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER0INIT?MAIN
+Program Size: data=19.0 xdata=0 code=1250
+creating hex file from "timer"...
+"timer" - 0 Error(s), 1 Warning(s).
+compiling timer.c...
+timer.c - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER0INIT?MAIN
+Program Size: data=19.0 xdata=0 code=1253
+creating hex file from "timer"...
+"timer" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling GPIO.c...
+compiling main.c...
+compiling timer.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER0INIT?MAIN
+Program Size: data=19.0 xdata=0 code=1253
+creating hex file from "timer"...
+"timer" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER0INIT?MAIN
+Program Size: data=19.0 xdata=0 code=1250
+creating hex file from "timer"...
+"timer" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling GPIO.c...
+compiling main.c...
+compiling timer.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER0INIT?MAIN
+Program Size: data=19.0 xdata=0 code=1250
+creating hex file from "timer"...
+"timer" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling GPIO.c...
+compiling main.c...
+compiling timer.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER0INIT?MAIN
+Program Size: data=19.0 xdata=0 code=1250
+creating hex file from "timer"...
+"timer" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling GPIO.c...
+compiling main.c...
+compiling timer.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER0INIT?MAIN
+Program Size: data=19.0 xdata=0 code=1248
+creating hex file from "timer"...
+"timer" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling GPIO.c...
+compiling main.c...
+compiling timer.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER0INIT?MAIN
+Program Size: data=19.0 xdata=0 code=1248
+creating hex file from "timer"...
+"timer" - 0 Error(s), 1 Warning(s).
+compiling main.c...
+main.c - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER0INIT?MAIN
+Program Size: data=19.0 xdata=0 code=1249
+creating hex file from "timer"...
+"timer" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling GPIO.c...
+compiling main.c...
+compiling timer.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER0INIT?MAIN
+Program Size: data=19.0 xdata=0 code=1249
+creating hex file from "timer"...
+"timer" - 0 Error(s), 1 Warning(s).
+compiling main.c...
+main.c - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER0INIT?MAIN
+Program Size: data=19.0 xdata=0 code=1254
+creating hex file from "timer"...
+"timer" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling GPIO.c...
+compiling main.c...
+compiling timer.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER0INIT?MAIN
+Program Size: data=19.0 xdata=0 code=1254
+creating hex file from "timer"...
+"timer" - 0 Error(s), 1 Warning(s).
+compiling main.c...
+main.c - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER0INIT?MAIN
+Program Size: data=19.0 xdata=0 code=1253
+creating hex file from "timer"...
+"timer" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling GPIO.c...
+compiling main.c...
+compiling timer.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER0INIT?MAIN
+Program Size: data=19.0 xdata=0 code=1253
+creating hex file from "timer"...
+"timer" - 0 Error(s), 1 Warning(s).
