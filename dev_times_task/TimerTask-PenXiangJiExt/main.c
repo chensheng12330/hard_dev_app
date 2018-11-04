@@ -39,7 +39,7 @@ L2(红)闪三次，表示关闭定时
 
 /*stc15f104w 引脚安排
 *********************************************************
-电机电源  p3.4  -- ||--p3.3  喷香机按键控制输入
+自动模式  p3.4  -- ||--p3.3  喷香机按键控制输入
 正电源       vcc    -- ||--p3.2  时间重置按键控制输入
 电机开关  p3.5  -- ||--p3.1  红灯
 负电源        gnd  -- ||--p3.0  绿灯
@@ -52,13 +52,16 @@ L2(红)闪三次，表示关闭定时
 /*************	本地常量声明	**************/
 #define l2Num_TimeRest_1 1
 #define l2Num_MotoRun_2  2
+#define k_addNum 50 //50 //定时叠加数
+#define k_moto_run_time (k_addNum*10) //500ms //电机启时间值。
 
 /*************	本地变量声明	**************/
-u8 g_hour=8;  //时
-u8  g_minute=0;//分
-u8  g_second=0;//秒
+u8 g_hour=6;  //时
+u8  g_minute=59;//分
+u8  g_second=50;//秒
 u16 g_millisecond=0;//毫秒 
-#define  k_addNum 50; //50 //定时叠加数
+
+
 
 sbit ioOutForL1Green= P3^0;  //绿灯，程序运行指示灯
 sbit ioOutForL2Red  = P3^1;  //红灯，按键响应指示灯
@@ -71,8 +74,8 @@ sbit ioOutForMotoPower=P3^5;  //喷香机电机启动开关IO口.
 //sbit ioOutForMotoKey= P3^4;  //暂时不做处理，保留IO口
 
 
-#define  k_moto_run_time 10; //50 //定时叠加数
-u8 g_moto_run_time=0; //电机启动运行后的时间值
+
+int g_moto_run_time=-1; //电机启动运行后的时间值
  
 typedef struct
 {
@@ -104,7 +107,7 @@ void	EXTI_config(void)
 	EXTI_InitTypeDef	EXTI_InitStructure;					//结构定义
 
     //初始化INT0
-	EXTI_InitStructure.EXTI_Mode      = EXT_MODE_RiseFall;	//中断模式,  EXT_MODE_RiseFall, EXT_MODE_Fall
+	EXTI_InitStructure.EXTI_Mode      = EXT_MODE_Fall;	//中断模式,  EXT_MODE_RiseFall, EXT_MODE_Fall
 	EXTI_InitStructure.EXTI_Polity    = PolityHigh;			//中断优先级,   PolityLow,PolityHigh
 	EXTI_InitStructure.EXTI_Interrupt = ENABLE;				//中断允许,     ENABLE或DISABLE
 	Ext_Inilize(EXT_INT0,&EXTI_InitStructure);	
@@ -162,25 +165,28 @@ void	Timer_config(void)
 /******************** 主函数**************************/
 void main(void)
 {
-	
+	//低电压检测保护
+	PCON &= ~LVDF;                  //上电后需要清LVD中断标志位
+    ELVD = 1;                       //使能LVD中断
+    
 	//io 脚配置
 	GPIO_config();
 
     //全局变量初使化
 	// 工作灯开始
-      ioOutForL1Green=ioInKeyForMoto=ioInKeyForTime=1; //key键拉高
+    ioOutForL1Green=ioInKeyForMoto=ioInKeyForTime=1; //key键拉高
 
-      //输出io脚先关闭
-      ioOutForL2Red =ioOutForMotoPower = 0;
+    //输出io脚先关闭
+    ioOutForL2Red =ioOutForMotoPower = 0;
 
-     // ioOutForMotoKey=1; //触发喷香机的按键开关. 低位开，高位关.
-
+    //ioOutForMotoKey=1; //触发喷香机的按键开关. 低位开，高位关.
+ 	
            
-        //g_allKeyState = {0,0,0};
+    //g_allKeyState = {0,0,0};
 
 
-        //开启引脚p32 p33的外部中断,下降沿中断.
-        EXTI_config();
+    //开启引脚p32 p33的外部中断,下降沿中断.
+    EXTI_config();
     
 	//定时器配置 50ms 一次定时，定时器触发时，cpu进入唤醒时段.
 	Timer_config();
@@ -290,10 +296,31 @@ void l2ShowWithNum(u8 num)
 void motoStart(void) {
     //设置电机启动标志时间值.
 
-        ioOutForMotoPower= 1; //开启电源
+        ioOutForMotoPower = 1; //开启电源
         g_moto_run_time = k_moto_run_time; 
 	
    // PrintString("\r\n motoStart. ");
+}
+
+void milliAction(void){
+	 
+        if(g_moto_run_time<0){
+
+                  ioOutForL2Red = 0;
+                  return;
+        }
+        else if(g_moto_run_time<=k_addNum){
+
+                g_moto_run_time=-0;
+                ioOutForL2Red = 0; //关电机运行指示灯
+                //关闭电机电源
+                 ioOutForMotoPower= 0;
+        }
+        else if(g_moto_run_time>0){
+                ioOutForL2Red = 1;
+                g_moto_run_time  -= k_addNum;
+        }
+     return ;   
 }
 
 void secondAction(void) {
@@ -308,70 +335,17 @@ void secondAction(void) {
     else {
             ioOutForL1Green = 0;
         }
-
-
-        if(g_moto_run_time==0){
-                return;
-        }
-        else if(g_moto_run_time==1){
-                g_moto_run_time=0;
-                ioOutForL2Red = 0; //关电机运行指示灯
-                //关闭电机电源
-                 ioOutForMotoPower= 0;
-            }
-        else if(g_moto_run_time>0){
-                ioOutForL2Red = 1;
-                g_moto_run_time--;
-            }
-        
 	
 }
-/*
-void mintueAction(void) {
-	//PrintString("\r\n mintueAction... ");
 
-}
-
-
-// TxSend(j/1000 + '0');
-void printNowTime(void) {
-
-	PrintString("\r\n ....");
-
-	TxSend('H');
-	//TxSend(g_hour+ '0');
-	TxSend(g_hour%100/10 + '0');
-	TxSend(g_hour%10+ '0');
-	
-
-	TxSend(' ');
-	TxSend('M');
-	TxSend(g_minute%100/10 + '0');
-	TxSend(g_minute%10+ '0');
-
-	TxSend(' ');
-	TxSend('S');
-	//TxSend(g_second+ '0');
-	TxSend(g_second%100/10 + '0');
-	TxSend(g_second%10+ '0');
-
-//
-	TxSend(' ');
-	TxSend('U');
-	//TxSend(g_millisecond+ '0');
-	TxSend(g_millisecond%1000/100 + '0');
-	TxSend(g_millisecond%100/10 + '0');
-	TxSend(g_millisecond%10+ '0');
-//
-	
-	PrintString("\r\n ");
-}
-*/
 
 /********************* Timer0中断函数************************/
 void timer0_int (void) interrupt TIMER0_VECTOR
 {
 	g_millisecond += k_addNum;
+
+   //50m一次.
+	milliAction();
 
 	if( g_millisecond>= 1000) { //满足一秒
 		g_millisecond = 0;
@@ -440,7 +414,7 @@ void INT1_int (void) interrupt INT1_VECTOR		//进中断时已经清除标志
 	//处理完中断事件后，可以把 int1中断开启，防止多次进入。
 
    // PrintString("\r\n 外部中断1.延时1秒");
-    delay_ms(2000);
+   // delay_ms(2000);
          while(ioInKeyForTime==0);
 	EX1 = 1;	  //程序键状态值.  0: 未按下  //1:已按下
   
@@ -461,5 +435,21 @@ void INT3_int  (void) interrupt INT3_VECTOR
 	g_allKeyState.sKeyForMoto= 1;
 }
 */
+
+///低电压中断函数
+//如果低电压，将	     LVD_VECTOR		6
+void LVD_ISR() interrupt 6 using 1
+{	
+	//
+	ioOutForL2Red   = 1; //常亮，表示电压不足
+	ioOutForL1Green= 0; //熄灯
+	ioOutForMotoPower =0; //强制停止运转.
+
+	PCON &= ~LVDF;                  //向PCON.5写0清LVD中断
+
+	//PCON |= 0x02;               //进入掉电模式
+}
+
+
 
 

@@ -22,8 +22,9 @@ sfr DPL  = 0x82;
 sfr DPH  = 0x83;
 sfr	S4CON = 0x84;
 sfr	S4BUF = 0x85;
-sfr PCON = 0x87;
+
 */
+ sfr PCON = 0x87;
 sfr TCON = 0x88;
 sfr TMOD = 0x89;
 sfr TL0  = 0x8A;
@@ -220,7 +221,7 @@ sbit RI   = SCON^0;	//接收中断标志位
 
 /*  IE   */
 sbit EA   = IE^7;	//中断允许总控制位
-//sbit ELVD = IE^6;	//低压监测中断允许位
+sbit ELVD = IE^6;	//低压监测中断允许位
 //sbit EADC = IE^5;	//ADC 中断 允许位
 //sbit ES   = IE^4;	//串行中断 允许控制位
 sbit ET1  = IE^3;	//定时中断1允许控制位
