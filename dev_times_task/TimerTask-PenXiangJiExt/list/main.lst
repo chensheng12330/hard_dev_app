@@ -1,4 +1,4 @@
-C51 COMPILER V9.00   MAIN                                                                  11/04/2018 22:12:36 PAGE 1   
+C51 COMPILER V9.00   MAIN                                                                  11/18/2018 23:28:46 PAGE 1   
 
 
 C51 COMPILER V9.00, COMPILATION OF MODULE MAIN
@@ -62,9 +62,9 @@ line level    source
   53          #define l2Num_TimeRest_1 1
   54          #define l2Num_MotoRun_2  2
   55          #define k_addNum 50 //50 //定时叠加数
-C51 COMPILER V9.00   MAIN                                                                  11/04/2018 22:12:36 PAGE 2   
+C51 COMPILER V9.00   MAIN                                                                  11/18/2018 23:28:46 PAGE 2   
 
-  56          #define k_moto_run_time (k_addNum*10) //500ms //电机启时间值。
+  56          #define k_moto_run_time (500) //500ms //电机启时间值。
   57          
   58          /*************  本地变量声明    **************/
   59          u8 g_hour=6;  //时
@@ -86,7 +86,7 @@ line level    source
   75          
   76          
   77          
-  78          int g_moto_run_time=-1; //电机启动运行后的时间值
+  78          int g_moto_run_time=0; //电机启动运行后的时间值
   79           
   80          typedef struct
   81          {
@@ -126,7 +126,7 @@ line level    source
  115   1          //初始化INT1
  116   1              EXTI_InitStructure.EXTI_Mode      = EXT_MODE_Fall;      //中断模式,     EXT_MODE_RiseFall, EXT_MODE_Fall
  117   1              EXTI_InitStructure.EXTI_Polity    = PolityLow;                  //中断优先级,   PolityLow,PolityHigh
-C51 COMPILER V9.00   MAIN                                                                  11/04/2018 22:12:36 PAGE 3   
+C51 COMPILER V9.00   MAIN                                                                  11/18/2018 23:28:46 PAGE 3   
 
  118   1              //EXTI_InitStructure.EXTI_Interrupt = ENABLE;                           //中断允许,     ENABLE或DISABLE
  119   1              Ext_Inilize(EXT_INT1,&EXTI_InitStructure);                              //      EXT_INT0,EXT_INT1,EXT_INT2,EXT_INT3,EXT_INT4
@@ -190,7 +190,7 @@ line level    source
  173   1              GPIO_config();
  174   1      
  175   1          //全局变量初使化
-C51 COMPILER V9.00   MAIN                                                                  11/04/2018 22:12:36 PAGE 4   
+C51 COMPILER V9.00   MAIN                                                                  11/18/2018 23:28:46 PAGE 4   
 
  176   1              // 工作灯开始
  177   1          ioOutForL1Green=ioInKeyForMoto=ioInKeyForTime=1; //key键拉高
@@ -205,7 +205,7 @@ line level    source
  186   1      
  187   1      
  188   1          //开启引脚p32 p33的外部中断,下降沿中断.
- 189   1          EXTI_config();
+ 189   1          //EXTI_config();
  190   1          
  191   1              //定时器配置 50ms 一次定时，定时器触发时，cpu进入唤醒时段.
  192   1              Timer_config();
@@ -229,7 +229,7 @@ line level    source
  210   3                              case 19:
  211   3                                  {
  212   4                                          if( g_minute==0 && g_second ==0 && 
- 213   4                                          g_millisecond<=100 )
+ 213   4                                          g_millisecond<51 )
  214   4                                           {
  215   5                                                    motoStart();
  216   5                                              }
@@ -248,242 +248,311 @@ line level    source
  229          // 按键处理功能
  230          void key_scan(void) {
  231   1      
- 232   1              if(g_allKeyState.sKeyForMoto == 1) {
- 233   2                      //清空原状态
- 234   2                      g_allKeyState.sKeyForMoto = 0;
- 235   2      
- 236   2                      //触发喷香机工作
- 237   2                      motoStart();
-C51 COMPILER V9.00   MAIN                                                                  11/04/2018 22:12:36 PAGE 5   
+ 232   1              //moto   
+ 233   1              
+ 234   1               if(ioInKeyForMoto==0){
+ 235   2                      
+ 236   2                 while(ioInKeyForMoto==0);
+ 237   2                 //
+C51 COMPILER V9.00   MAIN                                                                  11/18/2018 23:28:46 PAGE 5   
 
- 238   2                      l2ShowWithNum(l2Num_MotoRun_2);
- 239   2                      
- 240   2              }
- 241   1      /*
- 242   1              if(g_allKeyState.sKeyForRun== 1) {
- 243   1      
- 244   1                      //停止APP运行
- 245   1                      while(g_allKeyState.sKeyForRun){;};
- 246   1                      
- 247   1                      //清空原状态
- 248   1                      //g_allKeyState.sKeyForRun = 0;
- 249   1              }
- 250   1      */
- 251   1              if(g_allKeyState.sKeyForTime== 1) {
- 252   2                      //清空原状态
- 253   2                      g_allKeyState.sKeyForTime = 0;
- 254   2      
- 255   2                      //重置时间为12点.
- 256   2                      g_hour = 12;
- 257   2                      g_minute=g_second=g_millisecond =0;
- 258   2      
- 259   2                      l2ShowWithNum(l2Num_TimeRest_1);
- 260   2                      
- 261   2              }       
- 262   1      }
- 263          
- 264          //亮灯响应
- 265          /*
- 266          3、L1(绿io0)显示当前状态，
- 267          10秒闪一次，表示机器定时运行中。
- 268          常亮表示电池不足。
- 269          
- 270          L2(红io1)闪一次，表示时间较准完成。
- 271          L2(红)闪二次，表示触发喷香机工作。 
- 272          L2(红)闪三次，表示关闭APP运行
- 273          */ 
- 274          
- 275          void l2ShowWithNum(u8 num)
- 276          {
- 277   1              int i;
- 278   1          //PrintString("\r\n l2ShowWithNum.");
+ 238   2                 //触发喷香机工作
+ 239   2                      motoStart();
+ 240   2                      l2ShowWithNum(l2Num_MotoRun_2);
+ 241   2              }
+ 242   1      
+ 243   1              //time           ioInKeyForTime
+ 244   1              if(ioInKeyForTime==0){
+ 245   2                      
+ 246   2                 while(ioInKeyForTime==0);
+ 247   2                 //
+ 248   2                 //重置时间为12点.
+ 249   2                      g_hour = 12;
+ 250   2                      g_minute=g_second=g_millisecond =0;
+ 251   2      
+ 252   2              l2ShowWithNum(l2Num_TimeRest_1);
+ 253   2              }
+ 254   1      
+ 255   1      
+ 256   1       /*
+ 257   1              if(g_allKeyState.sKeyForMoto == 1) {
+ 258   1                      //清空原状态
+ 259   1                      g_allKeyState.sKeyForMoto = 0;
+ 260   1      
+ 261   1                      
+ 262   1                      
+ 263   1              }
+ 264   1      
+ 265   1              if(g_allKeyState.sKeyForRun== 1) {
+ 266   1      
+ 267   1                      //停止APP运行
+ 268   1                      while(g_allKeyState.sKeyForRun){;};
+ 269   1                      
+ 270   1                      //清空原状态
+ 271   1                      //g_allKeyState.sKeyForRun = 0;
+ 272   1              }
+ 273   1      
+ 274   1              if(g_allKeyState.sKeyForTime== 1) {
+ 275   1                      //清空原状态
+ 276   1                      g_allKeyState.sKeyForTime = 0;
+ 277   1      
+ 278   1                      
  279   1                      
- 280   1              for(i=0; i<num; i++)
- 281   1              {
- 282   2                      delay_ms(100);
- 283   2                      ioOutForL2Red = 1;
- 284   2                      delay_ms(100);
- 285   2                      ioOutForL2Red = 0;
- 286   2      
- 287   2              }       /**/
- 288   1      }       
- 289          
- 290          /*电机控制
- 291          
- 292          1.打开p34,      (10秒) 后关闭(相当于开关电源)
- 293          2.等待喷香机启动,约(1秒)钟,即8(k_moto_run_time-2)秒时启动操作.
- 294          3.打开p35, 20us 秒关闭(模似按键)
- 295          */
- 296          void motoStart(void) {
- 297   1          //设置电机启动标志时间值.
- 298   1      
- 299   1              ioOutForMotoPower = 1; //开启电源
-C51 COMPILER V9.00   MAIN                                                                  11/04/2018 22:12:36 PAGE 6   
+ 280   1              }       
+ 281   1      
+ 282   1              */
+ 283   1      }
+ 284          
+ 285          //亮灯响应
+ 286          /*
+ 287          3、L1(绿io0)显示当前状态，
+ 288          10秒闪一次，表示机器定时运行中。
+ 289          常亮表示电池不足。
+ 290          
+ 291          L2(红io1)闪一次，表示时间较准完成。
+ 292          L2(红)闪二次，表示触发喷香机工作。 
+ 293          L2(红)闪三次，表示关闭APP运行
+ 294          */ 
+ 295          
+ 296          void l2ShowWithNum(u8 num)
+ 297          {
+ 298   1              int i;
+ 299   1          //PrintString("\r\n l2ShowWithNum.");
+C51 COMPILER V9.00   MAIN                                                                  11/18/2018 23:28:46 PAGE 6   
 
- 300   1              g_moto_run_time = k_moto_run_time; 
- 301   1              
- 302   1         // PrintString("\r\n motoStart. ");
- 303   1      }
- 304          
- 305          void milliAction(void){
- 306   1               
- 307   1              if(g_moto_run_time<0){
- 308   2      
- 309   2                        ioOutForL2Red = 0;
- 310   2                        return;
- 311   2              }
- 312   1              else if(g_moto_run_time<=k_addNum){
- 313   2      
- 314   2                      g_moto_run_time=-0;
- 315   2                      ioOutForL2Red = 0; //关电机运行指示灯
- 316   2                      //关闭电机电源
- 317   2                       ioOutForMotoPower= 0;
- 318   2              }
- 319   1              else if(g_moto_run_time>0){
- 320   2                      ioOutForL2Red = 1;
- 321   2                      g_moto_run_time  -= k_addNum;
- 322   2              }
- 323   1           return ;   
- 324   1      }
- 325          
- 326          void secondAction(void) {
- 327   1              //PrintString("\r\n secondAction... ");
- 328   1              //printNowTime();
- 329   1          
- 330   1              if(g_second%10 == 0){   //工作指示灯(绿)
- 331   2                      ioOutForL1Green = 1;
- 332   2                      //delay_ms(200);
- 333   2                      
- 334   2              }
- 335   1          else {
- 336   2                  ioOutForL1Green = 0;
- 337   2              }
- 338   1              
- 339   1      }
- 340          
- 341          
- 342          /********************* Timer0中断函数************************/
- 343          void timer0_int (void) interrupt TIMER0_VECTOR
- 344          {
- 345   1              g_millisecond += k_addNum;
- 346   1      
- 347   1         //50m一次.
- 348   1              milliAction();
- 349   1      
- 350   1              if( g_millisecond>= 1000) { //满足一秒
- 351   2                      g_millisecond = 0;
- 352   2              
- 353   2                      secondAction();
- 354   2                      
- 355   2                      g_second++;
- 356   2      
- 357   2                      if(g_second >=60){
- 358   3      
- 359   3                              //满足一分钟
- 360   3                              //mintueAction();
- 361   3      
-C51 COMPILER V9.00   MAIN                                                                  11/04/2018 22:12:36 PAGE 7   
+ 300   1                      
+ 301   1              for(i=0; i<num; i++)
+ 302   1              {
+ 303   2                      delay_ms(100);
+ 304   2                      ioOutForL2Red = 1;
+ 305   2                      delay_ms(100);
+ 306   2                      ioOutForL2Red = 0;
+ 307   2      
+ 308   2              }       /**/
+ 309   1      }       
+ 310          
+ 311          /*电机控制
+ 312          
+ 313          1.打开p34,      (10秒) 后关闭(相当于开关电源)
+ 314          2.等待喷香机启动,约(1秒)钟,即8(k_moto_run_time-2)秒时启动操作.
+ 315          3.打开p35, 20us 秒关闭(模似按键)
+ 316          */
+ 317          void motoStart(void) {
+ 318   1      
+ 319   1                              //启动电机程序
+ 320   1                              ioOutForL2Red = 1;
+ 321   1                              ioOutForMotoPower = 1; //开启电源
+ 322   1              
+ 323   1                      delay_ms(400);
+ 324   1              
+ 325   1                      ioOutForL2Red = 0; //关电机运行指示灯
+ 326   1                       //关闭电机电源
+ 327   1                       ioOutForMotoPower= 0;
+ 328   1                       g_moto_run_time=0;
+ 329   1                   
+ 330   1          //PrintString("\r\n motoStart. ");
+ 331   1      }
+ 332          
+ 333          //void milliAction(void){
+ 334          //       
+ 335          //        if(g_moto_run_time==0){
+ 336          //                                //ioOutForMotoPower= 0;
+ 337          //        }
+ 338          //      else {
+ 339          //
+ 340          //                        
+ 341          //                       
+ 342          //             }
+ 343          //
+ 344          //        
+ 345          //
+ 346          //        return ;   
+ 347          //}
+ 348          
+ 349          void secondAction(void) {
+ 350   1              //PrintString("\r\n secondAction... ");
+ 351   1              //printNowTime();
+ 352   1          
+ 353   1              if(g_second%10 == 0){   //工作指示灯(绿)
+ 354   2                      ioOutForL1Green = 1;
+ 355   2                      //delay_ms(200);
+ 356   2                      
+ 357   2              }
+ 358   1          else {
+ 359   2                  ioOutForL1Green = 0;
+ 360   2              }
+ 361   1              
+C51 COMPILER V9.00   MAIN                                                                  11/18/2018 23:28:46 PAGE 7   
 
- 362   3                              
- 363   3                              g_second =0;
- 364   3                              g_minute ++;
- 365   3      
- 366   3                              if(g_minute >=60){
- 367   4      
- 368   4                                      //满足一小时
- 369   4                                      g_minute =0;
- 370   4                                      g_hour ++;
- 371   4      
- 372   4                                      if(g_hour >=24){
- 373   5      
- 374   5                                              //满足24小时
- 375   5                                              g_hour =0;
- 376   5                              
- 377   5                                      }
- 378   4                              
- 379   4                              }
- 380   3                      }
- 381   2              }
- 382   1      }
- 383          
- 384          /*
- 385          sbit ioInKeyForTime = P3^2; //时间较准按键输入  int0
- 386          sbit ioInKeyForRun  = P3^3;//程序是否运行输入   int1
- 387          sbit ioInKeyForMoto =P3^5;//喷香机触发运行输入  int3
- 388          */
- 389          
- 390          /********************* INT0中断函数 *************************/
- 391          void INT0_int (void) interrupt INT0_VECTOR              //进中断时已经清除标志
- 392          {
- 393   1              //WakeUpSource = 1;     //标记INT0唤醒
- 394   1              //EX0 = 0;                      //INT0 Disable
- 395   1      
- 396   1              IE0  = 0;                       //外中断0标志位
- 397   1              g_allKeyState.sKeyForMoto= 1;
- 398   1              //PrintString("\r\n 外部中断0.");
- 399   1              while(ioInKeyForMoto==0);
- 400   1              EX0 = 1;
- 401   1      
- 402   1              
- 403   1      }
- 404          
- 405          /********************* INT1中断函数 *************************/
- 406          void INT1_int (void) interrupt INT1_VECTOR              //进中断时已经清除标志
- 407          {
- 408   1              //进入中断时，可以把int1中断关闭。
- 409   1              EX1 = 0;        
- 410   1              //tfWakeUpSource = 2;   //标记INT1唤醒
- 411   1              //EX1 = 0;                      //INT1 Disable
- 412   1              IE1  = 0;                       //外中断1标志位
- 413   1              g_allKeyState.sKeyForTime= 1;
- 414   1              //处理完中断事件后，可以把 int1中断开启，防止多次进入。
- 415   1      
- 416   1         // PrintString("\r\n 外部中断1.延时1秒");
- 417   1         // delay_ms(2000);
- 418   1               while(ioInKeyForTime==0);
- 419   1              EX1 = 1;          //程序键状态值.  0: 未按下  //1:已按下
- 420   1        
- 421   1      }
- 422          
- 423          /********************* INT3中断函数 ***********************
-C51 COMPILER V9.00   MAIN                                                                  11/04/2018 22:12:36 PAGE 8   
+ 362   1      }
+ 363          
+ 364          
+ 365          /********************* Timer0中断函数************************/
+ 366          void timer0_int (void) interrupt TIMER0_VECTOR
+ 367          {
+ 368   1              g_millisecond += k_addNum;
+ 369   1      
+ 370   1         //50m一次.
+ 371   1      
+ 372   1         if(g_millisecond>400){
+ 373   2                       
+ 374   2         }
+ 375   1      
+ 376   1              if( g_millisecond>= 1000) { //满足一秒
+ 377   2                      g_millisecond = 0;
+ 378   2              
+ 379   2                      secondAction();
+ 380   2                      //milliAction();
+ 381   2                      g_second++;
+ 382   2      
+ 383   2                      if(g_second >=60){
+ 384   3      
+ 385   3                              //满足一分钟
+ 386   3                              //mintueAction();
+ 387   3      
+ 388   3                              
+ 389   3                              g_second =0;
+ 390   3                              g_minute ++;
+ 391   3      
+ 392   3                              if(g_minute >=60){
+ 393   4      
+ 394   4                                      //满足一小时
+ 395   4                                      g_minute =0;
+ 396   4                                      g_hour ++;
+ 397   4      
+ 398   4                                      if(g_hour >=24){
+ 399   5      
+ 400   5                                              //满足24小时
+ 401   5                                              g_hour =0;
+ 402   5                              
+ 403   5                                      }
+ 404   4                              
+ 405   4                              }
+ 406   3                      }
+ 407   2              }
+ 408   1      }
+ 409          
+ 410          /*
+ 411          sbit ioInKeyForTime = P3^2; //时间较准按键输入  int0
+ 412          sbit ioInKeyForRun  = P3^3;//程序是否运行输入   int1
+ 413          sbit ioInKeyForMoto =P3^5;//喷香机触发运行输入  int3
+ 414          */
+ 415          
+ 416          /********************* INT0中断函数 *************************/
+ 417          void INT0_int (void) interrupt INT0_VECTOR              //进中断时已经清除标志
+ 418          {
+ 419   1              //WakeUpSource = 1;     //标记INT0唤醒
+ 420   1              //EX0 = 0;                      //INT0 Disable
+ 421   1      
+ 422   1              IE0  = 0;                       //外中断0标志位
+ 423   1              while(ioInKeyForMoto==0);
+C51 COMPILER V9.00   MAIN                                                                  11/18/2018 23:28:46 PAGE 8   
 
- 424          void INT3_int  (void) interrupt INT3_VECTOR
- 425          {
- 426              PrintString("\r\n 外部中断3.延时1秒");
- 427          
- 428          //
- 429              INT_CLKO |=  (1 << 5);  //允许中断  
- 430              INT_CLKO &= ~(1 << 5);  //禁止中断
- 431          ///
- 432                  //EX3 = 0;      
- 433              //IE1  = 0; 
- 434          
- 435                  g_allKeyState.sKeyForMoto= 1;
- 436          }
- 437          */
- 438          
- 439          ///低电压中断函数
- 440          //如果低电压，将             LVD_VECTOR         6
- 441          void LVD_ISR() interrupt 6 using 1
- 442          {       
- 443   1              //
- 444   1              ioOutForL2Red   = 1; //常亮，表示电压不足
- 445   1              ioOutForL1Green= 0; //熄灯
- 446   1              ioOutForMotoPower =0; //强制停止运转.
- 447   1      
- 448   1              PCON &= ~LVDF;                  //向PCON.5写0清LVD中断
- 449   1      
- 450   1              //PCON |= 0x02;               //进入掉电模式
- 451   1      }
- 452          
- 453          
- 454          
- 455          
+ 424   1              //g_allKeyState.sKeyForMoto= 1;
+ 425   1              //PrintString("\r\n 外部中断0.");
+ 426   1              
+ 427   1              EX0 = 1;
+ 428   1      
+ 429   1              
+ 430   1      }
+ 431          
+ 432          /********************* INT1中断函数 *************************/
+ 433          void INT1_int (void) interrupt INT1_VECTOR              //进中断时已经清除标志
+ 434          {
+ 435   1              //进入中断时，可以把int1中断关闭。
+ 436   1              EX1 = 0;        
+ 437   1              //tfWakeUpSource = 2;   //标记INT1唤醒
+ 438   1              //EX1 = 0;                      //INT1 Disable
+ 439   1              IE1  = 0;                       //外中断1标志位
+ 440   1      
+ 441   1              if(ioInKeyForTime!=0) 
+ 442   1              {        
+ 443   2                      EX1 = 1;
+ 444   2                      return;
+ 445   2              }
+ 446   1      
+ 447   1              g_allKeyState.sKeyForTime= 1;
+ 448   1              g_allKeyState.sKeyForMoto= 1;
+ 449   1              //处理完中断事件后，可以把 int1中断开启，防止多次进入。
+ 450   1      
+ 451   1         // PrintString("\r\n 外部中断1.延时1秒");
+ 452   1         // delay_ms(2000);
+ 453   1          while(ioInKeyForTime==0);
+ 454   1              EX1 = 1;          //程序键状态值.  0: 未按下  //1:已按下
+ 455   1        
+ 456   1      }
+ 457          
+ 458          /********************* INT3中断函数 ***********************
+ 459          void INT3_int  (void) interrupt INT3_VECTOR
+ 460          {
+ 461              PrintString("\r\n 外部中断3.延时1秒");
+ 462          
+ 463          //
+ 464              INT_CLKO |=  (1 << 5);  //允许中断  
+ 465              INT_CLKO &= ~(1 << 5);  //禁止中断
+ 466          ///
+ 467                  //EX3 = 0;      
+ 468              //IE1  = 0; 
+ 469          
+ 470                  g_allKeyState.sKeyForMoto= 1;
+ 471          }
+ 472          */
+ 473          
+ 474          ///低电压中断函数
+ 475          //如果低电压，将             LVD_VECTOR         6
+ 476          void LVD_ISR() interrupt 6 using 1
+ 477          {       
+ 478   1              //
+ 479   1              ioOutForL2Red   = 1; //常亮，表示电压不足
+ 480   1              ioOutForL1Green= 0; //熄灯
+ 481   1              ioOutForMotoPower =0; //强制停止运转.
+ 482   1      
+ 483   1              PCON &= ~LVDF;                  //向PCON.5写0清LVD中断
+ 484   1      
+ 485   1              //PCON |= 0x02;               //进入掉电模式
+C51 COMPILER V9.00   MAIN                                                                  11/18/2018 23:28:46 PAGE 9   
+
+ 486   1      }
+ 487          
+ 488          /*
+ 489          void printNowTime(void) {
+ 490          
+ 491                  PrintString("\r\n ....");
+ 492          
+ 493                  TxSend('H');
+ 494                  //TxSend(g_hour+ '0');
+ 495                  TxSend(g_hour%100/10 + '0');
+ 496                  TxSend(g_hour%10+ '0');
+ 497                  
+ 498          
+ 499                  TxSend(' ');
+ 500                  TxSend('M');
+ 501                  TxSend(g_minute%100/10 + '0');
+ 502                  TxSend(g_minute%10+ '0');
+ 503          
+ 504                  TxSend(' ');
+ 505                  TxSend('S');
+ 506                  //TxSend(g_second+ '0');
+ 507                  TxSend(g_second%100/10 + '0');
+ 508                  TxSend(g_second%10+ '0');
+ 509          
+ 510          //
+ 511                  TxSend(' ');
+ 512                  TxSend('U');
+ 513                  //TxSend(g_millisecond+ '0');
+ 514                  TxSend(g_millisecond%1000/100 + '0');
+ 515                  TxSend(g_millisecond%100/10 + '0');
+ 516                  TxSend(g_millisecond%10+ '0');
+ 517          //
+ 518                  
+ 519                  PrintString("\r\n ");
+ 520          }
+ 521          */
+ 522          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    461    ----
+   CODE SIZE        =    407    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----

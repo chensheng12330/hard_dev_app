@@ -53,7 +53,7 @@ L2(红)闪三次，表示关闭定时
 #define l2Num_TimeRest_1 1
 #define l2Num_MotoRun_2  2
 #define k_addNum 50 //50 //定时叠加数
-#define k_moto_run_time (k_addNum*10) //500ms //电机启时间值。
+#define k_moto_run_time (500) //500ms //电机启时间值。
 
 /*************	本地变量声明	**************/
 u8 g_hour=6;  //时
@@ -75,7 +75,7 @@ sbit ioOutForMotoPower=P3^5;  //喷香机电机启动开关IO口.
 
 
 
-int g_moto_run_time=-1; //电机启动运行后的时间值
+int g_moto_run_time=0; //电机启动运行后的时间值
  
 typedef struct
 {
@@ -186,7 +186,7 @@ void main(void)
 
 
     //开启引脚p32 p33的外部中断,下降沿中断.
-    EXTI_config();
+    //EXTI_config();
     
 	//定时器配置 50ms 一次定时，定时器触发时，cpu进入唤醒时段.
 	Timer_config();
@@ -210,7 +210,7 @@ void main(void)
                         case 19:
                             {
                                     if( g_minute==0 && g_second ==0 && 
-                                    g_millisecond<=100 )
+                                    g_millisecond<51 )
                                      {
                                               motoStart();
                                         }
@@ -229,16 +229,39 @@ void main(void)
 // 按键处理功能
 void key_scan(void) {
 
+	//moto	 
+	
+	 if(ioInKeyForMoto==0){
+		
+	   while(ioInKeyForMoto==0);
+	   //
+	   //触发喷香机工作
+		motoStart();
+		l2ShowWithNum(l2Num_MotoRun_2);
+	}
+
+	//time		 ioInKeyForTime
+	if(ioInKeyForTime==0){
+		
+	   while(ioInKeyForTime==0);
+	   //
+	   //重置时间为12点.
+		g_hour = 12;
+		g_minute=g_second=g_millisecond =0;
+
+        l2ShowWithNum(l2Num_TimeRest_1);
+	}
+
+
+ /*
 	if(g_allKeyState.sKeyForMoto == 1) {
 		//清空原状态
 		g_allKeyState.sKeyForMoto = 0;
 
-		//触发喷香机工作
-		motoStart();
-		l2ShowWithNum(l2Num_MotoRun_2);
+		
 		
 	}
-/*
+
 	if(g_allKeyState.sKeyForRun== 1) {
 
 		//停止APP运行
@@ -247,18 +270,16 @@ void key_scan(void) {
 		//清空原状态
 		//g_allKeyState.sKeyForRun = 0;
 	}
-*/
+
 	if(g_allKeyState.sKeyForTime== 1) {
 		//清空原状态
 		g_allKeyState.sKeyForTime = 0;
 
-		//重置时间为12点.
-		g_hour = 12;
-		g_minute=g_second=g_millisecond =0;
-
-                l2ShowWithNum(l2Num_TimeRest_1);
+		
 		
 	}	
+
+	*/
 }
 
 //亮灯响应
@@ -294,34 +315,36 @@ void l2ShowWithNum(u8 num)
 3.打开p35, 20us 秒关闭(模似按键)
 */
 void motoStart(void) {
-    //设置电机启动标志时间值.
 
-        ioOutForMotoPower = 1; //开启电源
-        g_moto_run_time = k_moto_run_time; 
+			//启动电机程序
+			ioOutForL2Red = 1;
+			ioOutForMotoPower = 1; //开启电源
 	
-   // PrintString("\r\n motoStart. ");
+	        delay_ms(400);
+	
+	        ioOutForL2Red = 0; //关电机运行指示灯
+	         //关闭电机电源
+	         ioOutForMotoPower= 0;
+	         g_moto_run_time=0;
+             
+    //PrintString("\r\n motoStart. ");
 }
 
-void milliAction(void){
-	 
-        if(g_moto_run_time<0){
-
-                  ioOutForL2Red = 0;
-                  return;
-        }
-        else if(g_moto_run_time<=k_addNum){
-
-                g_moto_run_time=-0;
-                ioOutForL2Red = 0; //关电机运行指示灯
-                //关闭电机电源
-                 ioOutForMotoPower= 0;
-        }
-        else if(g_moto_run_time>0){
-                ioOutForL2Red = 1;
-                g_moto_run_time  -= k_addNum;
-        }
-     return ;   
-}
+//void milliAction(void){
+//	 
+//        if(g_moto_run_time==0){
+//				  //ioOutForMotoPower= 0;
+//        }
+//	else {
+//
+//                        
+//			 
+//             }
+//
+//        
+//
+//        return ;   
+//}
 
 void secondAction(void) {
 	//PrintString("\r\n secondAction... ");
@@ -345,13 +368,16 @@ void timer0_int (void) interrupt TIMER0_VECTOR
 	g_millisecond += k_addNum;
 
    //50m一次.
-	milliAction();
+
+   if(g_millisecond>400){
+		 
+   }
 
 	if( g_millisecond>= 1000) { //满足一秒
 		g_millisecond = 0;
         
 		secondAction();
-		
+		//milliAction();
 		g_second++;
 
 		if(g_second >=60){
@@ -394,9 +420,10 @@ void INT0_int (void) interrupt INT0_VECTOR		//进中断时已经清除标志
 	//EX0 = 0;			//INT0 Disable
 
 	IE0  = 0;			//外中断0标志位
-	g_allKeyState.sKeyForMoto= 1;
+	while(ioInKeyForMoto==0);
+	//g_allKeyState.sKeyForMoto= 1;
         //PrintString("\r\n 外部中断0.");
-        while(ioInKeyForMoto==0);
+        
         EX0 = 1;
 
 	
@@ -410,12 +437,20 @@ void INT1_int (void) interrupt INT1_VECTOR		//进中断时已经清除标志
 	//tfWakeUpSource = 2;	//标记INT1唤醒
 	//EX1 = 0;			//INT1 Disable
 	IE1  = 0;			//外中断1标志位
+
+	if(ioInKeyForTime!=0) 
+	{	 
+		EX1 = 1;
+		return;
+	}
+
 	g_allKeyState.sKeyForTime= 1;
+	g_allKeyState.sKeyForMoto= 1;
 	//处理完中断事件后，可以把 int1中断开启，防止多次进入。
 
    // PrintString("\r\n 外部中断1.延时1秒");
    // delay_ms(2000);
-         while(ioInKeyForTime==0);
+    while(ioInKeyForTime==0);
 	EX1 = 1;	  //程序键状态值.  0: 未按下  //1:已按下
   
 }
@@ -450,6 +485,38 @@ void LVD_ISR() interrupt 6 using 1
 	//PCON |= 0x02;               //进入掉电模式
 }
 
+/*
+void printNowTime(void) {
 
+	PrintString("\r\n ....");
 
+	TxSend('H');
+	//TxSend(g_hour+ '0');
+	TxSend(g_hour%100/10 + '0');
+	TxSend(g_hour%10+ '0');
+	
+
+	TxSend(' ');
+	TxSend('M');
+	TxSend(g_minute%100/10 + '0');
+	TxSend(g_minute%10+ '0');
+
+	TxSend(' ');
+	TxSend('S');
+	//TxSend(g_second+ '0');
+	TxSend(g_second%100/10 + '0');
+	TxSend(g_second%10+ '0');
+
+//
+	TxSend(' ');
+	TxSend('U');
+	//TxSend(g_millisecond+ '0');
+	TxSend(g_millisecond%1000/100 + '0');
+	TxSend(g_millisecond%100/10 + '0');
+	TxSend(g_millisecond%10+ '0');
+//
+	
+	PrintString("\r\n ");
+}
+*/
 

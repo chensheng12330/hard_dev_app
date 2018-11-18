@@ -1,5 +1,6 @@
----- ioOutForMotoPower Matches (4 in 0 files) ----
-Main.c:sbit ioOutForMotoPower=P3^4;  //喷香机电源开关IO口.
-Main.c:      ioOutForL2Red =ioOutForMotoPower = 0;
-Main.c:        ioOutForMotoPower= 1; //开启电源
-Main.c:                 ioOutForMotoPower= 0;
+---- motoStart Matches (5 in 0 files) ----
+Main.c:void motoStart(void);
+Main.c:                                              motoStart();
+Main.c:		motoStart();
+Main.c:void motoStart(void) {
+Main.c:    //PrintString("\r\n motoStart. ");

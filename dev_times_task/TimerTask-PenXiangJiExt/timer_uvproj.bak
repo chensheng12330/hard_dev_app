@@ -371,6 +371,11 @@
               <FileType>1</FileType>
               <FilePath>.\Exti.c</FilePath>
             </File>
+            <File>
+              <FileName>Soft_UART.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Soft_UART.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
