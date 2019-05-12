@@ -210,7 +210,7 @@ void main(void)
                         case 19:
                             {
                                     if( g_minute==0 && g_second ==0 && 
-                                    g_millisecond<51 )
+                                    g_millisecond<=50 )
                                      {
                                               motoStart();
                                         }
@@ -232,7 +232,7 @@ void key_scan(void) {
 	//moto	 
 	
 	 if(ioInKeyForMoto==0){
-		
+	 delay_ms(20);
 	   while(ioInKeyForMoto==0);
 	   //
 	   //触发喷香机工作
@@ -242,16 +242,17 @@ void key_scan(void) {
 
 	//time		 ioInKeyForTime
 	if(ioInKeyForTime==0){
-		
+	 delay_ms(20);	
 	   while(ioInKeyForTime==0);
 	   //
 	   //重置时间为12点.
-		g_hour = 12;
-		g_minute=g_second=g_millisecond =0;
+		
+		g_minute=g_second=g_millisecond =59;
+		g_hour = 7;
 
         l2ShowWithNum(l2Num_TimeRest_1);
 	}
-
+				  
 
  /*
 	if(g_allKeyState.sKeyForMoto == 1) {
@@ -352,13 +353,9 @@ void secondAction(void) {
     
 	if(g_second%10 == 0){   //工作指示灯(绿)
 		ioOutForL1Green = 1;
-		//delay_ms(200);
-		
+		delay_ms(50);
+		ioOutForL1Green = 0;
 	}
-    else {
-            ioOutForL1Green = 0;
-        }
-	
 }
 
 
@@ -369,9 +366,9 @@ void timer0_int (void) interrupt TIMER0_VECTOR
 
    //50m一次.
 
-   if(g_millisecond>400){
-		 
-   }
+//   if(g_millisecond>400){
+//		 
+//   }
 
 	if( g_millisecond>= 1000) { //满足一秒
 		g_millisecond = 0;
@@ -382,11 +379,22 @@ void timer0_int (void) interrupt TIMER0_VECTOR
 
 		if(g_second >=60){
 
+			 g_second =0;
+
 			//满足一分钟
 			//mintueAction();
-
+			if( g_minute==0 && g_second ==0 && g_millisecond==0 )
+	         {
+	            //整点报时.
+			    ioOutForL2Red = 1;
+				
+	
+	         }
+			 else {
+			 	ioOutForL2Red = 0;
+			 }
 			
-			g_second =0;
+			
 			g_minute ++;
 
 			if(g_minute >=60){
