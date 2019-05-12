@@ -20,7 +20,8 @@
 
 
 
-#include	"timer.h"
+#include "timer.h"
+#include "pwm.h"
 
 
 extern PWMInfoDef pwm1Info;

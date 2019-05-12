@@ -3,4 +3,4 @@
 ".\list\main.obj",
 ".\list\Soft_UART.obj" 
 TO ".\list\timer-pwm" 
-PRINT(".\list\timer-pwm.m51") RAMSIZE(256) 
+PRINT(".\list\timer-pwm.m51")

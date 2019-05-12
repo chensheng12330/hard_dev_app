@@ -404,3 +404,677 @@ linking...
 Program Size: data=33.0 xdata=0 code=1167
 creating hex file from ".\list\timer-pwm"...
 ".\list\timer-pwm" - 0 Error(s), 2 Warning(s).
+compiling main.c...
+MAIN.C(174): warning C209: '_PrintString': too few actual parameters
+MAIN.C(178): error C158: '_itos': function contains unnamed parameter
+main.c - 1 Error(s), 1 Warning(s).
+compiling main.c...
+MAIN.C(158): error C141: syntax error near 'char'
+MAIN.C(158): error C202: 'pw1': undefined identifier
+MAIN.C(160): error C202: 'pw1': undefined identifier
+MAIN.C(161): error C202: 'pw2': undefined identifier
+MAIN.C(163): error C202: 'pw1': undefined identifier
+MAIN.C(164): error C202: 'pw2': undefined identifier
+main.c - 6 Error(s), 0 Warning(s).
+compiling main.c...
+MAIN.C(158): error C141: syntax error near 'char'
+MAIN.C(158): error C202: 'pw1': undefined identifier
+MAIN.C(160): error C202: 'pw1': undefined identifier
+MAIN.C(161): error C202: 'pw2': undefined identifier
+MAIN.C(163): error C202: 'pw1': undefined identifier
+MAIN.C(164): error C202: 'pw2': undefined identifier
+main.c - 6 Error(s), 0 Warning(s).
+compiling main.c...
+MAIN.C(158): error C141: syntax error near 'char'
+MAIN.C(158): error C202: 'pw1': undefined identifier
+MAIN.C(159): error C141: syntax error near 'char'
+MAIN.C(159): error C202: 'pw2': undefined identifier
+MAIN.C(161): error C202: 'pw1': undefined identifier
+MAIN.C(162): error C202: 'pw2': undefined identifier
+MAIN.C(164): error C202: 'pw1': undefined identifier
+MAIN.C(165): error C202: 'pw2': undefined identifier
+main.c - 8 Error(s), 0 Warning(s).
+compiling main.c...
+main.c - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?DELAY
+Program Size: data=52.1 xdata=0 code=2240
+creating hex file from ".\list\timer-pwm"...
+".\list\timer-pwm" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling delay.c...
+compiling timer.c...
+compiling main.c...
+compiling Soft_UART.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?DELAY
+Program Size: data=52.1 xdata=0 code=2240
+creating hex file from ".\list\timer-pwm"...
+".\list\timer-pwm" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling delay.c...
+compiling timer.c...
+compiling main.c...
+compiling Soft_UART.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?DELAY
+Program Size: data=52.1 xdata=0 code=2240
+creating hex file from ".\list\timer-pwm"...
+".\list\timer-pwm" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling delay.c...
+compiling timer.c...
+compiling main.c...
+compiling Soft_UART.c...
+linking...
+Program Size: data=52.1 xdata=0 code=2270
+creating hex file from ".\list\timer-pwm"...
+".\list\timer-pwm" - 0 Error(s), 0 Warning(s).
+compiling main.c...
+MAIN.C(184): warning C259: 'parameter': pointer: different mspace
+MAIN.C(185): warning C259: 'parameter': pointer: different mspace
+main.c - 0 Error(s), 2 Warning(s).
+compiling main.c...
+MAIN.C(184): warning C259: 'parameter': pointer: different mspace
+MAIN.C(185): warning C259: 'parameter': pointer: different mspace
+main.c - 0 Error(s), 2 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(184): warning C259: 'parameter': pointer: different mspace
+MAIN.C(185): warning C259: 'parameter': pointer: different mspace
+linking...
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA    
+    SEGMENT: _DATA_GROUP_
+    LENGTH:  0078H
+Program Size: data=146.1 xdata=0 code=2408
+Target not created
+Build target 'Target 1'
+compiling delay.c...
+compiling timer.c...
+compiling main.c...
+compiling Soft_UART.c...
+linking...
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA    
+    SEGMENT: ?DT?MAIN
+    LENGTH:  0010H
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  PWM1INFO
+    MODULE:  .\list\timer.obj (TIMER)
+    ADDRESS: 0518H
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  PWM1INFO
+    MODULE:  .\list\timer.obj (TIMER)
+    ADDRESS: 051FH
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  PWM2INFO
+    MODULE:  .\list\timer.obj (TIMER)
+    ADDRESS: 0529H
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  PWM2INFO
+    MODULE:  .\list\timer.obj (TIMER)
+    ADDRESS: 0530H
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PWM_HIGH
+    SEGMENT: ?DT?MAIN
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PWM
+    SEGMENT: ?DT?MAIN
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PWM_LOW
+    SEGMENT: ?DT?MAIN
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PWM2INFO
+    SEGMENT: ?DT?MAIN
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PWM1INFO
+    SEGMENT: ?DT?MAIN
+Program Size: data=133.0 xdata=0 code=1362
+Target not created
+compiling main.c...
+main.c - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+linking...
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA    
+    SEGMENT: ?DT?MAIN
+    LENGTH:  0010H
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  PWM1INFO
+    MODULE:  .\list\timer.obj (TIMER)
+    ADDRESS: 0518H
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  PWM1INFO
+    MODULE:  .\list\timer.obj (TIMER)
+    ADDRESS: 051FH
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  PWM2INFO
+    MODULE:  .\list\timer.obj (TIMER)
+    ADDRESS: 0529H
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  PWM2INFO
+    MODULE:  .\list\timer.obj (TIMER)
+    ADDRESS: 0530H
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PWM_HIGH
+    SEGMENT: ?DT?MAIN
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PWM
+    SEGMENT: ?DT?MAIN
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PWM_LOW
+    SEGMENT: ?DT?MAIN
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PWM2INFO
+    SEGMENT: ?DT?MAIN
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PWM1INFO
+    SEGMENT: ?DT?MAIN
+Program Size: data=133.0 xdata=0 code=1362
+Target not created
+Clean started: Project: 'timer-pwm'
+   deleting intermediate output files for target 'Target 1'
+compiling main.c...
+main.c - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling delay.c...
+compiling timer.c...
+compiling Soft_UART.c...
+linking...
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA    
+    SEGMENT: ?DT?MAIN
+    LENGTH:  0010H
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  PWM1INFO
+    MODULE:  .\list\timer.obj (TIMER)
+    ADDRESS: 0518H
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  PWM1INFO
+    MODULE:  .\list\timer.obj (TIMER)
+    ADDRESS: 051FH
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  PWM2INFO
+    MODULE:  .\list\timer.obj (TIMER)
+    ADDRESS: 0529H
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  PWM2INFO
+    MODULE:  .\list\timer.obj (TIMER)
+    ADDRESS: 0530H
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PWM_HIGH
+    SEGMENT: ?DT?MAIN
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PWM
+    SEGMENT: ?DT?MAIN
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PWM_LOW
+    SEGMENT: ?DT?MAIN
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PWM2INFO
+    SEGMENT: ?DT?MAIN
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PWM1INFO
+    SEGMENT: ?DT?MAIN
+Program Size: data=133.0 xdata=0 code=1362
+Target not created
+compiling main.c...
+main.c - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling delay.c...
+compiling timer.c...
+compiling Soft_UART.c...
+linking...
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA    
+    SEGMENT: ?DT?MAIN
+    LENGTH:  0010H
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  PWM1INFO
+    MODULE:  .\list\timer.obj (TIMER)
+    ADDRESS: 0518H
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  PWM1INFO
+    MODULE:  .\list\timer.obj (TIMER)
+    ADDRESS: 051FH
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  PWM2INFO
+    MODULE:  .\list\timer.obj (TIMER)
+    ADDRESS: 0529H
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  PWM2INFO
+    MODULE:  .\list\timer.obj (TIMER)
+    ADDRESS: 0530H
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PWM_HIGH
+    SEGMENT: ?DT?MAIN
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PWM
+    SEGMENT: ?DT?MAIN
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PWM_LOW
+    SEGMENT: ?DT?MAIN
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PWM2INFO
+    SEGMENT: ?DT?MAIN
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PWM1INFO
+    SEGMENT: ?DT?MAIN
+Program Size: data=133.0 xdata=0 code=1362
+Target not created
+compiling main.c...
+main.c - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?DELAY
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA    
+    SEGMENT: ?DT?MAIN
+    LENGTH:  0010H
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  PWM1INFO
+    MODULE:  .\list\timer.obj (TIMER)
+    ADDRESS: 04FAH
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  PWM1INFO
+    MODULE:  .\list\timer.obj (TIMER)
+    ADDRESS: 0501H
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  PWM2INFO
+    MODULE:  .\list\timer.obj (TIMER)
+    ADDRESS: 050BH
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  PWM2INFO
+    MODULE:  .\list\timer.obj (TIMER)
+    ADDRESS: 0512H
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PWM_HIGH
+    SEGMENT: ?DT?MAIN
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PWM
+    SEGMENT: ?DT?MAIN
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PWM_LOW
+    SEGMENT: ?DT?MAIN
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PWM2INFO
+    SEGMENT: ?DT?MAIN
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PWM1INFO
+    SEGMENT: ?DT?MAIN
+Program Size: data=133.0 xdata=0 code=1332
+Target not created
+Build target 'Target 1'
+compiling main.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?DELAY
+Program Size: data=127.0 xdata=0 code=1332
+creating hex file from ".\list\timer-pwm"...
+".\list\timer-pwm" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling delay.c...
+compiling timer.c...
+compiling main.c...
+compiling Soft_UART.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?DELAY
+Program Size: data=127.0 xdata=0 code=1332
+creating hex file from ".\list\timer-pwm"...
+".\list\timer-pwm" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling delay.c...
+compiling timer.c...
+compiling main.c...
+compiling Soft_UART.c...
+linking...
+Program Size: data=127.0 xdata=0 code=1362
+creating hex file from ".\list\timer-pwm"...
+".\list\timer-pwm" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?DELAY
+Program Size: data=127.0 xdata=0 code=1332
+creating hex file from ".\list\timer-pwm"...
+".\list\timer-pwm" - 0 Error(s), 1 Warning(s).
+compiling main.c...
+main.c - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?DELAY
+Program Size: data=127.0 xdata=0 code=1332
+creating hex file from ".\list\timer-pwm"...
+".\list\timer-pwm" - 0 Error(s), 1 Warning(s).
+compiling main.c...
+main.c - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?DELAY
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_PRINTSTRING?SOFT_UART
+Program Size: data=127.0 xdata=0 code=1319
+creating hex file from ".\list\timer-pwm"...
+".\list\timer-pwm" - 0 Error(s), 2 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?DELAY
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_PRINTSTRING?SOFT_UART
+Program Size: data=127.0 xdata=0 code=1319
+creating hex file from ".\list\timer-pwm"...
+".\list\timer-pwm" - 0 Error(s), 2 Warning(s).
+Build target 'Target 1'
+compiling delay.c...
+compiling timer.c...
+compiling main.c...
+compiling Soft_UART.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?DELAY
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?PWM_LOAD?MAIN
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA    
+    SEGMENT: ?DT?PWM_LOAD?MAIN
+    LENGTH:  0005H
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  ?PWM_LOAD?BYTE
+    SEGMENT: ?DT?PWM_LOAD?MAIN
+Program Size: data=132.0 xdata=0 code=1294
+Target not created
+Clean started: Project: 'timer-pwm'
+   deleting intermediate output files for target 'Target 1'
+Build target 'Target 1'
+compiling delay.c...
+compiling timer.c...
+compiling main.c...
+compiling Soft_UART.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?DELAY
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?PWM_LOAD?MAIN
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA    
+    SEGMENT: ?DT?PWM_LOAD?MAIN
+    LENGTH:  0005H
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  ?PWM_LOAD?BYTE
+    SEGMENT: ?DT?PWM_LOAD?MAIN
+Program Size: data=132.0 xdata=0 code=1294
+Target not created
+Build target 'Target 1'
+compiling main.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?DELAY
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?PWM_CONFIG?MAIN
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA    
+    SEGMENT: ?DT?PWM_LOAD?MAIN
+    LENGTH:  0005H
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  ?PWM_LOAD?BYTE
+    SEGMENT: ?DT?PWM_LOAD?MAIN
+Program Size: data=132.0 xdata=0 code=1334
+Target not created
+Build target 'Target 1'
+compiling main.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?DELAY
+Program Size: data=127.0 xdata=0 code=1337
+creating hex file from ".\list\timer-pwm"...
+".\list\timer-pwm" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?DELAY
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?PWM_LOAD?MAIN
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA    
+    SEGMENT: ?DT?PWM_LOAD?MAIN
+    LENGTH:  0005H
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  ?PWM_LOAD?BYTE
+    SEGMENT: ?DT?PWM_LOAD?MAIN
+Program Size: data=132.0 xdata=0 code=1276
+Target not created
+Build target 'Target 1'
+compiling main.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?DELAY
+Program Size: data=127.0 xdata=0 code=1154
+creating hex file from ".\list\timer-pwm"...
+".\list\timer-pwm" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling delay.c...
+compiling timer.c...
+compiling main.c...
+compiling Soft_UART.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?DELAY
+Program Size: data=127.0 xdata=0 code=1154
+creating hex file from ".\list\timer-pwm"...
+".\list\timer-pwm" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_PRINTSTRING?SOFT_UART
+Program Size: data=127.0 xdata=0 code=1171
+creating hex file from ".\list\timer-pwm"...
+".\list\timer-pwm" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: data=127.0 xdata=0 code=1184
+creating hex file from ".\list\timer-pwm"...
+".\list\timer-pwm" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(183): warning C206: 'sprintf': missing function-prototype
+MAIN.C(183): error C267: 'sprintf': requires ANSI-style prototype
+Target not created
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(183): warning C206: 'sprintf': missing function-prototype
+MAIN.C(183): error C267: 'sprintf': requires ANSI-style prototype
+Target not created
+compiling main.c...
+MAIN.C(183): warning C206: 'sprintf': missing function-prototype
+MAIN.C(183): error C267: 'sprintf': requires ANSI-style prototype
+main.c - 1 Error(s), 1 Warning(s).
+compiling main.c...
+MAIN.C(183): warning C206: 'sprintf': missing function-prototype
+MAIN.C(183): error C267: 'sprintf': requires ANSI-style prototype
+main.c - 1 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(183): warning C206: 'sprintf': missing function-prototype
+MAIN.C(183): error C267: 'sprintf': requires ANSI-style prototype
+Target not created
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(184): warning C206: 'sprintf': missing function-prototype
+MAIN.C(184): error C267: 'sprintf': requires ANSI-style prototype
+Target not created
+compiling main.c...
+MAIN.C(184): warning C206: 'sprintf': missing function-prototype
+MAIN.C(189): warning C259: 'parameter': pointer: different mspace
+MAIN.C(143): warning C280: 'pw2': unreferenced local variable
+main.c - 0 Error(s), 3 Warning(s).
+compiling main.c...
+MAIN.C(184): warning C206: 'sprintf': missing function-prototype
+MAIN.C(142): warning C280: 'pw1': unreferenced local variable
+MAIN.C(143): warning C280: 'pw2': unreferenced local variable
+main.c - 0 Error(s), 3 Warning(s).
+compiling main.c...
+MAIN.C(184): warning C206: 'sprintf': missing function-prototype
+MAIN.C(142): warning C280: 'pw1': unreferenced local variable
+MAIN.C(143): warning C280: 'pw2': unreferenced local variable
+main.c - 0 Error(s), 3 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_PRINTSTRING?SOFT_UART
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA    
+    SEGMENT: ?DT?MAIN
+    LENGTH:  000AH
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  PWM1INFO
+    MODULE:  .\list\timer.obj (TIMER)
+    ADDRESS: 02DBH
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  PWM1INFO
+    MODULE:  .\list\timer.obj (TIMER)
+    ADDRESS: 02E2H
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  PWM2INFO
+    MODULE:  .\list\timer.obj (TIMER)
+    ADDRESS: 02ECH
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  PWM2INFO
+    MODULE:  .\list\timer.obj (TIMER)
+    ADDRESS: 02F3H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  SPRINTF
+    MODULE:  .\list\main.obj (MAIN)
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PWM2INFO
+    SEGMENT: ?DT?MAIN
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PWM1INFO
+    SEGMENT: ?DT?MAIN
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  SPRINTF
+    MODULE:  .\list\main.obj (MAIN)
+    ADDRESS: 003FH
+Program Size: data=130.0 xdata=0 code=797
+Target not created
+compiling main.c...
+MAIN.C(187): warning C206: 'sprintf': missing function-prototype
+MAIN.C(187): error C267: 'sprintf': requires ANSI-style prototype
+main.c - 1 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(187): warning C206: 'sprintf': missing function-prototype
+MAIN.C(187): error C267: 'sprintf': requires ANSI-style prototype
+Target not created
+compiling main.c...
+MAIN.C(189): warning C206: 'sprintf': missing function-prototype
+MAIN.C(189): error C267: 'sprintf': requires ANSI-style prototype
+main.c - 1 Error(s), 1 Warning(s).
+compiling main.c...
+MAIN.C(145): warning C206: 'sprintf': missing function-prototype
+MAIN.C(145): error C267: 'sprintf': requires ANSI-style prototype
+MAIN.C(148): error C141: syntax error near 'char'
+MAIN.C(148): error C202: 'pw1': undefined identifier
+MAIN.C(149): error C141: syntax error near 'char'
+MAIN.C(149): error C202: 'pw2': undefined identifier
+main.c - 5 Error(s), 1 Warning(s).
+compiling main.c...
+MAIN.C(151): warning C206: 'sprintf': missing function-prototype
+MAIN.C(151): error C267: 'sprintf': requires ANSI-style prototype
+main.c - 1 Error(s), 1 Warning(s).
+compiling main.c...
+MAIN.C(151): warning C206: 'sprintf': missing function-prototype
+MAIN.C(151): error C267: 'sprintf': requires ANSI-style prototype
+main.c - 1 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(151): warning C206: 'sprintf': missing function-prototype
+MAIN.C(151): error C267: 'sprintf': requires ANSI-style prototype
+Target not created
+Build target 'Target 1'
+compiling delay.c...
+compiling timer.c...
+compiling main.c...
+compiling Soft_UART.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?DELAY
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_PRINTSTRING?SOFT_UART
+Program Size: data=27.0 xdata=0 code=1181
+creating hex file from ".\list\timer-pwm"...
+".\list\timer-pwm" - 0 Error(s), 2 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?DELAY
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_PRINTSTRING?SOFT_UART
+Program Size: data=27.0 xdata=0 code=1181
+creating hex file from ".\list\timer-pwm"...
+".\list\timer-pwm" - 0 Error(s), 2 Warning(s).
+Build target 'Target 1'
+compiling delay.c...
+compiling timer.c...
+compiling main.c...
+compiling Soft_UART.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?DELAY
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_PRINTSTRING?SOFT_UART
+Program Size: data=27.0 xdata=0 code=1181
+creating hex file from ".\list\timer-pwm"...
+".\list\timer-pwm" - 0 Error(s), 2 Warning(s).
+compiling main.c...
+main.c - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?DELAY
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_PRINTSTRING?SOFT_UART
+Program Size: data=27.0 xdata=0 code=1181
+creating hex file from ".\list\timer-pwm"...
+".\list\timer-pwm" - 0 Error(s), 2 Warning(s).
+compiling main.c...
+MAIN.C(126): error C141: syntax error near 'PWMInfoDef'
+main.c - 1 Error(s), 0 Warning(s).
+compiling main.c...
+main.c - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?DELAY
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_PRINTSTRING?SOFT_UART
+Program Size: data=27.0 xdata=0 code=1147
+creating hex file from ".\list\timer-pwm"...
+".\list\timer-pwm" - 0 Error(s), 2 Warning(s).
+Build target 'Target 1'
+compiling delay.c...
+compiling timer.c...
+compiling main.c...
+compiling Soft_UART.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?DELAY
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_PRINTSTRING?SOFT_UART
+Program Size: data=27.0 xdata=0 code=1147
+creating hex file from ".\list\timer-pwm"...
+".\list\timer-pwm" - 0 Error(s), 2 Warning(s).

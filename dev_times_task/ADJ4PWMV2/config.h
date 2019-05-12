@@ -32,12 +32,4 @@ sbit	P_PWM1_P35 = P3^5;		//定义PWM输出引脚。
 sbit	P_PWM2_p30 = P3^0;      //定义PWM输出引脚
 //sbit	P_PWM = P1^4;		//定义PWM输出引脚。STC15W204S
 
-typedef struct
-{
-	u8  pwm_high;		//PWM高电平时间
-	u8	pwm_low;		//PWM低电平时间
-	u8  pwm_duty;  		//占空比 0-100
-	u16 pwm_cycle;		//定义PWM的周期，数值为时钟周期数,单位HZ
-} PWMInfoDef;
-
 #endif

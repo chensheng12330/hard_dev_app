@@ -15,7 +15,8 @@
 #include	"timer.h"
 #include	"delay.h"
 #include	"soft_uart.h"
-
+#include 	"pwm.h"
+//#include	<STDIO.H>
 
 /*************	功能说明	**************
 
@@ -28,13 +29,13 @@
 PWM可以是任意的量程。但是由于软件重装需要一点时间，所以PWM占空比最小为32T/周期，最大为(周期-32T)/周期, T为时钟周期。
 
 PWM频率为周期的倒数。假如周期为6000, 使用24MHZ的主频，则PWM频率为4000HZ。
-
+							  183
 ******************************************/
 
 /*************	本地常量声明	**************/
 
-#define		PWM_DUTY		50		//定义PWM占空比	
-#define     PWM_CYCLE       6000	//定义PWM的周期，数值为时钟周期数，假如使用24.576MHZ的主频，则PWM频率为6000HZ。
+#define		PWM_DUTY		10		//定义PWM占空比	
+#define     PWM_CYCLE       100	//定义PWM的周期，数值为时钟周期数，假如使用24.576MHZ的主频，则PWM频率为6000HZ。
 
 #define		PWM_HIGH_MIN	32				//限制PWM输出的最小占空比。用户请勿修改。
 #define		PWM_HIGH_MAX	(PWM_DUTY-PWM_HIGH_MIN)	//限制PWM输出的最大占空比。用户请勿修改。
@@ -46,11 +47,11 @@ PWM频率为周期的倒数。假如周期为6000, 使用24MHZ的主频，则PWM频率为4000HZ。
 
 
 
-PWMInfoDef  pwm1Info; //1路pwm
-PWMInfoDef  pwm2Info; //2路pwm		   
+PWMInfoDef  pwm1Info={0}; //1路pwm
+PWMInfoDef  pwm2Info={0}; //2路pwm		   
 
-u16		PWM_high,PWM_low;	//中间变量，用户请勿修改。
-u16		pwm;				//定义PWM输出高电平的时间的变量。用户操作PWM的变量。
+//u16		PWM_high,PWM_low;	//中间变量，用户请勿修改。
+//u16		pwm;				//定义PWM输出高电平的时间的变量。用户操作PWM的变量。
 
 
 
@@ -101,38 +102,35 @@ void LoadPWM(u16 i)
 }
 */
 
-void PWM_Load(PWMInfoDef pwmDef)
+
+void PWM_Load(PWMInfoDef *pwmDef)
 {
-	u16 tempPwm = pwmDef.pwm_cycle / pwmDef.pwm_duty;
+	u16 tempPwm = pwmDef->pwm_cycle / pwmDef->pwm_duty;
 	u16 lowTime,higTime;
 	
-	higTime = 65536UL - pwmDef.pwm_cycle + tempPwm;	//计算PWM低电平时间;
-	lowTime = 65536UL - tempPwm; //计算PWM高电平时间
+	lowTime = 65536UL - pwmDef->pwm_cycle + tempPwm;	//计算PWM低电平时间;
+	higTime = 65536UL - tempPwm; //计算PWM高电平时间
 
 	//if(i > PWM_HIGH_MAX)		i = PWM_HIGH_MAX;	//如果写入大于最大占空比数据，则强制为最大占空比。
 	//if(i < PWM_HIGH_MIN)		i = PWM_HIGH_MIN;	//如果写入小于最小占空比数据，则强制为最小占空比。
 	
 	EA = 0;
-	pwmDef.pwm_high= higTime;	//装载PWM高电平时间
-	pwmDef.pwm_low = lowTime;	//装载PWM低电平时间
+	pwmDef->pwm_high= higTime;	//装载PWM高电平时间
+	pwmDef->pwm_low = lowTime;	//装载PWM低电平时间
 	EA = 1;
 }
 
 
 void PWM_config(void) {
 	//pwm = PWM_DUTY / 10;	//给PWM一个初值，这里为10%占空比
-	
 	pwm1Info.pwm_duty = PWM_DUTY;
 	pwm1Info.pwm_cycle= PWM_CYCLE;
-
+	PWM_Load(&pwm1Info);
+	
 	pwm2Info.pwm_duty = PWM_DUTY+10;
 	pwm2Info.pwm_cycle= PWM_CYCLE+5000;
-
-	PWM_Load(pwm1Info);
-	PWM_Load(pwm2Info);
-	
+	PWM_Load(&pwm2Info);
 }
-
 
 /******************** 主函数**************************/
 void main(void)
@@ -154,7 +152,10 @@ void main(void)
 	//LoadPWM(pwm);			//计算PWM重装值
 
 	PWM_config();
-		
+	
+
+
+	
 	while (1)
 	{
 		/*
@@ -171,7 +172,18 @@ void main(void)
 			delay_ms(8);
 		}
 		*/
-		PrintString();
+		//const char *fm = 	 "%d";
+		//sprintf();
+
+		//(pw1,fm,112);
+		
+	//sprintf(pw1,"p1 H:%d L:%d",pwm1Info.pwm_high,pwm1Info.pwm_low);
+	//sprintf(pw2,"p2 H:%d L:%d",pwm2Info.pwm_high,pwm2Info.pwm_low);
+	//PrintString(pw1);
+	//PrintString(pw2);
+	//PrintString("12345");
+	//TxSend('8');
+
 	}
 }
 
