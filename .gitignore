@@ -1,0 +1,11 @@
+*.bak
+*.Bak
+*.bin
+*.hex
+*.HEX
+*.OBJ
+*.plg
+*.obj
+*.M51
+*.LST
+*.lnp

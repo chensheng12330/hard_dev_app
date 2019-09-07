@@ -1,0 +1,6 @@
+---- motoStart Matches (5 in 0 files) ----
+Main.c:void motoStart(void);
+Main.c:                                              motoStart();
+Main.c:		motoStart();
+Main.c:void motoStart(void) {
+Main.c:    //PrintString("\r\n motoStart. ");

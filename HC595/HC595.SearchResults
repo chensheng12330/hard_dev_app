@@ -1,0 +1,5 @@
+---- display_index Matches (5 in 0 files) ----
+宏晶模拟串口.c:u8	display_index;	//显示位索引
+宏晶模拟串口.c:	Send_595((~LED_TYPE) ^ T_COM[display_index]);			//输出位码
+宏晶模拟串口.c:	Send_595(  LED_TYPE  ^ t_display[LED8[display_index]]);	//输出段码
+宏晶模拟串口.c:	if(++display_index >= 8)	display_index = 0;	//8位结束回0

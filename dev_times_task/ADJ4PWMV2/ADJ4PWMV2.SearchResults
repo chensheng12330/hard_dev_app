@@ -1,0 +1,17 @@
+---- TH Matches (16 in 0 files) ----
+STC15Fxxxx.H:sfr TH0  = 0x8C;
+STC15Fxxxx.H:sfr TH1  = 0x8D;
+STC15Fxxxx.H:sfr RL_TH0  = 0x8C;
+STC15Fxxxx.H:sfr RL_TH1  = 0x8D;
+STC15Fxxxx.H:sfr	TH4  = 0xD2;
+STC15Fxxxx.H:sfr	TH3  = 0xD4;
+STC15Fxxxx.H:sfr	TH2  = 0xD6;
+STC15Fxxxx.H:#define		T0_pulseP35(n)		ET0=0,Timer0_AsTimer(),Timer0_1T(),Timer0_16bitAutoReload(),TH0=(65536-(n/2+MAIN_Fosc/2)/(n))/256,TL0=(65536-(n/2+MAIN_Fosc/2)/(n))%256,AUXR2 |= bit0,TR0=1		//fx=fosc/(2*M)/n,  M=1 or M=12
+STC15Fxxxx.H:#define		T1_pulseP34(n)		ET1=0,Timer1_AsTimer(),Timer1_1T(),Timer1_16bitAutoReload(),TH1=(65536-(n/2+MAIN_Fosc/2)/(n))/256,TL1=(65536-(n/2+MAIN_Fosc/2)/(n))%256,AUXR2 |= bit1,TR1=1		//fx=fosc/(2*M)/n,  M=1 or M=12
+STC15Fxxxx.H:#define		T2_pulseP30(n)		Timer2_InterruptDisable(),Timer2_AsTimer(),Timer2_1T(),TH2=(65536-(n/2+MAIN_Fosc/2)/(n))/256,TL2=(65536-(n/2+MAIN_Fosc/2)/(n))%256,AUXR2 |= bit2,Timer2_Run()	//fx=fosc/(2*M)/n,  M=1 or M=12
+STC15Fxxxx.H:#define		Timer0_Load(n)		TH0 = (n) / 256,	TL0 = (n) % 256
+STC15Fxxxx.H:#define		Timer1_Load(n)		TH1 = (n) / 256,	TL1 = (n) % 256
+STC15Fxxxx.H:#define		Timer2_Load(n)		TH2 = (n) / 256,	TL2 = (n) % 256
+STC15Fxxxx.H:#define		Timer0_Load_us(n)	TH0=(65536-MainFosc_KHZ*(n)/1000)/256,TL0=(65536-MainFosc_KHZ*(n)/1000)%256
+STC15Fxxxx.H:#define		Timer1_Load_us(n)	TH1=(65536-MainFosc_KHZ*(n)/1000)/256,TL1=(65536-MainFosc_KHZ*(n)/1000)%256
+STC15Fxxxx.H:#define		Timer2_Load_us(n)	TH2=(65536-MainFosc_KHZ*(n)/1000)/256,TL2=(65536-MainFosc_KHZ*(n)/1000)%256

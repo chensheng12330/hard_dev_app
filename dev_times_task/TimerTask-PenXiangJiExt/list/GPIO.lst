@@ -1,0 +1,71 @@
+C51 COMPILER V9.00   GPIO                                                                  11/25/2018 22:59:03 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE GPIO
+OBJECT MODULE PLACED IN GPIO.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE GPIO.c BROWSE DEBUG OBJECTEXTEND PRINT(.\list\GPIO.lst)
+
+line level    source
+
+   1          
+   2          /*------------------------------------------------------------------*/
+   3          /* --- STC MCU International Limited -------------------------------*/
+   4          /* --- STC 1T Series MCU RC Demo -----------------------------------*/
+   5          /* --- Mobile: (86)13922805190 -------------------------------------*/
+   6          /* --- Fax: 86-0513-55012956,55012947,55012969 ---------------------*/
+   7          /* --- Tel: 86-0513-55012928,55012929,55012966 ---------------------*/
+   8          /* --- Web: www.GXWMCU.com -----------------------------------------*/
+   9          /* --- QQ:  800003751 ----------------------------------------------*/
+  10          /* If you want to use the program or the program referenced in the  */
+  11          /* article, please specify in which data and procedures from STC    */
+  12          /*------------------------------------------------------------------*/
+  13          
+  14          /*************  功能说明        **************
+  15          
+  16          本文件为STC15xxx系列的端口初始化程序,用户几乎可以不修改这个程序.
+  17          
+  18          
+  19          ******************************************/
+  20          
+  21          #include        "GPIO.h"
+  22          
+  23          
+  24          //========================================================================
+  25          // 函数: u8     GPIO_Inilize(u8 GPIO, GPIO_InitTypeDef *GPIOx)
+  26          // 描述: 初始化IO口.
+  27          // 参数: GPIOx: 结构参数,请参考timer.h里的定义.
+  28          // 返回: 成功返回0, 空操作返回1,错误返回2.
+  29          // 版本: V1.0, 2012-10-22
+  30          //========================================================================
+  31          u8      GPIO_Inilize(u8 GPIO, GPIO_InitTypeDef *GPIOx)
+  32          {
+  33   1              //if(GPIO > GPIO_P5)                            return 1;       //空操作
+  34   1              //if(GPIOx->Mode > GPIO_OUT_PP) return 2;       //错误
+  35   1      
+  36   1      
+  37   1              if(GPIO == GPIO_P3)
+  38   1              {
+  39   2                      if(GPIOx->Mode == GPIO_PullUp)          P3M1 &= ~GPIOx->Pin,    P3M0 &= ~GPIOx->Pin;     //上拉准双向口
+  40   2                      else if(GPIOx->Mode == GPIO_HighZ)              P3M1 |=  GPIOx->Pin,    P3M0 &= ~GPIOx->Pin;     //浮空输入
+  41   2                      else if(GPIOx->Mode == GPIO_OUT_OD)             P3M1 |=  GPIOx->Pin,    P3M0 |=  GPIOx->Pin;     //开漏输出
+  42   2                      else if(GPIOx->Mode == GPIO_OUT_PP)             P3M1 &= ~GPIOx->Pin,    P3M0 |=  GPIOx->Pin;     //推挽输出
+  43   2              }
+  44   1      
+  45   1              return 0;       //成功
+  46   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     80    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+C51 COMPILER V9.00   GPIO                                                                  11/25/2018 22:59:03 PAGE 2   
+
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

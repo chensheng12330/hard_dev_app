@@ -1,0 +1,297 @@
+C51 COMPILER V9.00   HC595CP                                                               06/19/2019 22:57:24 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE HC595CP
+OBJECT MODULE PLACED IN HC595CP.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE HC595CP.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          /*---------------------------------------------------------------------*/
+   2          /* --- STC MCU Limited ------------------------------------------------*/
+   3          /* --- STC 1T Series MCU Demo Programme -------------------------------*/
+   4          /* --- Mobile: (86)13922805190 ----------------------------------------*/
+   5          /* --- Fax: 86-0513-55012956,55012947,55012969 -----------------------*/
+   6          /* --- Tel: 86-0513-55012928,55012929,55012966 ------------------------*/
+   7          /* --- Web: www.STCMCU.com --------------------------------------------*/
+   8          /* --- Web: www.GXWMCU.com --------------------------------------------*/
+   9          /* --- QQ:  800003751 -------------------------------------------------*/
+  10          /* 如果要在程序中使用此代码,请在程序中注明使用了STC的资料及程序        */
+  11          /*---------------------------------------------------------------------*/
+  12          
+  13          
+  14          /*************  本程序功能说明  **************
+  15          
+  16          用STC的MCU的IO方式控制74HC595驱动8位数码管。
+  17          
+  18          显示效果为: 数码时钟.
+  19          
+  20          使用Timer0的16位自动重装来产生1ms节拍,程序运行于这个节拍下, 用户修改MCU主时钟频率时,自动定时于1ms.
+  21          
+  22          ******************************************/
+  23          #include "reg51.h"
+  24          
+  25          #define     MAIN_Fosc       11059200L   //定义主时钟
+  26          
+  27          
+  28          typedef     unsigned char   u8;
+  29          typedef     unsigned int    u16;
+  30          typedef     unsigned long   u32;
+  31          
+  32          sfr AUXR = 0x8E;
+  33          
+  34          sfr P4   = 0xC0;
+  35          sfr P5   = 0xC8;
+  36          sfr P6   = 0xE8;
+  37          sfr P7   = 0xF8;
+  38          sfr P1M1 = 0x91;    //PxM1.n,PxM0.n     =00--->Standard,    01--->push-pull
+  39          sfr P1M0 = 0x92;    //                  =10--->pure input,  11--->open drain
+  40          sfr P0M1 = 0x93;
+  41          sfr P0M0 = 0x94;
+  42          sfr P2M1 = 0x95;
+  43          sfr P2M0 = 0x96;
+  44          sfr P3M1 = 0xB1;
+  45          sfr P3M0 = 0xB2;
+  46          sfr P4M1 = 0xB3;
+  47          sfr P4M0 = 0xB4;
+  48          sfr P5M1 = 0xC9;
+  49          sfr P5M0 = 0xCA;
+  50          sfr P6M1 = 0xCB;
+  51          sfr P6M0 = 0xCC;
+  52          sfr P7M1 = 0xE1;
+  53          sfr P7M0 = 0xE2;
+  54          
+  55          sbit P00 = P0^0;
+C51 COMPILER V9.00   HC595CP                                                               06/19/2019 22:57:24 PAGE 2   
+
+  56          sbit P01 = P0^1;
+  57          sbit P02 = P0^2;
+  58          sbit P03 = P0^3;
+  59          sbit P04 = P0^4;
+  60          sbit P05 = P0^5;
+  61          sbit P06 = P0^6;
+  62          sbit P07 = P0^7;
+  63          sbit P10 = P1^0;
+  64          sbit P11 = P1^1;
+  65          sbit P12 = P1^2;
+  66          sbit P13 = P1^3;
+  67          sbit P14 = P1^4;
+  68          sbit P15 = P1^5;
+  69          sbit P16 = P1^6;
+  70          sbit P17 = P1^7;
+  71          sbit P20 = P2^0;
+  72          sbit P21 = P2^1;
+  73          sbit P22 = P2^2;
+  74          sbit P23 = P2^3;
+  75          sbit P24 = P2^4;
+  76          sbit P25 = P2^5;
+  77          sbit P26 = P2^6;
+  78          sbit P27 = P2^7;
+  79          sbit P30 = P3^0;
+  80          sbit P31 = P3^1;
+  81          sbit P32 = P3^2;
+  82          sbit P33 = P3^3;
+  83          sbit P34 = P3^4;
+  84          sbit P35 = P3^5;
+  85          sbit P36 = P3^6;
+  86          sbit P37 = P3^7;
+  87          sbit P40 = P4^0;
+  88          sbit P41 = P4^1;
+  89          sbit P42 = P4^2;
+  90          sbit P43 = P4^3;
+  91          sbit P44 = P4^4;
+  92          sbit P45 = P4^5;
+  93          sbit P46 = P4^6;
+  94          sbit P47 = P4^7;
+  95          sbit P50 = P5^0;
+  96          sbit P51 = P5^1;
+  97          sbit P52 = P5^2;
+  98          sbit P53 = P5^3;
+  99          sbit P54 = P5^4;
+ 100          sbit P55 = P5^5;
+ 101          sbit P56 = P5^6;
+ 102          sbit P57 = P5^7;
+ 103          
+ 104          /****************************** 用户定义宏 ***********************************/
+ 105          
+ 106          #define Timer0_Reload   (65536UL -(MAIN_Fosc / 1000))       //Timer 0 中断频率, 1000次/秒
+ 107          
+ 108          /*****************************************************************************/
+ 109          
+ 110          
+ 111          #define DIS_DOT     0x20
+ 112          #define DIS_BLACK   0x10
+ 113          #define DIS_        0x11
+ 114          
+ 115          
+ 116          
+ 117          
+C51 COMPILER V9.00   HC595CP                                                               06/19/2019 22:57:24 PAGE 3   
+
+ 118          /*************  本地常量声明    **************/
+ 119          u8 code t_display[]={                       //标准字库
+ 120          //   0    1    2    3    4    5    6    7    8    9    A    B    C    D    E    F
+ 121              0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,0x7F,0x6F,0x77,0x7C,0x39,0x5E,0x79,0x71,
+ 122          //black  -     H    J    K    L    N    o   P    U     t    G    Q    r   M    y
+ 123              0x00,0x40,0x76,0x1E,0x70,0x38,0x37,0x5C,0x73,0x3E,0x78,0x3d,0x67,0x50,0x37,0x6e,
+ 124              0xBF,0x86,0xDB,0xCF,0xE6,0xED,0xFD,0x87,0xFF,0xEF,0x46};    //0. 1. 2. 3. 4. 5. 6. 7. 8. 9. -1
+ 125          
+ 126          u8 code T_COM[]={0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80};      //位码
+ 127          
+ 128          
+ 129          /*************  IO口定义    *************
+ 130          sbit    P_HC595_SER   = P4^0;   //pin 14    SER     data input
+ 131          sbit    P_HC595_RCLK  = P5^4;   //pin 12    RCLk    store (latch) clock
+ 132          sbit    P_HC595_SRCLK = P4^3;   //pin 11    SRCLK   Shift data clock
+ 133          */
+ 134          
+ 135          sbit    P_HC595_SER   = P3^2;   //pin 14        DO-SER          data input
+ 136          sbit    P_HC595_SRCLK = P3^3;   //pin 11        SRCLK   Shift data clock
+ 137          sbit    P_HC595_RCLK  = P3^4;   //pin 12        RCLk    store (latch) clock
+ 138          /*************  本地变量声明    **************/
+ 139          
+ 140          u8  LED8[8];        //显示缓冲
+ 141          u8  display_index;  //显示位索引
+ 142          bit B_1ms;          //1ms标志
+ 143          
+ 144          u8  hour,minute,second;
+ 145          u16 msecond;
+ 146          
+ 147          /*************  本地函数声明    **************/
+ 148          
+ 149          
+ 150          /****************  外部函数声明和外部变量声明 *****************/
+ 151          
+ 152          
+ 153          /********************** 显示时钟函数 ************************/
+ 154          void    DisplayRTC(void)
+ 155          {
+ 156   1          if(hour >= 10)  LED8[0] = hour / 10;
+ 157   1          else            LED8[0] = DIS_BLACK;
+ 158   1          LED8[1] = hour % 10;
+ 159   1          LED8[2] = DIS_;
+ 160   1          LED8[3] = minute / 10;
+ 161   1          LED8[4] = minute % 10;
+ 162   1          LED8[5] = DIS_;
+ 163   1          LED8[6] = second / 10;
+ 164   1          LED8[7] = second % 10;
+ 165   1      }
+ 166          
+ 167          /********************** RTC演示函数 ************************/
+ 168          void    RTC(void)
+ 169          {
+ 170   1          if(++second >= 60)
+ 171   1          {
+ 172   2              second = 0;
+ 173   2              if(++minute >= 60)
+ 174   2              {
+ 175   3                  minute = 0;
+ 176   3                  if(++hour >= 24)    hour = 0;
+ 177   3              }
+ 178   2          }
+ 179   1      }
+C51 COMPILER V9.00   HC595CP                                                               06/19/2019 22:57:24 PAGE 4   
+
+ 180          
+ 181          
+ 182          /********************** 主函数 ************************/
+ 183          void main(void)
+ 184          {
+ 185   1          u8  i,k;
+ 186   1          
+ 187   1          P0M1 = 0;   P0M0 = 0;   //设置为准双向口
+ 188   1          P1M1 = 0;   P1M0 = 0;   //设置为准双向口
+ 189   1          P2M1 = 0;   P2M0 = 0;   //设置为准双向口
+ 190   1          P3M1 = 0;   P3M0 = 0;   //设置为准双向口
+ 191   1          P4M1 = 0;   P4M0 = 0;   //设置为准双向口
+ 192   1          P5M1 = 0;   P5M0 = 0;   //设置为准双向口
+ 193   1          P6M1 = 0;   P6M0 = 0;   //设置为准双向口
+ 194   1          P7M1 = 0;   P7M0 = 0;   //设置为准双向口
+ 195   1      
+ 196   1          AUXR = 0x80;    //Timer0 set as 1T, 16 bits timer auto-reload, 
+ 197   1          TH0 = (u8)(Timer0_Reload / 256);
+ 198   1          TL0 = (u8)(Timer0_Reload % 256);
+ 199   1          ET0 = 1;    //Timer0 interrupt enable
+ 200   1          TR0 = 1;    //Tiner0 run
+ 201   1          EA = 1;     //打开总中断
+ 202   1          
+ 203   1          display_index = 0;
+ 204   1          hour   = 11;    //初始化时间值
+ 205   1          minute = 59;
+ 206   1          second = 58;
+ 207   1          RTC();
+ 208   1          DisplayRTC();
+ 209   1          
+ 210   1      //  for(i=0; i<8; i++)  LED8[i] = DIS_BLACK;    //上电消隐
+ 211   1          for(i=0; i<8; i++)  LED8[i] = i;    //显示01234567
+ 212   1          k = 0;
+ 213   1      
+ 214   1          while(1)
+ 215   1          {
+ 216   2              if(B_1ms)   //1ms到
+ 217   2              {
+ 218   3                  B_1ms = 0;
+ 219   3                  if(++msecond >= 1000)   //1秒到
+ 220   3                  {
+ 221   4                      msecond = 0;
+ 222   4                      RTC();
+ 223   4                      DisplayRTC();
+ 224   4                  }
+ 225   3      
+ 226   3              }
+ 227   2          }
+ 228   1      } 
+ 229          /**********************************************/
+ 230          
+ 231          
+ 232          /**************** 向HC595发送一个字节函数 ******************/
+ 233          void Send_595(u8 dat)
+ 234          {       
+ 235   1          u8  i;
+ 236   1          for(i=0; i<8; i++)
+ 237   1          {
+ 238   2              dat <<= 1;
+ 239   2              P_HC595_SER   = CY;
+ 240   2              P_HC595_SRCLK = 1;
+ 241   2              P_HC595_SRCLK = 0;
+C51 COMPILER V9.00   HC595CP                                                               06/19/2019 22:57:24 PAGE 5   
+
+ 242   2          }
+ 243   1      }
+ 244          
+ 245          /********************** 显示扫描函数 ************************/
+ 246          #define         LED_TYPE        0x00            //定义LED类型, 0x00--共阴, 0xff--共阳
+ 247          
+ 248          void DisplayScan(void)  //显示扫描函数
+ 249          {       
+ 250   1              Send_595((~LED_TYPE) ^ T_COM[display_index]);                   //输出位码
+ 251   1              Send_595(  LED_TYPE  ^ t_display[LED8[display_index]]); //输出段码
+ 252   1      
+ 253   1          P_HC595_RCLK = 1;
+ 254   1          P_HC595_RCLK = 0;                           //锁存输出数据
+ 255   1          if(++display_index >= 8)    display_index = 0;  //8位结束回0
+ 256   1      }
+ 257          
+ 258          
+ 259          /********************** Timer0 1ms中断函数 ************************/
+ 260          void timer0 (void) interrupt 1
+ 261          {
+ 262   1          DisplayScan();  //1ms扫描显示一位
+ 263   1          B_1ms = 1;      //1ms标志
+ 264   1      
+ 265   1      }
+ 266          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    316    ----
+   CONSTANT SIZE    =     51    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     14       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
